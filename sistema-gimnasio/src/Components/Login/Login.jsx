@@ -12,12 +12,12 @@ const Login = () => {
                 <Form.Control className='input-login' type="email" placeholder="Email" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
-                <Form.Control className='input-login' type="password" placeholder="Contaseña"/>
+                <Form.Control className='input-login' type="password" placeholder="Contraseña"/>
             </Form.Group>
         </Form>
         <Button variant="light" className='button-login'>Iniciar sesión</Button>
         <div className='forget-password'>
-            No tenes cuenta?<a href="">Registrate</a> 
+            No tenes cuenta?   <a href="">Registrate</a> 
         </div>
 
     </section>
