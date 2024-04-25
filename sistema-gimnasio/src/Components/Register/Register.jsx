@@ -1,27 +1,54 @@
 import React from 'react';
+import { useForm } from "react-hook-form"
 import Form from 'react-bootstrap/Form';
 import Button  from 'react-bootstrap/Button';
 import "./Register.css";
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+const schema = yup
+  .object({
+    firstName: yup.string().required("El nombre es requerido").matches(/^[a-zA-Z]+$/,"El nombre debe tener solo letras"),
+    lastname: yup.string().required("El apellido es requerido").matches(/^[a-zA-Z]+$/,"El apellido debe tener solo letras"),
+    email: yup.string().required("El email es requerido").email("Formato de mail invalido"),
+    password: yup.string().required("La contrasena es requerida").min(8,"La contrasena debe tener al menos 8 caracteres").matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([A-Za-z\d]|[^ ])*$/,"La contraseña debe contener al menos una letra minúscula,una mayuscula y un número")
+  })
 
 const Register = () => {
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        clearErrors,
+    } = useForm({
+        mode: "onBlur",
+        resolver: yupResolver(schema),
+        
+    })
+      const onSubmit = (data) => console.log(data)
+
   return (
     <section className='register-section'>
         <h2>CREA TU CUENTA</h2>
-        <Form className= "register-form-group">
+        <Form className= "register-form-group" onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3" controlId="formGroupName">
-                <Form.Control className='input-register' type="name" placeholder="Nombre" />
+                <Form.Control className='input-register' onFocus={() => clearErrors("firstName")}   {...register("firstName")} type="name" placeholder="Nombre" />
+                {errors.firstName && <span className="alert" role="alert">{errors.firstName.message}</span>}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupLastName">
-                <Form.Control className='input-register' type="lastname" placeholder="Apellido" />
+                <Form.Control className='input-register' onFocus={() => clearErrors("lastname")} {...register("lastname")} type="lastname" placeholder="Apellido" />
+                {errors.lastname && <span className="alert" role="alert">{errors.lastname.message}</span>}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupEmail">
-                <Form.Control className='input-register' type="email" placeholder="Email" />
+                <Form.Control className='input-register' onFocus={() => clearErrors("email")} {...register("email")} type="email" placeholder="Email" />
+                {errors.email && <span className="alert" role="alert">{errors.email.message}</span>}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formGroupPassword">
-                <Form.Control className='input-register' type="password" placeholder="Contraseña"/>
+                <Form.Control className='input-register' type="password" onFocus={() => clearErrors("password")} {...register("password")} placeholder="Contraseña"/>
+                {errors.password && <span className="alert" role="alert">{errors.password.message}</span>}
             </Form.Group>
+            <Button variant="light" className='button-register' type="submit">Registrarse</Button>
         </Form>
-        <Button variant="light" className='button-register'>Registrarse</Button>
         <div className='have-account'>
             Ya tenes cuenta?   <a href="">Inicia sesion</a> 
         </div>

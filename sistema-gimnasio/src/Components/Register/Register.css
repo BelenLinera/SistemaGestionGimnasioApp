@@ -22,3 +22,9 @@
 .have-account a{
     color: #11999E;
 }
+.alert{
+    text-align: left;
+    color: red;
+    font-size: x-small;
+    font-weight: 600;
+}
