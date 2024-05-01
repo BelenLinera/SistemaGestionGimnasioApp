@@ -1,59 +1,56 @@
 .admin-section {
-  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .button-admin {
   background-color: #6decb9;
 }
 
-.card-admin-logo {
-  width: calc(66.66%);
-  margin-right: calc(33.34%);
-  color: black;
-  margin-top: 90px;
-  margin-left: 50px;
-  /*background-image: url('./assets/user.png');*/
-}
+
 
 .card-admin {
+  display: flex;
+  flex-direction: row;
   height: 80hv;
   background-color: #6decb9;
   width: 370px;
   height: 220px;
   border-radius: 20px;
+  margin: 25px 0 25px;
 }
-
-.card-admin-name {
-  margin-top: -60px;
-  width: calc(66.66%);
-  margin-left: calc(33.34%);
+.icon-user
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  font-size:  90px;
+  border-right: 3px solid black; 
+}
+.information-user-section
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+}
+.information-user
+{ 
   text-align: center;
 }
-
-.card-admin-email {
-  width: calc(66.66%);
-  margin-left: calc(33.34%);
-  text-align: center;
-}
-
-.buttons {
-  width: calc(66.66%);
-  margin-left: calc(33.34%);
-  text-align: center;
-  display: inline-block;
-  margin-right: 10px;
-  margin-top: 20px;
+.buttons button{
+  margin: 10px;
 }
 
 .button-update-admin {
   background-color: green;
   color: #d9d9d9;
   border: 2px solid transparent;
-  margin-right: 15px;
+  
 }
 
 .button-delete-admin {
