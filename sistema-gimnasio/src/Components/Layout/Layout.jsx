@@ -1,14 +1,16 @@
 import React from 'react'
-import Register from '../Register/Register'
-import Footer from './Footer/Footer'
+import Admin from '../Admin/Admin'
 
 
 const Layout = () => {
   return (
     <>
-    {/*<Login></Login>*/}
+    {/*<Login></Login>
     <Register></Register>
+    
     <Footer></Footer>
+    */}
+    <Admin></Admin>
     </>
   )
 }
