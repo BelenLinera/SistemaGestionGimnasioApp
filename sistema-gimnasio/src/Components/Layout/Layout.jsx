@@ -16,6 +16,7 @@ const Layout = () => {
     <Route path="/" element={<Admin />}/>
     <Route path="/admin/create-admin" element={<FormUser entity={"admin"}/>} />
     <Route path= "/admin" element={<Admin/>}/>
+    <Route path = "/admin/edit-admin/:userEmail" element={<FormUser entity={"admin"} editForm={true}/>} />
     </Routes>
     </Router>
     </>

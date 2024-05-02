@@ -9,6 +9,7 @@ import { Button } from "react-bootstrap";
 import "./Card.css";
 import { deleteAdmin } from "../../Admin/AdminServices";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { Link } from "react-router-dom";
 
 const Card = ({ entity, type, setChanges, changes }) => {
   const [confirm, setConfirmModal] = useState(false);
@@ -40,9 +41,11 @@ const Card = ({ entity, type, setChanges, changes }) => {
           </h6>
         </div>
         <div className="buttons">
-          <Button variant="light" className="button-update-entity">
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Button>
+          <Link to={`/admin/edit-admin/${entity.email}`}>
+            <Button variant="light" className="button-update-entity">
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Button>
+          </Link>
           <Button
             variant="light"
             className="button-delete-entity"

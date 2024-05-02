@@ -5,10 +5,10 @@ import Button from "react-bootstrap/Button";
 import "./FormUser.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { createAdmin } from "../../Admin/AdminServices";
-import { useNavigate } from "react-router-dom";
+import { createAdmin, updateAdmin } from "../../Admin/AdminServices";
+import { useNavigate, useParams } from "react-router-dom";
 
-const schema = yup.object({
+const createUserSchema = yup.object({
   firstName: yup
     .string()
     .required("El nombre es requerido")
@@ -31,8 +31,20 @@ const schema = yup.object({
     ),
 });
 
-const FormUser = ({ entity }) => {
-    let navigate = useNavigate();
+const editUserSchema = yup.object({
+  firstName: yup
+    .string()
+    .required("El nombre es requerido")
+    .matches(/^[a-zA-Z]+$/, "El nombre debe tener solo letras"),
+  lastname: yup
+    .string()
+    .required("El apellido es requerido")
+    .matches(/^[a-zA-Z]+$/, "El apellido debe tener solo letras"),
+});
+
+const FormUser = ({ entity, editForm }) => {
+  let navigate = useNavigate();
+  let { userEmail } = useParams();
   const {
     register,
     formState: { errors },
@@ -40,25 +52,40 @@ const FormUser = ({ entity }) => {
     clearErrors,
   } = useForm({
     mode: "onBlur",
-    resolver: yupResolver(schema),
+    resolver: yupResolver(editForm ? editUserSchema : createUserSchema),
   });
   const onSubmit = async (data) => {
+    if (editForm) {
+      if (entity === "admin") {
+        try {
+          await updateAdmin(userEmail, data.firstName, data.lastname);
+          return navigate("/admin", { replace: true });
+        } catch (error) {
+          return console.log(error);
+        }
+      }
+    }
     if (entity === "admin") {
       try {
-        await createAdmin(data.email, data.firstName, data.lastname, data.password);
-        navigate('/admin', { replace: true });
+        await createAdmin(
+          data.email,
+          data.firstName,
+          data.lastname,
+          data.password
+        );
+        navigate("/admin", { replace: true });
       } catch (error) {
         console.log(error);
       }
     }
   };
   return (
-    <section className="register-section">
-      <h2>CREA TU CUENTA</h2>
-      <Form className="register-form-group" onSubmit={handleSubmit(onSubmit)}>
+    <section className="form-section">
+      <h2>{editForm ? "EDITAR CUENTA" : "CREA TU CUENTA"}</h2>
+      <Form className="form-group" onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3" controlId="formGroupName">
           <Form.Control
-            className="input-register"
+            className="input-form"
             onFocus={() => clearErrors("firstName")}
             {...register("firstName")}
             type="name"
@@ -72,7 +99,7 @@ const FormUser = ({ entity }) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formGroupLastName">
           <Form.Control
-            className="input-register"
+            className="input-form"
             onFocus={() => clearErrors("lastname")}
             {...register("lastname")}
             type="lastname"
@@ -84,41 +111,53 @@ const FormUser = ({ entity }) => {
             </span>
           )}
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formGroupEmail">
-          <Form.Control
-            className="input-register"
-            onFocus={() => clearErrors("email")}
-            {...register("email")}
-            type="email"
-            placeholder="Email"
-          />
-          {errors.email && (
-            <span className="alert" role="alert">
-              {errors.email.message}
-            </span>
-          )}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formGroupPassword">
-          <Form.Control
-            className="input-register"
-            type="password"
-            onFocus={() => clearErrors("password")}
-            {...register("password")}
-            placeholder="Contraseña"
-          />
-          {errors.password && (
-            <span className="alert" role="alert">
-              {errors.password.message}
-            </span>
-          )}
-        </Form.Group>
-        <Button variant="light" className="button-register" type="submit">
-          Registrarse
+        {editForm ? (
+          <> </>
+        ) : (
+          <Form.Group className="mb-3" controlId="formGroupEmail">
+            <Form.Control
+              className="input-form"
+              onFocus={() => clearErrors("email")}
+              {...register("email")}
+              type="email"
+              placeholder="Email"
+            />
+            {errors.email && (
+              <span className="alert" role="alert">
+                {errors.email.message}
+              </span>
+            )}
+          </Form.Group>
+        )}
+        {editForm ? (
+          <> </>
+        ) : (
+          <Form.Group className="mb-3" controlId="formGroupPassword">
+            <Form.Control
+              className="input-form"
+              type="password"
+              onFocus={() => clearErrors("password")}
+              {...register("password")}
+              placeholder="Contraseña"
+            />
+            {errors.password && (
+              <span className="alert" role="alert">
+                {errors.password.message}
+              </span>
+            )}
+          </Form.Group>
+        )}
+        <Button variant="light" className="button-form" type="submit">
+          {editForm ? "Editar" : "Registrarse"}
         </Button>
       </Form>
-      <div className="have-account">
-        Ya tenes cuenta? <a href="">Inicia sesion</a>
-      </div>
+      {editForm ? (
+        <></>
+      ) : (
+        <div className="have-account">
+          Ya tenes cuenta? <a href="">Inicia sesion</a>
+        </div>
+      )}
     </section>
   );
 };

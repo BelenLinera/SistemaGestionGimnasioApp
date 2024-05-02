@@ -12,13 +12,15 @@ const createAdmin = (email, nameAdmin, lastName, password) => {
     Email: email,
     Name: nameAdmin,
     Lastname: lastName,
-    Password: password
+    Password: password,
   });
 };
 
 const updateAdmin = (email, nameAdmin, lastName) => {
   // eslint-disable-next-line no-sequences
-  return api.put(`/Admin/${email}`, { nameAdmin, lastName });
+  return api.put(`/api/Admin?emailAdmin=${email}`, {
+    Name: nameAdmin,
+    Lastname: lastName,
+  });
 };
-
 export { getAllAdmins, deleteAdmin, createAdmin, updateAdmin };
