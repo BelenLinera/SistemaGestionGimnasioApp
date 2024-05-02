@@ -1,13 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import "./ConfirmModal.css"
-import { Button } from '../Button/Button';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./ConfirmModal.css";
+import { Button } from "../Button/Button";
 
-const ConfirmModal = ({ children, handler, title, reason, onAction, disabled }) => {
-  
+const ConfirmModal = ({
+  children,
+  handler,
+  title,
+  reason,
+  onAction,
+  disabled,
+}) => {
   const classByReason = {
-    enviar: 'submitButton',
-    eliminar: 'deleteButton'
+    enviar: "submitButton",
+    eliminar: "deleteButton",
   };
   return ReactDOM.createPortal(
     <div className="modal">
@@ -20,7 +26,11 @@ const ConfirmModal = ({ children, handler, title, reason, onAction, disabled }) 
         </div>
         <p className="modalMessage">{children}</p>
         <div className="modalButtons">
-          <Button action={handler} text={'Cancelar'} classNameButton={'cancelButton'} />
+          <Button
+            action={handler}
+            text={"Cancelar"}
+            classNameButton={"cancelButton"}
+          />
           <Button
             action={onAction}
             text={`${reason.charAt(0).toUpperCase()}${reason.substring(1)}`}

@@ -10,14 +10,20 @@ import "./Card.css";
 import { deleteAdmin } from "../../Admin/AdminServices";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 
-const Card = ({ entity, type }) => {
+const Card = ({ entity, type, setChanges, changes }) => {
   const [confirm, setConfirmModal] = useState(false);
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
   const onAction = () => {
     handleConfirm();
-    deleteAdmin(entity.email);
+    deleteAdmin(entity.email)
+    .then(() => {
+      setChanges(!changes); // Set changes to true after successful deletion
+    })
+    .catch((error) => {
+      console.error("Error deleting admin:", error);
+    });
   };
   return (
     <div className="card-entity">
