@@ -8,10 +8,17 @@ const deleteAdmin = (email) => {
   return api.delete(`/api/Admin/${email}`);
 };
 const createAdmin = (email, nameAdmin, lastName, password) => {
-  return api.post("/api/Admin"), { email, nameAdmin, lastName, password };
+  return api.post("/api/Admin", {
+    Email: email,
+    Name: nameAdmin,
+    Lastname: lastName,
+    Password: password
+  });
 };
+
 const updateAdmin = (email, nameAdmin, lastName) => {
-  return api.put(`/Admin/${email}`), {nameAdmin, lastName };
+  // eslint-disable-next-line no-sequences
+  return api.put(`/Admin/${email}`, { nameAdmin, lastName });
 };
 
 export { getAllAdmins, deleteAdmin, createAdmin, updateAdmin };

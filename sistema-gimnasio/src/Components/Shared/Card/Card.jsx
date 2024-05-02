@@ -19,7 +19,7 @@ const Card = ({ entity, type, setChanges, changes }) => {
     handleConfirm();
     deleteAdmin(entity.email)
     .then(() => {
-      setChanges(!changes); // Set changes to true after successful deletion
+      setChanges(!changes);
     })
     .catch((error) => {
       console.error("Error deleting admin:", error);
