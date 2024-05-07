@@ -7,24 +7,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import "./Card.css";
-import { deleteAdmin } from "../../Admin/AdminServices";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 
-const Card = ({ entity, type, setChanges, changes }) => {
+const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const [confirm, setConfirmModal] = useState(false);
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
   const onAction = () => {
     handleConfirm();
-    deleteAdmin(entity.email)
-    .then(() => {
-      setChanges(!changes);
-    })
-    .catch((error) => {
-      console.error("Error deleting admin:", error);
-    });
+    deleteEntity(entity.email)
+      .then(() => {
+        setChanges(!changes);
+      })
+      .catch((error) => {
+        console.error(`Error deleting ${type}:`, error);
+      });
   };
   return (
     <div className="card-entity">
@@ -41,7 +40,7 @@ const Card = ({ entity, type, setChanges, changes }) => {
           </h6>
         </div>
         <div className="buttons">
-          <Link to={`/admin/edit-admin/${entity.email}`}>
+          <Link to={`/${type}/edit-${type}/${entity.email}`}>
             <Button variant="light" className="button-update-entity">
               <FontAwesomeIcon icon={faPenToSquare} />
             </Button>

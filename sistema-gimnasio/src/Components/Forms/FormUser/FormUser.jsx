@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { createAdmin, updateAdmin } from "../../Admin/AdminServices";
 import { useNavigate, useParams } from "react-router-dom";
+import { createClient, updateClient } from "../../Client/ClientServices";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -63,6 +64,13 @@ const FormUser = ({ entity, editForm }) => {
         } catch (error) {
           return console.log(error);
         }
+      }else if (entity === "client") {
+        try {
+          await updateClient(userEmail, data.firstName, data.lastname);
+          return navigate("/client", { replace: true });
+        } catch (error) {
+          return console.log(error);
+        }
       }
     }
     if (entity === "admin") {
@@ -74,6 +82,18 @@ const FormUser = ({ entity, editForm }) => {
           data.password
         );
         navigate("/admin", { replace: true });
+      } catch (error) {
+        console.log(error);
+      }
+    }else if (entity === "client") {
+      try {
+        await createClient(
+          data.email,
+          data.firstName,
+          data.lastname,
+          data.password
+        );
+        navigate("/client", { replace: true });
       } catch (error) {
         console.log(error);
       }
