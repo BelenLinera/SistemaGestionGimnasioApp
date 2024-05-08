@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { createAdmin, updateAdmin } from "../../Admin/AdminServices";
 import { useNavigate, useParams } from "react-router-dom";
 import { createClient, updateClient } from "../../Client/ClientServices";
+import { createTrainer, updateByEmail } from "../../Trainer/TrainerServices";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -71,6 +72,13 @@ const FormUser = ({ entity, editForm }) => {
         } catch (error) {
           return console.log(error);
         }
+      }else if (entity === "trainer") {
+        try {
+          await updateByEmail(userEmail, data.firstName, data.lastname);
+          return navigate("/trainer", { replace: true });
+        } catch (error) {
+          return console.log(error);
+        }
       }
     }
     if (entity === "admin") {
@@ -94,6 +102,18 @@ const FormUser = ({ entity, editForm }) => {
           data.password
         );
         navigate("/client", { replace: true });
+      } catch (error) {
+        console.log(error);
+      }
+    }else if (entity === "trainer") {
+      try {
+        await createTrainer(
+          data.email,
+          data.firstName,
+          data.lastname,
+          data.password
+        );
+        navigate("/trainer", { replace: true });
       } catch (error) {
         console.log(error);
       }
@@ -175,7 +195,7 @@ const FormUser = ({ entity, editForm }) => {
         <></>
       ) : (
         <div className="have-account">
-          Ya tenes cuenta? <a href="">Inicia sesion</a>
+          Ya tenes cuenta? Inicia sesion
         </div>
       )}
     </section>
