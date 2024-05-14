@@ -5,6 +5,7 @@ import FormUser from "../Forms/FormUser/FormUser";
 import Client from "../Client/Client";
 import Trainer from "../Trainer/Trainer";
 import NavBar from "./NavBar/NavBar";
+import Footer from "./Footer/Footer";
 
 const Layout = () => {
   return (
@@ -12,9 +13,8 @@ const Layout = () => {
       <NavBar />
       {/*<Login></Login>
     <Register></Register>
-    
-    <Footer></Footer>
     */}
+      <Footer />
       <Router>
         <Routes>
           <Route path="/" element={<Admin />} />

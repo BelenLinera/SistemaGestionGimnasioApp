@@ -2,7 +2,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 190px;
+  width: 100%;
   padding: 0 2rem;
   background-color: #d9d9d9;
   color: #11999e;
@@ -35,8 +36,10 @@ header .nav-btn {
 
 .logo-image {
   align-self: center;
-  width: 250px;
+  width: 280px;
   height: auto;
+  margin-right: 50px;
+  margin-bottom: 10px;
 }
 
 /* para hacer el responsive */
@@ -77,14 +80,3 @@ header .nav-btn {
     font-size: 1.5rem;
   }
 }
-
-/* Logo */
-
-/* position: absolute;
-left: 9.16%;
-right: 55.47%;
-top: 18.95%;
-bottom: 18.95%;
-
-background: url(Logopit_1713400427814.png);
-border-radius: 13px; */
