@@ -1,0 +1,61 @@
+.client-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .button-client {
+    background-color: #6decb9;
+  }
+  
+  
+  
+  .card-client {
+    display: flex;
+    flex-direction: row;
+    height: 80hv;
+    background-color: #6decb9;
+    width: 370px;
+    height: 220px;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+  }
+  .icon-user
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    font-size:  90px;
+    border-right: 3px solid black; 
+  }
+  .information-user-section
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+  }
+  .information-user
+  { 
+    text-align: center;
+  }
+  .buttons button{
+    margin: 10px;
+  }
+  
+  .button-update-client {
+    background-color: green;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+    
+  }
+  
+  .button-delete-client {
+    background-color: red;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+  }
+  
