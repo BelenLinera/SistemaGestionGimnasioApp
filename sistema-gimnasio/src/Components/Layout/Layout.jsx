@@ -1,4 +1,3 @@
-import React from "react";
 import Admin from "../Admin/Admin";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FormUser from "../Forms/FormUser/FormUser";
@@ -10,11 +9,10 @@ import Footer from "./Footer/Footer";
 const Layout = () => {
   return (
     <>
-      <NavBar />
       {/*<Login></Login>
     <Register></Register>
     */}
-      <Footer />
+      <NavBar />
       <Router>
         <Routes>
           <Route path="/" element={<Admin />} />
@@ -51,6 +49,7 @@ const Layout = () => {
           />
         </Routes>
       </Router>
+      <Footer />
     </>
   );
 };
