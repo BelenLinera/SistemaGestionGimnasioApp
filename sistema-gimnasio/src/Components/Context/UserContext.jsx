@@ -23,10 +23,9 @@ const UserProvider = ({ children }) => {
   }, []);
 
   const login = (token) => {
-    console.log("token:",token)
     const userClaims = parseJwt(token)
     const fullName = `${userClaims.name} ${userClaims.lastName}`;
-    const userData = { email: userClaims.sub, role:userClaims.role, name: fullName};
+    const userData = { email: userClaims.sub, role:userClaims.role, name: fullName, token: token};
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };

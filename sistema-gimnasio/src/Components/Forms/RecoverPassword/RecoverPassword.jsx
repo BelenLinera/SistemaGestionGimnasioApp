@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,9 +26,9 @@ const RecoverPassword = () => {
   const onSubmit = async (data) =>
   {
     try {
-      const response = await api.post(`api/User?email=${data.email}`);
+      const response = await api.post(`api/User/createToken?email=${data.email}`);
 
-      if (response.status= 200) {
+      if (response.status=== 200) {
         return navigate("/forget-password/validate-token", { replace: true });
       }
     } catch (error) {
