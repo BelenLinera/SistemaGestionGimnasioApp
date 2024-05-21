@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import {Form, Button} from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { useNavigate,Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import "./Login.css";
-import api from "../../api";
-import { useForm } from "react-hook-form";
 import UserContext from "../Context/UserContext";
-import { useNavigate } from "react-router-dom";
+import api from "../../api";
+import "./Login.css";
+
 const loginSchema = yup.object({
   email: yup
     .string()
@@ -29,30 +29,17 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
   const LoginUser = async (data) => {
-    const response = await api
-      .post("/api/Autheticate", {
+    try {
+      const response = await api.post("/api/Autheticate", {
         Email: data.email,
         Password: data.password,
-      })
-      console.log(response.data)
-        login(response.data)
-        return navigate("/", { replace: true });
+      });
+      login(response.data);
+      return navigate("/", { replace: true });
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
-  function parseJwt(token) {
-    var base64Url = token.split(".")[1];
-    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    var jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-  }
   return (
     <section className="login-section">
       <h2>BIENVENIDO/A</h2>
@@ -89,8 +76,13 @@ const Login = () => {
           Iniciar sesión
         </Button>
       </Form>
-      <div className="forget-password">
-        No tenes cuenta? <a href="">Registrate</a>
+      <div>
+        <div className="forget-password">
+          No tenes cuenta? <a href="">Registrate</a>
+        </div>
+        <div className="forget-password">
+          Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>
+        </div>
       </div>
     </section>
   );
