@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Card from "../Shared/Card/Card";
 import "./Admin.css";
 import { getAllAdmins } from "./AdminServices";
+import { deleteAdmin } from "./AdminServices";
 
 const Admin = () => {
   const [admins, setAdmins] = useState([]);
@@ -28,6 +29,7 @@ const Admin = () => {
           key={admin.email}
           setChanges={setChanges}
           changes={changes}
+          deleteEntity={deleteAdmin}
         />
       ))}
     </section>
