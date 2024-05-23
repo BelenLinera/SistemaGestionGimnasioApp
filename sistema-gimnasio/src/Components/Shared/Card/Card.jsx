@@ -13,32 +13,33 @@ import { updateClientActiveState } from "../../Client/ClientServices";
 
 const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const [confirm, setConfirmModal] = useState(false);
-  const [clientActive, setClientActive] = useState(false);
   const [activeModalClient, setActiveModalClient] = useState(false);
 
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
+  const handleConfirmActiveClient = () => {
+    setConfirmModal(!confirm);
+    setActiveModalClient(!activeModalClient);
+  }
 
   const handleChange = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-    if (clientActive) {
       // Si el cliente se activa manualmente, llamamos a la API para actualizar el estado
-      updateClientActiveState(entity.email, true) // Llama a la función de actualización con el nuevo estado
+      updateClientActiveState(entity.email, !entity.autorizationToReserve) // Llama a la función de actualización con el nuevo estado
         .then(() => {
           console.log("Estado del cliente actualizado con éxito en la API");
+          setChanges(!changes);
         })
         .catch((error) => {
           console.error("Error al actualizar el estado del cliente:", error);
         });
-    }
   };
 
 
   const onAction = () => {
     if (activeModalClient) {
-      setClientActive(!clientActive);
       return handleChange();
     }
     handleConfirm();
@@ -63,8 +64,8 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
               type="checkbox"
               id="cliente-activo"
               label="Cliente activo"
-              checked={clientActive}
-              onChange={handleChange}
+              checked={entity.autorizationToReserve}
+              onChange={handleConfirmActiveClient}
               
             />
           )}
@@ -112,12 +113,12 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
       {confirm && activeModalClient && (
         <ConfirmModal
           handler={handleChange}
-          title={clientActive ? `Desactivar ${type}` : `Activar`}
+          title={entity.autorizationToReserve ? `Desactivar ${type}` : `Activar`}
           reason={"enviar"}
           onAction={() => onAction()}
         >
           Estás seguro de que quieres{" "}
-          {clientActive ? " desactivar" : " activar"} la cuenta de{" "}
+          {entity.autorizationToReserve ? " desactivar" : " activar"} la cuenta de{" "}
           <strong>
             {entity.name} {entity.lastName}
           </strong>

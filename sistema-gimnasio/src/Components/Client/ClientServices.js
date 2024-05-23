@@ -26,7 +26,7 @@ const updateClient = (email, nameClient, lastName) => {
 
 const updateClientActiveState = (email, autorizationToReserve) => {
    // eslint-disable-next-line no-sequences
-  return api.patch(`/api/Client/${email}/state`, autorizationToReserve ); 
+  return api.patch(`/api/Client/${email}/state?autorizationToReserve=${autorizationToReserve}` )
 };
 
 export { getAllClients, deleteClient, createClient, updateClient, updateClientActiveState };
