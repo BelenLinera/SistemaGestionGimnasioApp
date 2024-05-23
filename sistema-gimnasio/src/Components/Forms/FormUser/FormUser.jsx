@@ -113,7 +113,7 @@ const FormUser = ({ entity, editForm }) => {
   };
   return (
     <section className="form-section">
-      <h2>{editForm ? "EDITAR CUENTA" : "CREA TU CUENTA"}</h2>
+      <h2>{editForm ? "EDITAR CUENTA" : entity==='client'?"CREA TU CUENTA":`CREAR ${entity}`}</h2>
       <Form className="form-group" onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3" controlId="formGroupName">
           <Form.Control
@@ -180,10 +180,10 @@ const FormUser = ({ entity, editForm }) => {
           </Form.Group>
         )}
         <Button variant="light" className="button-form" type="submit">
-          {editForm ? "Editar" : "Registrarse"}
+          {editForm ? "Editar" : entity==="client"? "Registrarse":"Crear cuenta"}
         </Button>
       </Form>
-      {editForm ? (
+      {entity !== "client" ? (
         <></>
       ) : (
         <div className="have-account">
