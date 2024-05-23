@@ -1,0 +1,24 @@
+.login-section{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+
+.button-login{
+    background-color: #6DECB9;
+    
+}
+.input-login{
+    background-color: #d9d9d9;
+}
+.login-form-group{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.forget-password a{
+    color: #11999E;
+}
