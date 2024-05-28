@@ -7,12 +7,13 @@ const getAllTrainers = () => {
 const deleteByEmail = (email) => {
   return api.delete(`/api/Trainer/${email}`);
 };
-const createTrainer = (email, nameTrainer, lastName, password) => {
+const createTrainer = (email, nameTrainer, lastName, password, activities) => {
   return api.post("/api/Trainer", {
     Email: email,
     Name: nameTrainer,
     Lastname: lastName,
     Password: password,
+    Activities: activities
   });
 };
 
