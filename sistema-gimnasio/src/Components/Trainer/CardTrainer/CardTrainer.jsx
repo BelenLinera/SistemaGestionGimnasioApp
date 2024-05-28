@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { Button} from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "./CardTrainer.css";
 import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
@@ -44,10 +44,20 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
         </div>
       </div>
       <div className="information-trainer-section">
+        <h3>Actividades</h3>
         <div className="activities-trainer">
-        {entity.trainerActivities.map((activity) => (
-        <p key={activity.activity.idActivity}>{activity.activity.activityName}</p>
-      ))}
+          {entity.trainerActivities.length > 0 ? (
+            entity.trainerActivities.map((activity) => (
+              <p
+                className="activity-trainer"
+                key={activity.activity.idActivity}
+              >
+                {activity.activity.activityName}
+              </p>
+            ))
+          ) : (
+            <p>Este entrenador no tiene actividades aun.</p>
+          )}
         </div>
         <div className="buttons">
           <Link to={`/${type}/edit-${type}/${entity.email}`}>

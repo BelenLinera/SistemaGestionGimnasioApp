@@ -12,7 +12,6 @@ const Trainer = () => {
   useEffect(() => {
     getAllTrainers().then((response) => {
       setTrainers(response.data);
-      console.log(response.data)
     });
   }, [changes]);
   return (

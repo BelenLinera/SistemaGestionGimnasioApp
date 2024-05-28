@@ -4,7 +4,7 @@
     height: 80hv;
     background-color: #6decb9;
     width: 370px;
-    height: 220px;
+    min-height: 220px;
     border-radius: 20px;
     margin: 25px 0 25px;
   }
@@ -31,8 +31,7 @@
   }
 
   .information-user-section
-  {
-    
+  { 
     border-left: 3px solid black; 
     display: flex;
     flex-direction: column;

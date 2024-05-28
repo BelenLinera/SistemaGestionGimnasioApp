@@ -1,13 +1,3 @@
-.card-entity{
-    display: flex;
-    flex-direction: row;
-    background-color: #6decb9;
-    width: 370px;
-    height: 220px;
-    border-radius: 20px;
-    margin: 25px 0 25px;
-  }
-
   .card-left{
     display: flex;
     align-items: center;
@@ -43,9 +33,28 @@
     margin-top: 10px;
     text-align: center;
   }
-  .activities-trainer p {
-    text-transform: capitalize;
+  .activities-trainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
+  .activities-trainer .activity-trainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #11999E;
+    width: 100px;
+    padding: 10px;
+    border-radius: 15px;
+    color: white;
+  }
+  .activities-trainer p {
+    text-align: center;
+    width: 150px;
+  }
+
   .buttons button{
     margin: 10px;
   }
