@@ -7,13 +7,18 @@ import * as yup from "yup";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createAdmin, updateAdmin } from "../../Admin/AdminServices";
+import { createAdmin, getAdminByEmail, updateAdmin } from "../../Admin/AdminServices";
 import {
   createClient,
+  getClientByEmail,
   updateClient,
   updateClientActiveState,
 } from "../../Client/ClientServices";
-import { createTrainer, updateByEmail } from "../../Trainer/TrainerServices";
+import {
+  createTrainer,
+  getTrainerByEmail,
+  updateByEmail,
+} from "../../Trainer/TrainerServices";
 import "./FormUser.css";
 import api from "../../../api";
 
@@ -32,11 +37,11 @@ const createUserSchema = yup.object({
     .email("Formato de mail invalido"),
   password: yup
     .string()
-    .required("La contrasena es requerida")
-    .min(8, "La contrasena debe tener al menos 8 caracteres")
+    .required("La contraseña es requerida")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([A-Za-z\d]|[^ ])*$/,
-      "La contraseña debe contener al menos una letra minúscula,una mayuscula y un número"
+      "La contraseña debe contener al menos una letra minúscula, una mayúscula y un número"
     ),
 });
 
@@ -64,6 +69,12 @@ const customStyles = {
   }),
 };
 
+const ENTITY_URL_MAP = {
+  admin: "/admin",
+  client: "/client",
+  trainer: "/trainer",
+};
+
 const FormUser = ({ entity, editForm }) => {
   const navigate = useNavigate();
   const [optionsActivities, setOptionsActivities] = useState([]);
@@ -74,72 +85,105 @@ const FormUser = ({ entity, editForm }) => {
     handleSubmit,
     clearErrors,
     control,
+    setValue,
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(editForm ? editUserSchema : createUserSchema),
   });
-  useEffect(() => {
-    api.get("/api/Activity").then((response) => {
-      const mappedActivities = response.data.map((activity) => ({
-        value: activity.idActivity,
-        label: activity.activityName,
-      }));
-      setOptionsActivities(mappedActivities);
-    });
-  }, []);
-  const onSubmit = async (data) => {
-    if (editForm) {
-      if (entity === "admin") {
-        try {
-          await updateAdmin(userEmail, data.firstName, data.lastname);
-          return navigate("/admin", { replace: true });
-        } catch (error) {
-          return console.log(error);
-        }
-      } else if (entity === "client") {
-        try {
-          await updateClient(userEmail, data.firstName, data.lastname);
-          await updateClientActiveState(userEmail, data.autorizationToReserve);
-          return navigate("/client", { replace: true });
-        } catch (error) {
-          return console.log(error);
-        }
-      } else if (entity === "trainer") {
-        try {
-          await updateByEmail(userEmail, data.firstName, data.lastname);
-          return navigate("/trainer", { replace: true });
-        } catch (error) {
-          return console.log(error);
-        }
-      }
-    }
 
-    if (entity === "admin") {
-      try {
+  useEffect(() => {
+    if (entity === "trainer") {
+      const fetchActivities = async () => {
+        try {
+          const response = await api.get("/api/Activity");
+          const mappedActivities = response.data.map((activity) => ({
+            value: activity.idActivity,
+            label: activity.activityName,
+          }));
+          setOptionsActivities(mappedActivities);
+        } catch (error) {
+          console.error("Error trayendo las actividades", error);
+        }
+      };
+      fetchActivities();
+    }
+    if (userEmail) {
+      const fetchDataUser = async () =>{
+          const dataEditUser =await getDataUser(userEmail)
+          const user = dataEditUser.data;
+          setValue("firstName", user.name);
+          setValue("lastname", user.lastName);
+          entity === "trainer" && setValue("activities", user.trainerActivities.map(activity => activity.idActivity));
+      }
+      fetchDataUser();
+    }
+  }, []);
+
+  const handleFormSubmit = async (data) => {
+    try {
+      if (editForm) {
+        await handleEdit(data);
+      } else {
+        await handleCreate(data);
+      }
+      navigate(ENTITY_URL_MAP[entity], { replace: true });
+    } catch (error) {
+      console.error(`Error creando el ${entity}`, error);
+    }
+  };
+  const getDataUser = async (email) => {
+    switch (entity) {
+      case "admin":
+        return await getAdminByEmail(email); 
+      case "client":
+        return await getClientByEmail(email); 
+      case "trainer":
+        return await getTrainerByEmail(email); 
+      default:
+        break;
+    }
+  }
+  const handleEdit = async (data) => {
+    switch (entity) {
+      case "admin":
+        await updateAdmin(userEmail, data.firstName, data.lastname);
+        break;
+      case "client":
+        await updateClient(userEmail, data.firstName, data.lastname);
+        // await updateClientActiveState(userEmail, data.autorizationToReserve);
+        break;
+      case "trainer":
+        await updateByEmail(
+          userEmail,
+          data.firstName,
+          data.lastname,
+          data.activities
+        );
+        break;
+      default:
+        throw new Error("Unknown entity type");
+    }
+  };
+
+  const handleCreate = async (data) => {
+    switch (entity) {
+      case "admin":
         await createAdmin(
           data.email,
           data.firstName,
           data.lastname,
           data.password
         );
-        navigate("/admin", { replace: true });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (entity === "client") {
-      try {
+        break;
+      case "client":
         await createClient(
           data.email,
           data.firstName,
           data.lastname,
           data.password
         );
-        navigate("/client", { replace: true });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (entity === "trainer") {
-      try {
+        break;
+      case "trainer":
         await createTrainer(
           data.email,
           data.firstName,
@@ -147,22 +191,21 @@ const FormUser = ({ entity, editForm }) => {
           data.password,
           data.activities
         );
-        navigate("/trainer", { replace: true });
-      } catch (error) {
-        console.log(error);
-      }
+        break;
+      default:
+        await createClient(
+          data.email,
+          data.firstName,
+          data.lastname,
+          data.password
+        );
     }
   };
+
   return (
     <section className="form-section">
-      <h2>
-        {editForm
-          ? "EDITAR CUENTA"
-          : entity === "client"
-          ? "CREA TU CUENTA"
-          : `CREAR ${entity}`}
-      </h2>
-      <Form className="form-group" onSubmit={handleSubmit(onSubmit)}>
+      <h2>{editForm ? "EDITAR CUENTA" : `CREAR ${entity.toUpperCase()}`}</h2>
+      <Form className="form-group" onSubmit={handleSubmit(handleFormSubmit)}>
         <Form.Group className="mb-3" controlId="formGroupName">
           <Form.Control
             className="input-form"
@@ -191,77 +234,71 @@ const FormUser = ({ entity, editForm }) => {
             </span>
           )}
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formGroupLastName">
-          <Controller
-            name="activities"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                className="input-form"
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                isMulti
-                options={optionsActivities}
-                styles={customStyles}
-                value={optionsActivities.filter((option) =>
-                  field.value?.includes(option.value)
-                )}
-                onChange={(selectedOptions) => {
-                  field.onChange(selectedOptions.map((option) => option.value));
-                }}
-              />
-            )}
-          />
-        </Form.Group>
-        {editForm ? (
-          <> </>
-        ) : (
-          <Form.Group className="mb-3" controlId="formGroupEmail">
-            <Form.Control
-              className="input-form"
-              onFocus={() => clearErrors("email")}
-              {...register("email")}
-              type="email"
-              placeholder="Email"
+        {entity === "trainer" && (
+          <Form.Group className="mb-3" controlId="formGroupActivities">
+            <Controller
+              name="activities"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  className="input-form"
+                  closeMenuOnSelect={false}
+                  components={animatedComponents}
+                  isMulti
+                  options={optionsActivities}
+                  styles={customStyles}
+                  value={optionsActivities.filter((option) =>
+                    field.value?.includes(option.value)
+                  )}
+                  onChange={(selectedOptions) => {
+                    field.onChange(
+                      selectedOptions.map((option) => option.value)
+                    );
+                  }}
+                />
+              )}
             />
-            {errors.email && (
-              <span className="alert" role="alert">
-                {errors.email.message}
-              </span>
-            )}
           </Form.Group>
         )}
-        {editForm ? (
-          <> </>
-        ) : (
-          <Form.Group className="mb-3" controlId="formGroupPassword">
-            <Form.Control
-              className="input-form"
-              type="password"
-              onFocus={() => clearErrors("password")}
-              {...register("password")}
-              placeholder="Contraseña"
-            />
-            {errors.password && (
-              <span className="alert" role="alert">
-                {errors.password.message}
-              </span>
-            )}
-          </Form.Group>
+        {!editForm && (
+          <>
+            <Form.Group className="mb-3" controlId="formGroupEmail">
+              <Form.Control
+                className="input-form"
+                onFocus={() => clearErrors("email")}
+                {...register("email")}
+                type="email"
+                placeholder="Email"
+              />
+              {errors.email && (
+                <span className="alert" role="alert">
+                  {errors.email.message}
+                </span>
+              )}
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Control
+                className="input-form"
+                type="password"
+                onFocus={() => clearErrors("password")}
+                {...register("password")}
+                placeholder="Contraseña"
+              />
+              {errors.password && (
+                <span className="alert" role="alert">
+                  {errors.password.message}
+                </span>
+              )}
+            </Form.Group>
+          </>
         )}
         <Button variant="light" className="button-form" type="submit">
-          {editForm
-            ? "Editar"
-            : entity === "client"
-            ? "Registrarse"
-            : "Crear cuenta"}
+          {editForm ? "Editar" : !entity ? "Registrarse" : "Crear cuenta"}
         </Button>
       </Form>
-      {entity ? (
-        <></>
-      ) : (
-        <div className="have-account">Ya tienes cuenta? Inicia sesion</div>
+      {!entity && (
+        <div className="have-account">¿Ya tienes cuenta? Inicia sesión</div>
       )}
     </section>
   );
