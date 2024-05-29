@@ -3,6 +3,9 @@ import api from "../../api";
 const getAllClients = () => {
   return api.get("/api/Client");
 };
+const getClientByEmail=(email) =>{
+  return api.get(`/api/Client/${email}`)
+}
 
 const deleteClient = (email) => {
   return api.delete(`/api/Client/${email}`);
@@ -29,6 +32,6 @@ const updateClientActiveState = (email, autorizationToReserve) => {
   return api.patch(`/api/Client/${email}/state?autorizationToReserve=${autorizationToReserve}` )
 };
 
-export { getAllClients, deleteClient, createClient, updateClient, updateClientActiveState };
+export { getAllClients, getClientByEmail,deleteClient, createClient, updateClient, updateClientActiveState };
 
 
