@@ -1,4 +1,17 @@
-.card-entity {
+.trainer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .button-trainer {
+    background-color: #6decb9;
+  }
+  
+  
+  
+  .card-trainer {
     display: flex;
     flex-direction: row;
     height: 80hv;
@@ -8,32 +21,17 @@
     border-radius: 20px;
     margin: 25px 0 25px;
   }
-
-  .card-left{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    margin-left: 0.5em;
-    
-  }
- 
   .icon-user
-  { display: flex;
+  {
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 150px;
     font-size:  90px;
+    border-right: 3px solid black; 
   }
-  .client-active{
-    width: 150px;
-    margin-top: 20px;
-  }
-
   .information-user-section
   {
-    
-    border-left: 3px solid black; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,15 +46,16 @@
     margin: 10px;
   }
   
-  .button-update-entity {
+  .button-update-trainer {
     background-color: green;
     color: #d9d9d9;
     border: 2px solid transparent;
     
   }
   
-  .button-delete-entity {
+  .button-delete-trainer {
     background-color: red;
     color: #d9d9d9;
     border: 2px solid transparent;
   }
+  

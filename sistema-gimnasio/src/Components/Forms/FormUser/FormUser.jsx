@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { createAdmin, updateAdmin } from "../../Admin/AdminServices";
 import { useNavigate, useParams } from "react-router-dom";
+import { createClient, updateClient, updateClientActiveState } from "../../Client/ClientServices";
+import { createTrainer, updateByEmail } from "../../Trainer/TrainerServices";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -41,7 +43,6 @@ const editUserSchema = yup.object({
     .required("El apellido es requerido")
     .matches(/^[a-zA-Z]+$/, "El apellido debe tener solo letras"),
 });
-
 const FormUser = ({ entity, editForm }) => {
   let navigate = useNavigate();
   let { userEmail } = useParams();
@@ -54,6 +55,7 @@ const FormUser = ({ entity, editForm }) => {
     mode: "onBlur",
     resolver: yupResolver(editForm ? editUserSchema : createUserSchema),
   });
+
   const onSubmit = async (data) => {
     if (editForm) {
       if (entity === "admin") {
@@ -63,17 +65,47 @@ const FormUser = ({ entity, editForm }) => {
         } catch (error) {
           return console.log(error);
         }
+      } else if (entity === "client") {
+        try {
+          await updateClient(userEmail, data.firstName, data.lastname);
+          await updateClientActiveState(userEmail, data.autorizationToReserve);
+          return navigate("/client", { replace: true });
+        } catch (error) {
+          return console.log(error);
+        }
+      }else if (entity === "trainer") {
+        try {
+          await updateByEmail(userEmail, data.firstName, data.lastname);
+          return navigate("/trainer", { replace: true });
+        } catch (error) {
+          return console.log(error);
+        }
       }
     }
+
     if (entity === "admin") {
       try {
-        await createAdmin(
+        await createAdmin(data.email, data.firstName, data.lastname, data.password);
+        navigate("/admin", { replace: true });
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (entity === "client") {
+      try {
+        await createClient(data.email, data.firstName, data.lastname, data.password);
+        navigate("/client", { replace: true });
+      } catch (error) {
+        console.log(error);
+      }
+    }else if (entity === "trainer") {
+      try {
+        await createTrainer(
           data.email,
           data.firstName,
           data.lastname,
           data.password
         );
-        navigate("/admin", { replace: true });
+        navigate("/trainer", { replace: true });
       } catch (error) {
         console.log(error);
       }
@@ -155,7 +187,7 @@ const FormUser = ({ entity, editForm }) => {
         <></>
       ) : (
         <div className="have-account">
-          Ya tenes cuenta? <a href="">Inicia sesion</a>
+          Ya tenes cuenta? Inicia sesion
         </div>
       )}
     </section>
