@@ -9,7 +9,7 @@ header {
   color: #11999e;
 }
 
-nav a {
+nav .link-nav {
   margin: 0 2rem;
   padding: 10px 20px;
   display: inline-block;
@@ -19,7 +19,7 @@ nav a {
   text-decoration: none;
 }
 
-nav a:hover {
+nav .link-nav:hover {
   background-color: #6decb9;
 }
 
@@ -76,7 +76,7 @@ header .nav-btn {
     left: 2rem;
   }
 
-  nav a {
+  nav .link-nav {
     display: flex;
     align-items: center;
     justify-content: center;

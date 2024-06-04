@@ -1,5 +1,6 @@
 import React from "react";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./NavBar.css";
@@ -16,15 +17,31 @@ const NavBar = () => {
       <button className="nav-btn" onClick={showNavBar}>
         <FontAwesomeIcon icon={faBars} color="#11999e" />
       </button>
-      <img src="/assets/logo-simple2.png" alt="logo" className="logo-image" />
+      <Link to="/">
+        <img src="/assets/logo-simple2.png" alt="logo" className="logo-image" />
+      </Link>
       <nav ref={navRef}>
-        <a href="/#">HOME</a>
-        <a href="/#">ENTRENADORES</a>
-        <a href="/#">CLASES</a>
-        <a href="/#">ACTIVIDADES</a>
-        <a href="/#">CLIENTES</a>
-        <a href="/#">ADMINS</a>
-        <a href="/#">EDITAR PERFIL</a>
+        <Link to="/" className="link-nav" onClick={showNavBar}>
+          HOME
+        </Link>
+        <Link to="/trainer" className="link-nav" onClick={showNavBar}>
+          ENTRENADORES
+        </Link>
+        <Link to="/" className="link-nav" onClick={showNavBar}>
+          CLASES
+        </Link>
+        <Link to="/" className="link-nav" onClick={showNavBar}>
+          ACTIVIDADES
+        </Link>
+        <Link to="/client" className="link-nav" onClick={showNavBar}>
+          CLIENTES
+        </Link>
+        <Link to="/admin" className="link-nav" onClick={showNavBar}>
+          ADMINS
+        </Link>
+        <Link to="" className="link-nav" onClick={showNavBar}>
+          EDITAR PERFIL
+        </Link>
         <button className="nav-btn nav-close-btn" onClick={showNavBar}>
           <FontAwesomeIcon icon={faXmark} color="#11999e" />
         </button>
