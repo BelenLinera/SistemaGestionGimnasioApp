@@ -3,8 +3,7 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Card from "../Shared/Card/Card";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
-import "./Trainer.css"; 
-
+import "./Trainer.css";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
