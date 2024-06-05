@@ -1,0 +1,27 @@
+.activity-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .button-activity {
+    background-color: #6decb9;
+  }
+
+  .buttons button{
+    margin: 10px;
+  }
+  
+  .button-update-activity-act {
+    background-color: green;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+    
+  }
+  
+  .button-delete-activity-act {
+    background-color: red;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+  }
