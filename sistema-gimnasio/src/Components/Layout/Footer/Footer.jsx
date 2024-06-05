@@ -1,9 +1,22 @@
-import React from 'react'
+import React from "react";
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div>Footer</div>
-  )
-}
+    <footer className="footer-container">
+      <div className="footer-columns">
+        <div className="footer-column">
+          <p>Direccion: Santa Fe 1100</p>
+        </div>
+        <div className="footer-column">
+          <p>Contacto: trainingcenter@gmail.com</p>
+        </div>
+        <div className="footer-column">
+          <p>© Derechos reservados 2023-2024</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;

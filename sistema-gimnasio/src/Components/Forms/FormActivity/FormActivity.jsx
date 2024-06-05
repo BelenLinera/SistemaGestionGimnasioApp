@@ -37,7 +37,10 @@ const editActivitySchema = yup.object({
   activityDescription: yup
     .string()
     .required("La descripcion de la actividad es requerida")
-    .matches(/^[a-zA-Z0-9 ]+$/, "La descripcion debe tener solo letras"),
+    .matches(
+      /^[a-zA-Z0-9 ]+$/,
+      "La descripcion no debe contener simbolos ni caracteres especiales"
+    ),
 });
 
 const FormActivity = ({ entity, editFormAct }) => {
@@ -56,27 +59,28 @@ const FormActivity = ({ entity, editFormAct }) => {
   });
 
   const onSubmit = async (data) => {
-    //const { activityNameData, activityDescription } = data;
     if (editFormAct) {
       if (entity === "activity") {
         try {
-          //await updateActivity(activityNameData, activityDescription);
-          await updateActivity(activityName, data.activityName, data.activityDescription);
+          await updateActivity(
+            activityName,
+            data.activityName,
+            data.activityDescription
+          );
           return navigate("/activity", { replace: true });
         } catch (error) {
           return console.log(error);
         }
       }
-    } //else {
-      if (entity === "activity") {
-        try {
-          //await createActivity(activityNameData, activityDescription);
-          await createActivity(data.activityName, data.activityDescription);
-          navigate("/activity", { replace: true });
-        } catch (error) {
-          console.log(error);
-        }
+    }
+    if (entity === "activity") {
+      try {
+        await createActivity(data.activityName, data.activityDescription);
+        navigate("/activity", { replace: true });
+      } catch (error) {
+        console.log(error);
       }
+    }
     //}
   };
   return (
@@ -88,7 +92,7 @@ const FormActivity = ({ entity, editFormAct }) => {
             className="input-form"
             onFocus={() => clearErrors("activityName")}
             {...register("activityName")}
-            type="text"
+            type="activityName"
             placeholder="Nombre"
           />
           {errors.activityName && (
@@ -100,14 +104,14 @@ const FormActivity = ({ entity, editFormAct }) => {
         <Form.Group className="mb-3" controlId="formGroupDescription">
           <Form.Control
             className="input-form"
-            onFocus={() => clearErrors("description")}
+            onFocus={() => clearErrors("activityDescription")}
             {...register("activityDescription")}
-            type="text"
+            type="activityDescription"
             placeholder="Descripcion"
           />
-          {errors.description && (
+          {errors.activityDescription && (
             <span className="alert" role="alert">
-              {errors.description.message}
+              {errors.activityDescription.message}
             </span>
           )}
         </Form.Group>
