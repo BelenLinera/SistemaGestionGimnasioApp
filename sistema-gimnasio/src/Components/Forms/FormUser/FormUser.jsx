@@ -12,7 +12,6 @@ import {
   createClient,
   getClientByEmail,
   updateClient,
-  updateClientActiveState,
 } from "../../Client/ClientServices";
 import {
   createTrainer,
@@ -20,7 +19,7 @@ import {
   updateByEmail,
 } from "../../Trainer/TrainerServices";
 import "./FormUser.css";
-import api from "../../../api";
+import { getAllActivities } from "../../Activity/ActivityServices";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -95,7 +94,7 @@ const FormUser = ({ entity, editForm }) => {
     if (entity === "trainer") {
       const fetchActivities = async () => {
         try {
-          const response = await api.get("/api/Activity");
+          const response = await getAllActivities();
           const mappedActivities = response.data.map((activity) => ({
             value: activity.idActivity,
             label: activity.activityName,
@@ -150,7 +149,6 @@ const FormUser = ({ entity, editForm }) => {
         break;
       case "client":
         await updateClient(userEmail, data.firstName, data.lastname);
-        // await updateClientActiveState(userEmail, data.autorizationToReserve);
         break;
       case "trainer":
         await updateByEmail(
