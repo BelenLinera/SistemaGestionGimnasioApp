@@ -11,7 +11,7 @@ const Admin = () => {
   const [changes, setChanges] = useState(false);
   useEffect(() => {
     getAllAdmins().then((response) => {
-      setAdmins(response.data.$values);
+      setAdmins(response.data);
     });
   }, [changes]);
   return (

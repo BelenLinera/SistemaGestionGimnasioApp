@@ -10,7 +10,7 @@ const Activity = () => {
     const [changes, setChanges] = useState([]);
     useEffect(() => {
         getAllActivities().then((response) => {
-            setActivities(response.data.$values);
+            setActivities(response.data);
         });
     }, [changes]);
   return (
