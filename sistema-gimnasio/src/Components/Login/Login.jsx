@@ -78,7 +78,7 @@ const Login = () => {
       </Form>
       <div>
         <div className="forget-password">
-          No tenes cuenta? <a href="">Registrate</a>
+          No tenes cuenta? <Link  to="/login">Registrate</Link>
         </div>
         <div className="forget-password">
           Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>

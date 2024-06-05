@@ -1,8 +1,10 @@
 import Admin from "../Admin/Admin";
 import { Route, Routes } from "react-router-dom";
 import FormUser from "../Forms/FormUser/FormUser";
+import FormActivity from '../Forms/FormActivity/FormActivity';
 import Client from "../Client/Client";
 import Trainer from "../Trainer/Trainer";
+import Activity from '../Activity/Activity';
 import Footer from "./Footer/Footer";
 import NavBar from "./NavBar/NavBar";
 import React from "react";
@@ -55,6 +57,10 @@ const Layout = () => {
           path="/trainer/edit-trainer/:userEmail"
           element={<FormUser entity={"trainer"} editForm={true} />}
         />
+            <Route path="/activity" element={<Activity />}/>
+    <Route path="/activity/create-activity" element={<FormActivity entity={"activity"}/>} />
+    <Route path= "/activity" element={<Activity/>}/>
+    <Route path = "/activity/edit-activity/:activityName" element={<FormActivity entity={"activity"} editFormAct={true}/>} />
       </Routes>
       <Footer />
     </>

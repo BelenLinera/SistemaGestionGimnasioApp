@@ -30,7 +30,7 @@ const NavBar = () => {
         <Link to="/" className="link-nav" onClick={showNavBar}>
           CLASES
         </Link>
-        <Link to="/" className="link-nav" onClick={showNavBar}>
+        <Link to="/activity" className="link-nav" onClick={showNavBar}>
           ACTIVIDADES
         </Link>
         <Link to="/client" className="link-nav" onClick={showNavBar}>

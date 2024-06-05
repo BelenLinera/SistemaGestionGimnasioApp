@@ -1,0 +1,46 @@
+.card-entity-act {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #6decb9;
+    flex-direction: column;
+    width: 370px;
+    min-height: 220px;
+    height: auto;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+    overflow: hidden; 
+    word-wrap: break-word;
+    
+  }
+ .activity-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+.card-entity-description-act{
+  
+  text-align: center ;
+  word-wrap: break-word;
+  margin: 0 15px 0;
+}
+
+  .buttons button{
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button-update-entity {
+    background-color: green;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+    
+  }
+  
+  .button-delete-entity {
+    background-color: red;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+  }
