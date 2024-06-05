@@ -4,6 +4,8 @@ import {BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FormUser from '../Forms/FormUser/FormUser';
 import Client from '../Client/Client';
 import Trainer from '../Trainer/Trainer';
+import GymClass from '../GymClass/GymClass';
+import GymClassForm from '../Forms/GymClassForm/GymClassForm';
 
 const Layout = () => {
   return (
@@ -29,6 +31,12 @@ const Layout = () => {
     <Route path="/trainer/create-trainer" element={<FormUser entity={"trainer"}/>} />
     <Route path= "/trainer" element={<Trainer/>}/>
     <Route path = "/trainer/edit-trainer/:userEmail" element={<FormUser entity={"trainer"} editForm={true}/>} />
+
+    <Route path="/gymclass" element={<GymClass />}/>
+    <Route path="/gymclass/create-gymclass" element={<GymClassForm editFormGym={false} />} />
+    <Route path="/gymclass" element={<GymClass />}/>
+    <Route path="/gymclass/edit-gymclass/:id" element={<GymClassForm editFormGym={true} />} />
+    
     </Routes>
     </Router>
     </>
