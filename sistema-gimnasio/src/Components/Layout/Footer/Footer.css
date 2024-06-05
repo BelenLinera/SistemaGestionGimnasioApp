@@ -1,0 +1,30 @@
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9;
+  color: #11999e;
+  bottom: 0;
+  height: 180px;
+  width: 100%;
+}
+
+/* vista para telefonos */
+@media only screen and (max-width: 1220px) {
+  div .footer-columns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  div .footer-column {
+    margin: 0px 20px;
+    justify-content: center;
+  }
+}
+
+/* vista para escritorio */
+/* 
+@media only screen and (min-width: 1220px) {
+} */
