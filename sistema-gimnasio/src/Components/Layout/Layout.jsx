@@ -5,13 +5,15 @@ import Client from "../Client/Client";
 import Trainer from "../Trainer/Trainer";
 import Footer from "./Footer/Footer";
 import NavBar from "./NavBar/NavBar";
+import React from "react";
+import Login from "../Login/Login";
+import Home from "./Home/Home";
+import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
+import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
 
 const Layout = () => {
   return (
     <>
-      {/*<Login></Login>
-    <Register></Register>
-    */}
       <NavBar />
       <Routes>
         <Route path="/admin" element={<Admin />} />
@@ -23,6 +25,13 @@ const Layout = () => {
         <Route
           path="/admin/edit-admin/:userEmail"
           element={<FormUser entity={"admin"} editForm={true} />}
+        />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forget-password" element={<RecoverPassword />} />
+        <Route
+          path="/forget-password/validate-token"
+          element={<ChangePasswordForm />}
         />
 
         <Route path="/client" element={<Client />} />
