@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Card from "../Shared/Card/Card";
+import CardTrainer from "./CardTrainer/CardTrainer";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
 import "./Trainer.css";
 
@@ -10,7 +10,7 @@ const Trainer = () => {
   const [changes, setChanges] = useState(false);
   useEffect(() => {
     getAllTrainers().then((response) => {
-      setTrainers(response.data.$values);
+      setTrainers(response.data);
     });
   }, [changes]);
   return (
@@ -22,7 +22,7 @@ const Trainer = () => {
         </Button>
       </Link>
       {trainers.map((trainer) => (
-        <Card
+        <CardTrainer
           entity={trainer}
           type={"trainer"}
           key={trainer.email}

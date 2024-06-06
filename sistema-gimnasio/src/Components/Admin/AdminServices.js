@@ -3,6 +3,9 @@ import api from "../../api";
 const getAllAdmins = () => {
   return api.get("/api/Admin");
 };
+const getAdminByEmail=(email) =>{
+  return api.get(`/api/Admin/${email}`)
+}
 
 const deleteAdmin = (email) => {
   return api.delete(`/api/Admin/${email}`);
@@ -23,4 +26,4 @@ const updateAdmin = (email, nameAdmin, lastName) => {
     Lastname: lastName,
   });
 };
-export { getAllAdmins, deleteAdmin, createAdmin, updateAdmin };
+export { getAllAdmins, getAdminByEmail,deleteAdmin, createAdmin, updateAdmin };

@@ -11,7 +11,7 @@ const Client = () => {
   const [changes, setChanges] = useState(false);
   useEffect(() => {
     getAllClients().then((response) => {
-      setClients(response.data.$values);
+      setClients(response.data);
     });
   }, [changes]);
   return (
