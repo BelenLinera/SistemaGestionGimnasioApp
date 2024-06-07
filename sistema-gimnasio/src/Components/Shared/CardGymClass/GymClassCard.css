@@ -1,20 +1,31 @@
+
 .card-gymclass {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    height: 80hv;
+    background-color: #6decb9;
+    width: 370px;
+    min-height: 220px;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+  }
 
-.card-title {
-    font-size: 1.25em;
-    margin-bottom: 10px;
-}
-
-.card-subtitle {
-    font-size: 1em;
-    color: #888;
-}
-
-.card-text {
-    margin-bottom: 15px;
-}
+  .buttons button{
+    margin: 10px;
+  }
+  
+  .button-update-entity {
+    background-color: green;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+    
+  }
+  
+  .button-delete-entity {
+    background-color: red;
+    color: #d9d9d9;
+    border: 2px solid transparent;
+  }

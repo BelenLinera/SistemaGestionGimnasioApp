@@ -12,13 +12,14 @@ const GymClass = () => {
     useEffect(() => {
         getAllGymClasses().then((response) => {
             setGymClasses(response.data);
+            console.log(response.data)
         });
     }, [changes]);
 
     return (
         <section className="gymclass-section">
             <h2>CLASES DEL GIMNASIO</h2>
-            <Link to="/gymclass/create-gymclass">
+            <Link to="/gym-class/create-gym-class">
                 <Button variant="light" className="button-gymclass">
                     + Nueva clase
                 </Button>

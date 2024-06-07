@@ -8,12 +8,12 @@ const getAllGymClasses = () => {
     return api.delete(`/api/GymClass/${idGymClass}`);
   };
   
-  const createGymClass = (idTrainerActivity, timeClass, days, capacity) => {
+  const createGymClass = (data) => {
     return api.post('/api/GymClass', {
-      IdTrainerActivity: idTrainerActivity,
-      TimeClass: timeClass,
-      Days: days,
-      Capacity: capacity,
+      IdTrainerActivity: data.IdTrainerActivity,
+      TimeClass: data.TimeClass,
+      Days: data.Days,
+      Capacity: data.Capacity,
     });
   };
   
