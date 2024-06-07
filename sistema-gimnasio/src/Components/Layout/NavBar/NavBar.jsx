@@ -27,7 +27,7 @@ const NavBar = () => {
         <Link to="/trainer" className="link-nav" onClick={showNavBar}>
           ENTRENADORES
         </Link>
-        <Link to="/" className="link-nav" onClick={showNavBar}>
+        <Link to="/gym-class" className="link-nav" onClick={showNavBar}>
           CLASES
         </Link>
         <Link to="/activity" className="link-nav" onClick={showNavBar}>

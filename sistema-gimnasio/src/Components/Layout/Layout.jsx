@@ -63,10 +63,10 @@ const Layout = () => {
     <Route path="/activity/create-activity" element={<FormActivity entity={"activity"}/>} />
     <Route path= "/activity" element={<Activity/>}/>
     <Route path = "/activity/edit-activity/:activityName" element={<FormActivity entity={"activity"} editFormAct={true}/>} />
-    <Route path="/gymclass" element={<GymClass />}/>
-    <Route path="/gymclass/create-gymclass" element={<GymClassForm editFormGym={false} />} />
-    <Route path="/gymclass" element={<GymClass />}/>
-    <Route path="/gymclass/edit-gymclass/:id" element={<GymClassForm editFormGym={true} />} />
+    <Route path="/gym-class" element={<GymClass />}/>
+    <Route path="/gym-class/create-gym-class" element={<GymClassForm editFormGym={false} />} />
+    <Route path="/gym-class" element={<GymClass />}/>
+    <Route path="/gym-class/edit-gym-class/:id" element={<GymClassForm editFormGym={true} />} />
       </Routes>
       <Footer />
     </>
