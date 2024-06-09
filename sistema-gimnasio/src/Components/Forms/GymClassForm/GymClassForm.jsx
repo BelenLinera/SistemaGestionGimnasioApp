@@ -20,12 +20,15 @@ const createGymClassSchema = yup.object({
   IdActivity: yup.object().required("La actividad del entrenador es requerida"),
   IdTrainerActivity: yup.number().required("El entrenador es requerido"),
   Days: yup.number().required("Los días de la clase son requeridos"),
-  TimeClass: yup.string().required("Los días de la clase son requeridos"),
+  TimeClass: yup.string()
+  .matches(/^([0-9]|[01]\d|2[0-3]):([00]\d)$/, "El horario debe estar en formato de hora (HH:mm)")
+  .required("El horario es requerido"),
   Capacity: yup
     .number("La capacidad debe ser un numero")
     .required("La capacidad de la clase es requerida")
-    .positive("La capacidad no pude ser negativa")
-    .integer("La capacidad debe ser un numero entero"),
+    .positive("La capacidad debe ser mayor a 0")
+    .integer("La capacidad debe ser un numero entero")
+    .max(20, "La capacidad no puede ser mayor que 20"),
 });
 const animatedComponents = makeAnimated();
 const customStyles = {
@@ -215,6 +218,20 @@ const GymClassForm = ({ editFormGym }) => {
             </span>
           )}
         </Form.Group>
+        <Form.Group className="mb-3" controlId="formGroupCapacity">
+          <Form.Control
+            className="input-form"
+            onFocus={() => clearErrors("Capacity")}
+            {...register("Capacity")}
+            type="number"
+            placeholder="Capacidad"
+          />
+          {errors.Capacity && (
+            <span className="alert" role="alert">
+              {errors.Capacity.message}
+            </span>
+          )}
+        </Form.Group>
         <Form.Group className="mb-3" controlId="formGroupDays">
           <Controller
             name="Days"
@@ -252,20 +269,6 @@ const GymClassForm = ({ editFormGym }) => {
           {errors.TimeClass && (
             <span className="alert" role="alert">
               {errors.TimeClass.message}
-            </span>
-          )}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formGroupCapacity">
-          <Form.Control
-            className="input-form"
-            onFocus={() => clearErrors("Capacity")}
-            {...register("Capacity")}
-            type="number"
-            placeholder="Capacidad"
-          />
-          {errors.Capacity && (
-            <span className="alert" role="alert">
-              {errors.Capacity.message}
             </span>
           )}
         </Form.Group>

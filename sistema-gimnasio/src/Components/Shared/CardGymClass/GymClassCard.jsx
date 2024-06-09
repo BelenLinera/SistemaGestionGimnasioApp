@@ -23,19 +23,22 @@ const CardGymClass = ({ entity, setChanges, changes }) => {
       </h5>
       <p>
         <strong>Entrenador:</strong> {entity.trainerActivity.trainer.name}{" "}
-        {entity.trainerActivity.trainer.lastName}<br />
+        {entity.trainerActivity.trainer.lastName}
+        <br />
         <strong>Día:</strong> {entity.dayName} <br />
         <strong>Horario:</strong> {entity.timeClass} <br />
         <strong>Cupo:</strong> {entity.capacity}
       </p>
-      <Button variant="danger" onClick={handleDelete}>
-        Eliminar
-      </Button>
-      <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
-            <Button variant="light" className="button-update-entity">
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </Button>
-          </Link>
+      <div className="buttons">
+        <Button variant="danger" onClick={handleDelete}>
+          Eliminar
+        </Button>
+        <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
+          <Button variant="light" className="button-update-entity">
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };
