@@ -6,7 +6,7 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
-const CardGymClass = ({ entity, setChanges, changes }) => {
+const CardGymClass = ({ entity, setChanges, changes,showDay }) => {
   const handleDelete = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
@@ -27,6 +27,9 @@ const CardGymClass = ({ entity, setChanges, changes }) => {
         <br />
         <strong>Día:</strong> {entity.dayName} <br />
         <strong>Horario:</strong> {entity.timeClass} <br />
+        {showDay && (
+          <strong>Fecha Completa: {entity.datetimeString}</strong> 
+        )}
         <strong>Cupo:</strong> {entity.capacity}
       </p>
       <div className="buttons">
