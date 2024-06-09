@@ -12,7 +12,6 @@ const GymClass = () => {
     useEffect(() => {
         getAllGymClasses().then((response) => {
             setGymClasses(response.data);
-            console.log(response.data)
         });
     }, [changes]);
 
@@ -28,7 +27,7 @@ const GymClass = () => {
                 <CardGymClass
                     entity={gymClass}
                     type={"gymclass"}
-                    key={gymClass.IdGymClass}
+                    key={gymClass.idGymClass}
                     setChanges={setChanges}
                     changes={changes}
                 />

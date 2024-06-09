@@ -2,6 +2,9 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { deleteGymClass } from "../../GymClass/GymClassServices";
 import "./GymClassCard.css";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const CardGymClass = ({ entity, setChanges, changes }) => {
   const handleDelete = async () => {
@@ -28,6 +31,11 @@ const CardGymClass = ({ entity, setChanges, changes }) => {
       <Button variant="danger" onClick={handleDelete}>
         Eliminar
       </Button>
+      <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
+            <Button variant="light" className="button-update-entity">
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Button>
+          </Link>
     </div>
   );
 };

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import {
   createGymClass,
+  getGymClassById,
   updateGymClass,
 } from "../../GymClass/GymClassServices";
 import Form from "react-bootstrap/Form";
@@ -17,9 +18,7 @@ import "./GymClassForm.css";
 
 const createGymClassSchema = yup.object({
   IdActivity: yup.object().required("La actividad del entrenador es requerida"),
-  IdTrainerActivity: yup
-    .number()
-    .required("El entrenador es requerido"),
+  IdTrainerActivity: yup.number().required("El entrenador es requerido"),
   Days: yup.number().required("Los días de la clase son requeridos"),
   TimeClass: yup.string().required("Los días de la clase son requeridos"),
   Capacity: yup
@@ -28,20 +27,6 @@ const createGymClassSchema = yup.object({
     .positive("La capacidad no pude ser negativa")
     .integer("La capacidad debe ser un numero entero"),
 });
-
-const editGymClassSchema = yup.object({
-  IdTrainerActivity: yup
-    .number()
-    .required("El ID de la actividad del entrenador es requerido"),
-  TimeClass: yup.string().required("El horario de la clase es requerido"),
-  Days: yup.number().required(),
-  Capacity: yup
-    .number()
-    .required("La capacidad de la clase es requerida")
-    .positive()
-    .integer(),
-});
-
 const animatedComponents = makeAnimated();
 const customStyles = {
   control: (provided) => ({
@@ -59,22 +44,20 @@ const GymClassForm = ({ editFormGym }) => {
   let navigate = useNavigate();
   let { id } = useParams();
   const [optionsActivities, setOptionsActivities] = useState([]);
-  const [optionsTrainers, setOptionsTrainers] = useState([]);
+  const [trainers, setTrainers] = useState([]);
   const [activitySelected, setActivitySelected] = useState(null);
+  const [trainerSelected, setTrainerSelected] = useState(null);
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
     clearErrors,
     control,
     setValue,
   } = useForm({
     mode: "onBlur",
-    resolver: yupResolver(
-      editFormGym ? editGymClassSchema : createGymClassSchema
-    ),
+    resolver: yupResolver(createGymClassSchema),
   });
 
   useEffect(() => {
@@ -91,58 +74,73 @@ const GymClassForm = ({ editFormGym }) => {
       }
     };
     fetchActivities();
-
-    // if (editFormGym && id) {
-    //   getGymClassById(id)
-    //     .then((response) => {
-    //       setInitialData(response.data);
-    //       reset(response.data);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error trayendo la clase del gimnasio', error);
-    //     });
-    // }
+    console.log("Trae actividades")
   }, []);
 
   useEffect(() => {
-    console.log("usseEfect trainers")
     const fetchTrainers = async () => {
       try {
         const response = await getAllTrainers();
-        const trainersOfActivitySelected = response.data.filter((trainer) =>
-          trainer.trainerActivities.some(
-            (activities) => activities.activity.idActivity === activitySelected
-          )
-        );
-        const mappedTrainers = trainersOfActivitySelected.flatMap((trainer) =>
-          trainer.trainerActivities
-            .filter(
-              (activities) => activities.activity.idActivity === activitySelected
-            )
-            .map((activity) => ({
-              value: activity.idTrainerActivity,
-              label: `${trainer.name} ${trainer.lastName}`,
-            }))
-        );
-        setOptionsTrainers(mappedTrainers);
+        setTrainers(response.data);
       } catch (error) {
         console.error("Error trayendo los entrenadores", error);
       }
     };
+    fetchTrainers();
+    console.log("trae trainers activities")
+  }, []);
 
-    if (activitySelected) {
-      fetchTrainers(); 
+  const optionsTrainers = useMemo(() => {
+    if (!activitySelected) return [];
+    const trainersOfActivitySelected = trainers.filter((trainer) =>
+      trainer.trainerActivities.some(
+        (activities) => activities.activity.idActivity === activitySelected.value
+      )
+    );
+    return trainersOfActivitySelected.flatMap((trainer) =>
+      trainer.trainerActivities
+        .filter(
+          (activities) => activities.activity.idActivity === activitySelected.value
+        )
+        .map((activity) => ({
+          value: activity.idTrainerActivity,
+          label: `${trainer.name} ${trainer.lastName}`,
+        }))
+    );
+  }, [trainers, activitySelected]);
 
-      console.log("llamado a la api")
+  
+  useEffect(() => {
+    if (id) {
+      const fetchDataUser = async () => {
+        const dataGymClassDefault = await getGymClassById(id);
+        const gymClassDefault = dataGymClassDefault.data;
+        setActivitySelected({
+          value: gymClassDefault.trainerActivity.idActivity,
+          label: gymClassDefault.trainerActivity.activity.activityName,
+        });
+        setTrainerSelected({
+          value: gymClassDefault.trainerActivity.idTrainerActivity,
+          label: `${gymClassDefault.trainerActivity.trainer.name} ${gymClassDefault.trainerActivity.trainer.lastName}`,
+        });
+        setValue("IdActivity", {
+          value: gymClassDefault.trainerActivity.idActivity,
+          label: gymClassDefault.trainerActivity.activity.activityName,
+        });
+        setValue("IdTrainerActivity", gymClassDefault.trainerActivity.idTrainerActivity);
+        setValue("Days", gymClassDefault.days);
+        setValue("TimeClass", gymClassDefault.timeClass);
+        setValue("Capacity", gymClassDefault.capacity);
+      };
+      fetchDataUser();
     }
-  }, [activitySelected,setValue]);
+  }, [id, setValue]);
 
   const onSubmit = async (data) => {
     try {
       if (editFormGym) {
         await updateGymClass(id, data);
       } else {
-        console.log(data.IdTrainerActivity)
         await createGymClass(data);
       }
       navigate("/gym-class", { replace: true });
@@ -150,7 +148,7 @@ const GymClassForm = ({ editFormGym }) => {
       console.log(error);
     }
   };
-  
+
   const daysOptions = [
     { value: 1, label: "Lunes" },
     { value: 2, label: "Martes" },
@@ -179,9 +177,10 @@ const GymClassForm = ({ editFormGym }) => {
                 styles={customStyles}
                 placeholder="Selecciona una actividad"
                 onChange={(selectedOption) => {
-                  setActivitySelected(selectedOption.value);
+                  setActivitySelected(selectedOption);
                   field.onChange(selectedOption);
                 }}
+                value={activitySelected}
               />
             )}
           />
@@ -199,10 +198,9 @@ const GymClassForm = ({ editFormGym }) => {
               <Select
                 {...field}
                 options={optionsTrainers}
-                value={optionsTrainers.find(
-                  (option) => option.value === field.value
-                )}
+                value={trainerSelected}
                 onChange={(selectedOption) => {
+                  setTrainerSelected(selectedOption);
                   field.onChange(selectedOption.value);
                 }}
                 styles={customStyles}
