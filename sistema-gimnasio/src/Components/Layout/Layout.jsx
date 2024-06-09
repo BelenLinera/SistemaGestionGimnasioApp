@@ -2,9 +2,11 @@ import Admin from "../Admin/Admin";
 import { Route, Routes } from "react-router-dom";
 import FormUser from "../Forms/FormUser/FormUser";
 import FormActivity from '../Forms/FormActivity/FormActivity';
+import GymClassForm from '../Forms/GymClassForm/GymClassForm';
 import Client from "../Client/Client";
 import Trainer from "../Trainer/Trainer";
 import Activity from '../Activity/Activity';
+import GymClass from '../GymClass/GymClass';
 import Footer from "./Footer/Footer";
 import NavBar from "./NavBar/NavBar";
 import React from "react";
@@ -61,6 +63,10 @@ const Layout = () => {
     <Route path="/activity/create-activity" element={<FormActivity entity={"activity"}/>} />
     <Route path= "/activity" element={<Activity/>}/>
     <Route path = "/activity/edit-activity/:activityName" element={<FormActivity entity={"activity"} editFormAct={true}/>} />
+    <Route path="/gym-class" element={<GymClass />}/>
+    <Route path="/gym-class/create-gym-class" element={<GymClassForm editFormGym={false} />} />
+    <Route path="/gym-class" element={<GymClass />}/>
+    <Route path="/gym-class/edit-gym-class/:id" element={<GymClassForm editFormGym={true} />} />
       </Routes>
       <Footer />
     </>
