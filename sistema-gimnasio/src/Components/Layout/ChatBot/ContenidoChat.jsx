@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import ChatBot from "react-simple-chatbot";
 
-export default class ContenidoChat extends Component {
+
+
+class ContenidoChat extends Component {
   render() {
     return (
       <ChatBot
@@ -15,7 +17,7 @@ export default class ContenidoChat extends Component {
             id: "2",
             user: true,
             validator: (value) => {
-              if (/^[a-z]{1,15}$/.test(value)) {
+              if (/^[a-zA-Z]{1,15}$/.test(value)) {
                 return true;
               } else {
                 return "Por favor, ingresa un nombre correcto.";
@@ -127,4 +129,4 @@ export default class ContenidoChat extends Component {
       />
     );
   }
-}
+} export default ContenidoChat;
