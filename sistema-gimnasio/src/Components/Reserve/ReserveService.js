@@ -12,7 +12,7 @@ const getReservesByUser = async (token) => {
   });
 };
 
-const makeReserve = async (token,data) => {
+const makeReserve = async (token, data) => {
   return await api.post(
     "/api/Reserve",
     {
@@ -27,4 +27,12 @@ const makeReserve = async (token,data) => {
   );
 };
 
-export { getAllReserves, getReservesByUser, makeReserve };
+const cancelReserve = async (token, id) => {
+  return await api.delete(`/api/Reserve/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export { getAllReserves, getReservesByUser, makeReserve, cancelReserve };

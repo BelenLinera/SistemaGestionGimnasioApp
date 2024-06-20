@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import UserContext from "../../Context/UserContext";
 import { deleteGymClass } from "../../GymClass/GymClassServices";
-import { makeReserve } from "../../Reserve/ReserveService";
+import { cancelReserve, makeReserve } from "../../Reserve/ReserveService";
 import { format, parse } from "date-fns";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
-  const { user } = useContext(UserContext); 
+  const { user } = useContext(UserContext);
 
   const handleDelete = async () => {
     try {
@@ -20,20 +20,34 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       console.error("Failed to delete gym class", error);
     }
   };
+
   useEffect(() => {
-    console.log(entity.reserved)
-  },[entity.reserved])
+    console.log(entity);
+  }, [entity.reserved]);
+
   const handleReserve = async () => {
-    if (entity.reserved || entity.reserveCount=== entity.capacity) {
-      return console.log("Capacidad maxima alcanzada")
+    if (entity.reserved || entity.reserveCount === entity.capacity) {
+      return console.log("Capacidad maxima alcanzada");
     }
     try {
-      const parsedDate = parse(entity.datetimeString, 'dd/MM/yyyy', new Date());
+      const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
       const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
-      await makeReserve(user.token, { IdGymClass: entity.idGymClass, dateClass: formattedDate });
+      await makeReserve(user.token, {
+        IdGymClass: entity.idGymClass,
+        dateClass: formattedDate,
+      });
       setChanges(!changes);
     } catch (error) {
       console.log("No se pudo hacer la reserva", error);
+    }
+  };
+
+  const handleCancelReserve = async () => {
+    try {
+      await cancelReserve(user.token, entity.idReserve);
+      setChanges(!changes);
+    } catch (error) {
+      console.log("No se pudo cancelar la reserva", error);
     }
   };
 
@@ -58,14 +72,27 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
 
       <div className="buttons">
         {showDay ? (
-          <Button 
-            variant="light" 
-            className="button-update-entity" 
-            onClick={handleReserve}
-            disabled={entity.reserved || entity.reserveCount=== entity.capacity}
-          >
-            {entity.reserved ? "Reservado" : "Reservar"}
-          </Button>
+          <>
+            <Button
+              variant="light"
+              className="button-update-entity"
+              onClick={handleReserve}
+              disabled={
+                entity.reserved || entity.reserveCount === entity.capacity
+              }
+            >
+              {entity.reserved ? "Reservado" : "Reservar"}
+            </Button>
+            {entity.reserved && (
+              <Button
+                variant="danger"
+                className="button-delete-entity"
+                onClick={handleCancelReserve}
+              >
+                Cancelar reserva
+              </Button>
+            )}
+          </>
         ) : (
           <>
             <Button variant="danger" onClick={handleDelete}>
