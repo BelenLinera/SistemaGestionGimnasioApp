@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { addDays, setHours, setMinutes, format } from 'date-fns';
 import "./Reserve.css";
 import CardGymClass from '../Shared/CardGymClass/GymClassCard';
 import { getAllGymClasses } from '../GymClass/GymClassServices';
+import { getAllReserves } from '../Reserve/ReserveService';
+import UserContext from '../Context/UserContext';
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
+  const [changes, setChanges] = useState([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchGymClasses = async () => {
+    const fetchGymClassesAndReserves = async () => {
       try {
-        const response = await getAllGymClasses();
+        const [gymClassesResponse, reservesResponse] = await Promise.all([
+          getAllGymClasses(),
+          getAllReserves()
+        ]);
+
         const today = new Date();
         const sevenDaysLater = addDays(today, 7);
 
-        console.log("Datos recibidos:", response.data);
-
-        const classesWithDateTime = response.data.map(gymclass => {
+        const classesWithDateTime = gymClassesResponse.data.map(gymclass => {
           const daysOffset = (gymclass.days - today.getDay() + 7) % 7;
           const classDate = addDays(today, daysOffset);
           const [hours, minutes] = gymclass.timeClass.split(':').map(Number);
@@ -25,36 +31,43 @@ const Reserve = () => {
           // Formatear la fecha para mostrar
           const formattedDate = format(classDate, 'dd/MM/yyyy');
 
+          // Contar las reservas para esta clase
+          const reservesForClass = reservesResponse.data.filter(reserve => reserve.idGymClass === gymclass.idGymClass);
+          const isReserved = reservesForClass.some(reserve => reserve.clientEmail === user.email);
+
           return { 
             ...gymclass, 
             datetime: classDateTime,
-            datetimeString: formattedDate
+            datetimeString: formattedDate,
+            reserved: isReserved,
+            reserveCount: reservesForClass.length
           };
         }).filter(gymclass => {
           return gymclass.datetime >= today && gymclass.datetime <= sevenDaysLater;
         });
 
-        console.log("Clases con datetime:", classesWithDateTime);
-
         setGymClasses(classesWithDateTime);
       } catch (error) {
-        console.error("Error fetching gym classes", error);
+        console.log("Error trayendo las clases", error);
       }
     };
 
-    fetchGymClasses();
-  }, []);
+    fetchGymClassesAndReserves();
+  }, [changes, user.email]);
 
   return (
-    <div>
+    <section className="reserve-section">
+      <h2>RESERVAS SEMANALES</h2>
       {gymClasses.map((gymclass) => (
         <CardGymClass 
           key={gymclass.idGymClass} 
           entity={gymclass} 
           showDay={true} 
+          setChanges={setChanges}
+          changes={changes}
         />
       ))}
-    </div>
+    </section>
   );
 };
 

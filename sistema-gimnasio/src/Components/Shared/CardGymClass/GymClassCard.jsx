@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { deleteGymClass } from "../../GymClass/GymClassServices";
 import "./GymClassCard.css";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import UserContext from "../../Context/UserContext";
+import { deleteGymClass } from "../../GymClass/GymClassServices";
+import { makeReserve } from "../../Reserve/ReserveService";
+import { format, parse } from "date-fns";
 
-const CardGymClass = ({ entity, setChanges, changes,showDay }) => {
+const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
+  const { user } = useContext(UserContext); 
+
   const handleDelete = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
       setChanges(!changes);
     } catch (error) {
       console.error("Failed to delete gym class", error);
+    }
+  };
+  useEffect(() => {
+    console.log(entity.reserved)
+  },[entity.reserved])
+  const handleReserve = async () => {
+    if (entity.reserved || entity.reserveCount=== entity.capacity) {
+      return console.log("Capacidad maxima alcanzada")
+    }
+    try {
+      const parsedDate = parse(entity.datetimeString, 'dd/MM/yyyy', new Date());
+      const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
+      await makeReserve(user.token, { IdGymClass: entity.idGymClass, dateClass: formattedDate });
+      setChanges(!changes);
+    } catch (error) {
+      console.log("No se pudo hacer la reserva", error);
     }
   };
 
@@ -27,20 +48,36 @@ const CardGymClass = ({ entity, setChanges, changes,showDay }) => {
         <br />
         <strong>Día:</strong> {entity.dayName} <br />
         <strong>Horario:</strong> {entity.timeClass} <br />
-        {showDay && (
-          <strong>Fecha Completa: {entity.datetimeString}</strong> 
-        )}
+        <strong>Fecha Completa: </strong>
+        {showDay && entity.datetimeString}
+        <br />
         <strong>Cupo:</strong> {entity.capacity}
+        <br />
+        <strong>Inscriptos:</strong> {entity.reserveCount}
       </p>
+
       <div className="buttons">
-        <Button variant="danger" onClick={handleDelete}>
-          Eliminar
-        </Button>
-        <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
-          <Button variant="light" className="button-update-entity">
-            <FontAwesomeIcon icon={faPenToSquare} />
+        {showDay ? (
+          <Button 
+            variant="light" 
+            className="button-update-entity" 
+            onClick={handleReserve}
+            disabled={entity.reserved || entity.reserveCount=== entity.capacity}
+          >
+            {entity.reserved ? "Reservado" : "Reservar"}
           </Button>
-        </Link>
+        ) : (
+          <>
+            <Button variant="danger" onClick={handleDelete}>
+              Eliminar
+            </Button>
+            <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
+              <Button variant="green" className="button-update-entity">
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );
