@@ -1,0 +1,31 @@
+.chatbot-container {
+    position: fixed;
+    bottom: 20px; /* Distancia desde el borde inferior */
+    right: 100px; /* Distancia desde el borde derecho */
+    width: 300px; /* Ancho del contenedor del chat */
+    z-index: 9999; /* Asegura que esté por encima de otros elementos */
+  }
+
+
+  
+.button-chatbot
+{
+    background: #11999e;
+    border-radius: 30px;
+    position: fixed;
+    bottom: 20px; /* Distancia desde el borde inferior */
+    right: 100px; /* Distancia desde el borde derecho */
+    z-index: 9999; /* Asegura que esté por encima de otros elementos */
+    padding: 10px 15px;
+    color:white;
+    border:white;
+    font-size: 30px;
+    
+}
+.close-button {
+    top: 5px; /* Ajusta la posición del botón cerrar */
+    right: 5px; /* Ajusta la posición del botón cerrar */
+    color: #11999e;
+    cursor: pointer;
+    font-size: 20px;
+  }

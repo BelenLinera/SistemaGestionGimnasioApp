@@ -1,11 +1,24 @@
 import React, { Component } from "react";
 import ChatBot from "react-simple-chatbot";
+import { ThemeProvider } from "styled-components";
+import "./ContenidoChat.css";
 
-
+const theme = {
+  background: '#f4f4f4',
+  headerBgColor: "#11999e",
+  headerFontColor: '#f4f4f4',
+  headerFontSize: '15px',
+  botBubbleColor: "#11999e",
+  botFontColor: '#fff',
+  userBubbleColor: '#f4f4f4',
+  userFontColor: '#4a4a4a',
+}
 
 class ContenidoChat extends Component {
   render() {
     return (
+      <div>
+      <ThemeProvider theme={theme}>
       <ChatBot
         steps={[
           {
@@ -66,7 +79,7 @@ class ContenidoChat extends Component {
             id: "seleccionClases",
             options: [
               { value: "preg-clase1", label: "Que clases estan disponibles?", trigger: "6A" },
-              { value: "preg-clase2", label: "Los sabados hay clases disponible?", trigger: "6AA" },
+              { value: "preg-clase2", label: "Los sabados hay clases disponibles?", trigger: "6AA" },
             ],
           },
           {
@@ -123,10 +136,16 @@ class ContenidoChat extends Component {
           {
             id: "final",
             message: "Gracias por usar el servicio de chat. Si tenes otra duda comunicate con el administrador belen.linera@gmail.com ¡Hasta luego!",
+            
             end: true,
+            
           },
         ]}
+        floating={true}
       />
+      </ThemeProvider>
+      </div>
+        
     );
   }
 } export default ContenidoChat;
