@@ -5,14 +5,17 @@
     justify-content: center;
     align-items: center;
     text-align: left;
-    height: 80hv;
     background-color: #6decb9;
     width: 370px;
     min-height: 220px;
     border-radius: 20px;
     margin: 25px 0 25px;
+    padding: 15px 0;
   }
-
+  
+  .card-details{
+    list-style-type: none;
+  }
   .buttons button{
     margin: 10px;
   }

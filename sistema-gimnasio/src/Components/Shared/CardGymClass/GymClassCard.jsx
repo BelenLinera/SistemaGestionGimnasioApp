@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "react-bootstrap";
 import "./GymClassCard.css";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
@@ -6,13 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import UserContext from "../../Context/UserContext";
 import { deleteGymClass } from "../../GymClass/GymClassServices";
-import { cancelReserve, makeReserve } from "../../Reserve/ReserveService";
+import {
+  cancelReserve,
+  confirmAssistance,
+  makeReserve,
+} from "../../Reserve/ReserveService";
 import { format, parse } from "date-fns";
+import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   const { user } = useContext(UserContext);
-
-  const handleDelete = async () => {
+  const [showModal, setShowModal] = useState(false);
+  const handleDeleteClass = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
       setChanges(!changes);
@@ -20,11 +25,6 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       console.error("Failed to delete gym class", error);
     }
   };
-
-  useEffect(() => {
-    console.log(entity);
-  }, [entity.reserved]);
-
   const handleReserve = async () => {
     if (entity.reserved || entity.reserveCount === entity.capacity) {
       return console.log("Capacidad maxima alcanzada");
@@ -51,27 +51,48 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
     }
   };
 
+  const handleConfirmAttendance = async (idReserve) => {
+    try {
+      await confirmAssistance(user.token, idReserve);
+      setChanges(!changes);
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <div className="card-gymclass">
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>
-      <p>
-        <strong>Entrenador:</strong> {entity.trainerActivity.trainer.name}{" "}
-        {entity.trainerActivity.trainer.lastName}
-        <br />
-        <strong>Día:</strong> {entity.dayName} <br />
-        <strong>Horario:</strong> {entity.timeClass} <br />
-        <strong>Fecha Completa: </strong>
-        {showDay && entity.datetimeString}
-        <br />
-        <strong>Cupo:</strong> {entity.capacity}
-        <br />
-        <strong>Inscriptos:</strong> {entity.reserveCount}
-      </p>
+      <ul className="card-details">
+        <li>
+          <strong>Entrenador:</strong> {entity.trainerActivity.trainer.name}{" "}
+          {entity.trainerActivity.trainer.lastName}
+        </li>
+        <li>
+          <strong>Día:</strong> {entity.dayName}
+        </li>
+        <li>
+          <strong>Horario:</strong> {entity.timeClass}
+        </li>
+        {showDay && (
+          <li>
+            <strong>Fecha Completa:</strong> {entity.datetimeString}
+          </li>
+        )}
+        <li>
+          <strong>Cupo:</strong> {entity.capacity}
+        </li>
+        {showDay && (
+          <li>
+            <strong>Inscriptos:</strong> {entity.reserveCount}
+          </li>
+        )}
+      </ul>
 
       <div className="buttons">
-        {showDay ? (
+        {showDay && user.role === "Client" ? (
           <>
             <Button
               variant="light"
@@ -94,18 +115,35 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             )}
           </>
         ) : (
-          <>
-            <Button variant="danger" onClick={handleDelete}>
-              Eliminar
-            </Button>
-            <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
-              <Button variant="green" className="button-update-entity">
-                <FontAwesomeIcon icon={faPenToSquare} />
+          user.role === "Admin" && (
+            <>
+              <Button variant="danger" onClick={handleDeleteClass}>
+                Eliminar
               </Button>
-            </Link>
+              <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
+                <Button variant="green" className="button-update-entity">
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                </Button>
+              </Link>
+            </>
+          )
+        )}
+        {showDay && user.role === "Trainer" && (
+          <>
+            <Button variant="info" onClick={() => setShowModal(true)}>
+              Ver reservas
+            </Button>
           </>
         )}
       </div>
+
+      {showModal && (
+        <ReserveListModal
+          entity={entity}
+          handler={() => setShowModal(false)}
+          onConfirm={handleConfirmAttendance}
+        />
+      )}
     </div>
   );
 };

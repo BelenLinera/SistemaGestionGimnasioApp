@@ -9,67 +9,92 @@ import UserContext from "../Context/UserContext";
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchGymClassesAndReserves = async () => {
-      try {
-        const [gymClassesResponse, reservesResponse] = await Promise.all([
-          getAllGymClasses(),
-          getAllReserves(),
-        ]);
+  const fetchGymClassesAndReserves = async () => {
+    try {
+      const [gymClassesResponse, reservesResponse] = await Promise.all([
+        getAllGymClasses(),
+        getAllReserves(),
+      ]);
+      processGymClasses(gymClassesResponse.data, reservesResponse.data);
+    } catch (error) {
+      console.log("Error trayendo las clases", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const today = new Date();
-        const sevenDaysLater = addDays(today, 7);
+  const processGymClasses = (gymClassesData, reservesData) => {
+    const today = new Date();
+    const sevenDaysLater = addDays(today, 7);
 
-        const classesWithDateTime = gymClassesResponse.data
-          .map((gymclass) => {
-            const daysOffset = (gymclass.days - today.getDay() + 7) % 7;
-            const classDate = addDays(today, daysOffset);
-            const [hours, minutes] = gymclass.timeClass.split(":").map(Number);
-            const classDateTime = setHours(
-              setMinutes(classDate, minutes),
-              hours
-            );
+    const processedClasses = gymClassesData
+      .map((gymclass) => {
+        const daysOffset = (gymclass.days - today.getDay() + 7) % 7;
+        const classDate = addDays(today, daysOffset);
+        const [hours, minutes] = gymclass.timeClass.split(":").map(Number);
+        const classDateTime = setHours(setMinutes(classDate, minutes), hours);
+        const formattedDate = format(classDate, "dd/MM/yyyy");
 
-            // Formatear la fecha para mostrar
-            const formattedDate = format(classDate, "dd/MM/yyyy");
+        const reservesForClass = reservesData.filter(
+          (reserve) => reserve.idGymClass === gymclass.idGymClass
+        );
 
-            // Contar las reservas para esta clase
-            const reservesForClass = reservesResponse.data.filter(
-              (reserve) => reserve.idGymClass === gymclass.idGymClass
-            );
-            const isReserved = reservesForClass.some(
-              (reserve) => reserve.clientEmail === user.email
-            );
+        if (user.role === 'Client') {
+          return processClientRole(gymclass, reservesForClass, classDateTime, formattedDate);
+        } else if (user.role === 'Trainer') {
+          return processTrainerRole(gymclass, reservesForClass, classDateTime, formattedDate);
+        }
 
-            const userReserve = reservesForClass.find(
-              (reserve) => reserve.clientEmail === user.email
-            );
+        return null;
+      })
+      .filter((gymclass) => gymclass && gymclass.datetime >= today && gymclass.datetime <= sevenDaysLater);
 
-            return {
-              ...gymclass,
-              datetime: classDateTime,
-              datetimeString: formattedDate,
-              idReserve: userReserve ? userReserve.id : null,
-              reserved: isReserved,
-              reserveCount: reservesForClass.length,
-            };
-          })
-          .filter((gymclass) => {
-            return (
-              gymclass.datetime >= today && gymclass.datetime <= sevenDaysLater
-            );
-          });
+    setGymClasses(processedClasses);
+  };
 
-        setGymClasses(classesWithDateTime);
-      } catch (error) {
-        console.log("Error trayendo las clases", error);
-      }
+  const processClientRole = (gymclass, reservesForClass, classDateTime, formattedDate) => {
+    const isReserved = reservesForClass.some(
+      (reserve) => reserve.clientEmail === user.email
+    );
+
+    const userReserve = reservesForClass.find(
+      (reserve) => reserve.clientEmail === user.email
+    );
+
+    return {
+      ...gymclass,
+      datetime: classDateTime,
+      datetimeString: formattedDate,
+      idReserve: userReserve ? userReserve.id : null,
+      reserved: isReserved,
+      reserveCount: reservesForClass.length,
     };
+  };
 
+  const processTrainerRole = (gymclass, reservesForClass, classDateTime, formattedDate) => {
+    if (gymclass.trainerActivity.trainer.email === user.email) {
+      return {
+        ...gymclass,
+        datetime: classDateTime,
+        datetimeString: formattedDate,
+        reservesForClass: reservesForClass,
+        reserveCount: reservesForClass.length
+      };
+    }
+    return null;
+  };
+
+  useEffect(() => {
     fetchGymClassesAndReserves();
-  }, [changes, user.email]);
+  }, [changes]);
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
 
   return (
     <section className="reserve-section">

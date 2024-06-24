@@ -4,14 +4,6 @@ const getAllReserves = () => {
   return api.get("/api/Reserve");
 };
 
-const getReservesByUser = async (token) => {
-  return await api.get("/api/Reserve/my-reserves", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
-
 const makeReserve = async (token, data) => {
   return await api.post(
     "/api/Reserve",
@@ -26,7 +18,13 @@ const makeReserve = async (token, data) => {
     }
   );
 };
-
+const confirmAssistance = async (token, id) => {
+  return await api.patch(`api/Reserve/${id}`, null,{
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 const cancelReserve = async (token, id) => {
   return await api.delete(`/api/Reserve/${id}`, {
     headers: {
@@ -35,4 +33,4 @@ const cancelReserve = async (token, id) => {
   });
 };
 
-export { getAllReserves, getReservesByUser, makeReserve, cancelReserve };
+export { getAllReserves, makeReserve, confirmAssistance, cancelReserve };
