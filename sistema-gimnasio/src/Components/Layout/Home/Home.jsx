@@ -1,7 +1,7 @@
+import React, { useState, useEffect } from "react";
 import "./Home.css";
 import CardActivity from "../../Shared/CardEntity/CardActivity";
 import { getAllActivities } from "../../Activity/ActivityServices";
-import { useEffect, useState } from "react";
 
 const Home = () => {
   const [activities, setActivities] = useState([]);
@@ -10,8 +10,12 @@ const Home = () => {
   useEffect(() => {
     getAllActivities()
       .then(response => {
-        console.log(response);
-        setActivities(response.data.$values);
+        console.log(response); 
+        if (response.data && Array.isArray(response.data.$values)) {
+          setActivities(response.data.$values);
+        } else {
+          setActivities([]);
+        }
       })
       .catch(error => {
         console.error("Error fetching activities:", error);
@@ -20,7 +24,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-
       <div className="home-content">
         <h1>Bienvenido/a a Training Center</h1>
         <p>En Training Center, tu bienestar y condición física 
@@ -39,17 +42,20 @@ const Home = () => {
       </div>
       <div className="activities-container">
         <h2>Nuestras Actividades</h2>
-        {activities.map(activity => (
-          <CardActivity 
-            key={activity.activityName} 
-            entity={activity} 
-            type="actividad" 
-            setChanges={setChanges} 
-            changes={changes} 
-          />
-        ))}
+        {activities && activities.length > 0 ? (
+          activities.map(activity => (
+            <CardActivity 
+              key={activity.activityName} 
+              entity={activity} 
+              type="actividad" 
+              setChanges={setChanges} 
+              changes={changes} 
+            />
+          ))
+        ) : (
+          <p>No hay actividades disponibles</p>
+        )}
       </div>
-
     </div>
   );
 };
