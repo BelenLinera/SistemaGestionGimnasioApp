@@ -14,10 +14,12 @@ import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
 import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
 
 const Layout = () => {
+  //const userRole = 'Admin';
   return (
     <>
       <NavBar />
       <Routes>
+        <Route path="/" element={<Home/>}/>
         <Route path="/admin" element={<Admin />} />
         <Route
           path="/admin/create-admin"
@@ -28,7 +30,6 @@ const Layout = () => {
           path="/admin/edit-admin/:userEmail"
           element={<FormUser entity={"admin"} editForm={true} />}
         />
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forget-password" element={<RecoverPassword />} />
         <Route
@@ -62,10 +63,9 @@ const Layout = () => {
     <Route path= "/activity" element={<Activity/>}/>
     <Route path = "/activity/edit-activity/:activityName" element={<FormActivity entity={"activity"} editFormAct={true}/>} />
       </Routes>
-      <Home/>
       <Footer />
     </>
   );
 };
-
+//<Home isAdmin={userRole === 'Admin'}/>
 export default Layout;
