@@ -62,6 +62,7 @@ const Layout = () => {
     <Route path= "/activity" element={<Activity/>}/>
     <Route path = "/activity/edit-activity/:activityName" element={<FormActivity entity={"activity"} editFormAct={true}/>} />
       </Routes>
+      <Home/>
       <Footer />
     </>
   );
