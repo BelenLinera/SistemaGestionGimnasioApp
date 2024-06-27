@@ -16,6 +16,8 @@ import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
 import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
 import Reserve from "../Reserve/Reserve";
 import MyReserves from "../Reserve/MyReserves";
+import ContenidoChat from "./ChatBot/ContenidoChat";
+
 
 const Layout = () => {
   return (
@@ -83,6 +85,7 @@ const Layout = () => {
         <Route path="/reserves" element={<Reserve />} />
         <Route path="/my-reserves" element={<MyReserves />} />
       </Routes>
+      <ContenidoChat/>
       <Footer />
     </>
   );
