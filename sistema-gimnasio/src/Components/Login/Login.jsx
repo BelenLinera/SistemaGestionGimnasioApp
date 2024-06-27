@@ -7,6 +7,8 @@ import * as yup from "yup";
 import UserContext from "../Context/UserContext";
 import api from "../../api";
 import "./Login.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const loginSchema = yup.object({
   email: yup
@@ -35,9 +37,12 @@ const Login = () => {
         Password: data.password,
       });
       login(response.data);
-      return navigate("/", { replace: true });
+      toast.success("Inicio de sesión exitoso"); 
+      setTimeout(() => {
+        return navigate("/", { replace: true });
+      }, 3000);
     } catch (error) {
-      console.log("Error:", error);
+      toast.error(error.response.data); 
     }
   };
   return (
@@ -84,6 +89,7 @@ const Login = () => {
           Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

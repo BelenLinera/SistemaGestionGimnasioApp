@@ -4,14 +4,23 @@ import { Link } from "react-router-dom";
 import CardTrainer from "./CardTrainer/CardTrainer";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
 import "./Trainer.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
   const [changes, setChanges] = useState(false);
-  useEffect(() => {
-    getAllTrainers().then((response) => {
+  const getTrainers = async () => {
+    try {
+      const response = await getAllTrainers()
       setTrainers(response.data);
-    });
+    }
+    catch(error) {
+      toast.error(error.response.data);
+    }
+  }
+ useEffect(() => {
+    getTrainers()
   }, [changes]);
   return (
     <section className="trainer-section">
@@ -31,6 +40,7 @@ const Trainer = () => {
           deleteEntity={deleteByEmail}
         />
       ))}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

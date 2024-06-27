@@ -3,16 +3,25 @@ import { getAllGymClasses } from './GymClassServices';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import "./GymClass.css";  
-import CardGymClass from '../Shared/CardGymClass/GymClassCard';  
+import CardGymClass from '../Shared/CardGymClass/GymClassCard'; 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const GymClass = () => {
     const [gymClasses, setGymClasses] = useState([]);
     const [changes, setChanges] = useState([]);
-    
-    useEffect(() => {
-        getAllGymClasses().then((response) => {
+    const getGymClasses = async () => {
+        try {
+            const response = await getAllGymClasses()
             setGymClasses(response.data);
-        });
+        }
+        catch(error) {
+            toast.error(error.response.data);
+        }
+    }
+
+    useEffect(() => {
+        getGymClasses()
     }, [changes]);
 
     return (
@@ -32,6 +41,7 @@ const GymClass = () => {
                     changes={changes}
                 />
             ))}
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
         </section>
     );
 };

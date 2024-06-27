@@ -9,6 +9,8 @@ import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import "./CardActivity.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CardActivity = ({entity, type, setChanges, changes, deleteEntity}) => {
   const [confirm, setConfirmModal] = useState(false);
@@ -17,6 +19,7 @@ const CardActivity = ({entity, type, setChanges, changes, deleteEntity}) => {
   };
   const onAction = () =>  {
     handleConfirm();
+    toast.success("Actividad eliminada con exito")
     deleteActivity(entity.activityName)
     .then(() => {
       setChanges(!changes);
@@ -63,7 +66,7 @@ const CardActivity = ({entity, type, setChanges, changes, deleteEntity}) => {
           </strong>
           </ConfirmModal>
       )}
-     
+     <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

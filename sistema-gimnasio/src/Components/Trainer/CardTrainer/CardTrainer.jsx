@@ -9,6 +9,8 @@ import { Button } from "react-bootstrap";
 import "./CardTrainer.css";
 import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const [confirm, setConfirmModal] = useState(false);
@@ -19,6 +21,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
 
   const onAction = () => {
     handleConfirm();
+    toast.success("Entrenador eliminado con exito");
     deleteEntity(entity.email)
       .then(() => {
         setChanges(!changes);
@@ -81,13 +84,14 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
           reason={"eliminar"}
           onAction={() => onAction()}
         >
-          Estás seguro de que quieres eliminar
+          Estás seguro de que quieres eliminar a 
           <strong>
-            {entity.name} {entity.lastName}
+           {} {entity.name} {entity.lastName}
           </strong>
           ?
         </ConfirmModal>
       )}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

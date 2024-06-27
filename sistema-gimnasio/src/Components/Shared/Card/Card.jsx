@@ -10,8 +10,11 @@ import "./Card.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { updateClientActiveState } from "../../Client/ClientServices";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
+
+const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => {
   const [confirm, setConfirmModal] = useState(false);
   const [activeModalClient, setActiveModalClient] = useState(false);
 
@@ -26,30 +29,30 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const handleChange = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-      // Si el cliente se activa manualmente, llamamos a la API para actualizar el estado
-      updateClientActiveState(entity.email, !entity.autorizationToReserve) // Llama a la función de actualización con el nuevo estado
+      updateClientActiveState(entity.email, !entity.autorizationToReserve) 
         .then(() => {
-          console.log("Estado del cliente actualizado con éxito en la API");
+          setToast({display:true, message:"Cliente ha sido actualizado con exito", error:false});
           setChanges(!changes);
         })
         .catch((error) => {
-          console.error("Error al actualizar el estado del cliente:", error);
+          setToast({display:true, message:error.response.data, error:true});
         });
   };
 
 
-  const onAction = () => {
+  const  onAction = async () => {
     if (activeModalClient) {
       return handleChange();
     }
-    handleConfirm();
-    deleteEntity(entity.email)
-      .then(() => {
+    await handleConfirm();
+    try {
+      await deleteEntity(entity.email)
+        setToast({display:true, message:"Cliente eliminado con exito", error:false});
         setChanges(!changes);
-      })
-      .catch((error) => {
-        console.error(`Error deleting ${type}:`, error);
-      });
+    }
+    catch (error) { 
+      setToast({display:true, message:error.response.data, error:true});
+    }
   };
 
   return (

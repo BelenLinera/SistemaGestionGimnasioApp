@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import api from "../../api";
 
 const getAllGymClasses = () => {
@@ -8,6 +9,7 @@ const getGymClassById = (idGymClass) => {
   return api.get(`/api/GymClass/${idGymClass}`);
 };
 const deleteGymClass = (idGymClass) => {
+  toast.success("Clase eliminada con exito");
   return api.delete(`/api/GymClass/${idGymClass}`);
 };
 
