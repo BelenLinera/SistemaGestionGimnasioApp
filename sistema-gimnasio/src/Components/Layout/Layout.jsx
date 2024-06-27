@@ -18,22 +18,12 @@ import Reserve from "../Reserve/Reserve";
 import MyReserves from "../Reserve/MyReserves";
 import ContenidoChat from "./ChatBot/ContenidoChat";
 
-
 const Layout = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/admin" element={<Admin />} />
-        <Route
-          path="/admin/create-admin"
-          element={<FormUser entity={"admin"} />}
-        />
-        <Route path="/admin" element={<Admin />} />
-        <Route
-          path="/admin/edit-admin/:userEmail"
-          element={<FormUser entity={"admin"} editForm={true} />}
-        />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forget-password" element={<RecoverPassword />} />
@@ -41,51 +31,63 @@ const Layout = () => {
           path="/forget-password/validate-token"
           element={<ChangePasswordForm />}
         />
-
-        <Route path="/client" element={<Client />} />
-        <Route
-          path="/client/create-client"
-          element={<FormUser entity={"client"} />}
-        />
-        <Route path="/client" element={<Client />} />
-        <Route
-          path="/client/edit-client/:userEmail"
-          element={<FormUser entity={"client"} editForm={true} />}
-        />
-
-        <Route path="/trainer" element={<Trainer />} />
-        <Route
-          path="/trainer/create-trainer"
-          element={<FormUser entity={"trainer"} />}
-        />
-        <Route path="/trainer" element={<Trainer />} />
-        <Route
-          path="/trainer/edit-trainer/:userEmail"
-          element={<FormUser entity={"trainer"} editForm={true} />}
-        />
         <Route path="/activity" element={<Activity />} />
-        <Route
-          path="/activity/create-activity"
-          element={<FormActivity entity={"activity"} />}
-        />
-        <Route path="/activity" element={<Activity />} />
-        <Route
-          path="/activity/edit-activity/:activityName"
-          element={<FormActivity entity={"activity"} editFormAct={true} />}
-        />
-        <Route path="/gym-class" element={<GymClass />} />
-        <Route
-          path="/gym-class/create-gym-class"
-          element={<GymClassForm editFormGym={false} />}
-        />
-        <Route
-          path="/gym-class/edit-gym-class/:id"
-          element={<GymClassForm editFormGym={true} />}
-        />
-        <Route path="/reserves" element={<Reserve />} />
-        <Route path="/my-reserves" element={<MyReserves />} />
+        {user?.role === "Admin" && (
+          <>
+            <Route path="/admin" element={<Admin />} />
+            <Route
+              path="/admin/create-admin"
+              element={<FormUser entity={"admin"} />}
+            />
+            <Route path="/admin" element={<Admin />} />
+            <Route
+              path="/admin/edit-admin/:userEmail"
+              element={<FormUser entity={"admin"} editForm={true} />}
+            />
+
+            <Route path="/client" element={<Client />} />
+            <Route
+              path="/client/create-client"
+              element={<FormUser entity={"client"} />}
+            />
+            <Route
+              path="/client/edit-client/:userEmail"
+              element={<FormUser entity={"client"} editForm={true} />}
+            />
+            <Route path="/trainer" element={<Trainer />} />
+            <Route
+              path="/trainer/create-trainer"
+              element={<FormUser entity={"trainer"} />}
+            />
+            <Route
+              path="/trainer/edit-trainer/:userEmail"
+              element={<FormUser entity={"trainer"} editForm={true} />}
+            />
+            <Route
+              path="/activity/create-activity"
+              element={<FormActivity entity={"activity"} />}
+            />
+            <Route
+              path="/activity/edit-activity/:activityName"
+              element={<FormActivity entity={"activity"} editFormAct={true} />}
+            />
+            <Route path="/gym-class" element={<GymClass />} />
+            <Route
+              path="/gym-class/create-gym-class"
+              element={<GymClassForm editFormGym={false} />}
+            />
+            <Route
+              path="/gym-class/edit-gym-class/:id"
+              element={<GymClassForm editFormGym={true} />}
+            />
+          </>
+        )}
+        {user?.role && <Route path="/reserves" element={<Reserve />} />}
+        {user?.role === "Client" && (
+          <Route path="/my-reserves" element={<MyReserves />} />
+        )}
       </Routes>
-      <ContenidoChat/>
+      <ContenidoChat />
       <Footer />
     </>
   );

@@ -24,6 +24,7 @@ const UserProvider = ({ children }) => {
 
   const login = (token) => {
     const userClaims = parseJwt(token)
+    console.log(userClaims)
     const fullName = `${userClaims.name} ${userClaims.lastName}`;
     const userData = { email: userClaims.sub, role:userClaims.role, name: fullName, token: token};
     setUser(userData);
