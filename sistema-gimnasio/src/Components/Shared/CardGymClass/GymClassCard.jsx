@@ -1,22 +1,23 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { format, parse } from "date-fns";
 import { Button } from "react-bootstrap";
-import "./GymClassCard.css";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import UserContext from "../../Context/UserContext";
-import { deleteGymClass } from "../../GymClass/GymClassServices";
 import {
   cancelReserve,
   confirmAssistance,
   makeReserve,
 } from "../../Reserve/ReserveService";
-import { format, parse } from "date-fns";
+import { deleteGymClass } from "../../GymClass/GymClassServices";
+import UserContext from "../../Context/UserContext";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
+import "./GymClassCard.css";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   const { user } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
+
   const handleDeleteClass = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
@@ -25,6 +26,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       console.error("Failed to delete gym class", error);
     }
   };
+  console.log(entity);
   const handleReserve = async () => {
     if (entity.reserved || entity.reserveCount === entity.capacity) {
       return console.log("Capacidad maxima alcanzada");
@@ -56,7 +58,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       await confirmAssistance(user.token, idReserve);
       setChanges(!changes);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -81,13 +83,17 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             <strong>Fecha Completa:</strong> {entity.datetimeString}
           </li>
         )}
-        <li>
-          <strong>Cupo:</strong> {entity.capacity}
-        </li>
-        {showDay && (
-          <li>
-            <strong>Inscriptos:</strong> {entity.reserveCount}
-          </li>
+        {entity.capacity && (
+          <>
+            <li>
+              <strong>Cupo:</strong> {entity.capacity}
+            </li>
+            {showDay && (
+              <li>
+                <strong>Inscriptos:</strong> {entity.reserveCount}
+              </li>
+            )}
+          </>
         )}
       </ul>
 
@@ -104,7 +110,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             >
               {entity.reserved ? "Reservado" : "Reservar"}
             </Button>
-            {entity.reserved && (
+            {entity.reserved && entity.canBeCancelled && (
               <Button
                 variant="danger"
                 className="button-delete-entity"
@@ -115,7 +121,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             )}
           </>
         ) : (
-          user.role === "Admin" && (
+          !showDay &&  (
             <>
               <Button variant="danger" onClick={handleDeleteClass}>
                 Eliminar
@@ -128,7 +134,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             </>
           )
         )}
-        {showDay && user.role === "Trainer" && (
+        {showDay && (user.role === "Trainer" || user.role === "Admin") &&  (
           <>
             <Button variant="info" onClick={() => setShowModal(true)}>
               Ver reservas

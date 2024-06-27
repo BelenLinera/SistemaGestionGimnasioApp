@@ -15,6 +15,7 @@ import Home from "./Home/Home";
 import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
 import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
 import Reserve from "../Reserve/Reserve";
+import MyReserves from "../Reserve/MyReserves";
 
 const Layout = () => {
   return (
@@ -80,6 +81,7 @@ const Layout = () => {
           element={<GymClassForm editFormGym={true} />}
         />
         <Route path="/reserves" element={<Reserve />} />
+        <Route path="/my-reserves" element={<MyReserves />} />
       </Routes>
       <Footer />
     </>

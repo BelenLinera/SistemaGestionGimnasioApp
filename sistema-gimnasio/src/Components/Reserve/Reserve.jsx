@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { addDays, setHours, setMinutes, format } from "date-fns";
-import "./Reserve.css";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { getAllGymClasses } from "../GymClass/GymClassServices";
 import { getAllReserves } from "../Reserve/ReserveService";
 import UserContext from "../Context/UserContext";
+import "./Reserve.css";
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
 
   const fetchGymClassesAndReserves = async () => {
@@ -21,8 +20,6 @@ const Reserve = () => {
       processGymClasses(gymClassesResponse.data, reservesResponse.data);
     } catch (error) {
       console.log("Error trayendo las clases", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -42,20 +39,47 @@ const Reserve = () => {
           (reserve) => reserve.idGymClass === gymclass.idGymClass
         );
 
-        if (user.role === 'Client') {
-          return processClientRole(gymclass, reservesForClass, classDateTime, formattedDate);
-        } else if (user.role === 'Trainer') {
-          return processTrainerRole(gymclass, reservesForClass, classDateTime, formattedDate);
+        if (user.role === "Client") {
+          return processClientRole(
+            gymclass,
+            reservesForClass,
+            classDateTime,
+            formattedDate,
+          );
+        } else if (user.role === "Trainer") {
+          return processTrainerRole(
+            gymclass,
+            reservesForClass,
+            classDateTime,
+            formattedDate
+          );
+        } else if(user.role === "Admin") {
+          return {
+            ...gymclass,
+            datetime: classDateTime,
+            datetimeString: formattedDate,
+            reservesForClass: reservesForClass,
+            reserveCount: reservesForClass.length,
+          };
         }
 
-        return null;
       })
-      .filter((gymclass) => gymclass && gymclass.datetime >= today && gymclass.datetime <= sevenDaysLater);
+      .filter(
+        (gymclass) =>
+          gymclass &&
+          gymclass.datetime >= today &&
+          gymclass.datetime <= sevenDaysLater
+      );
 
     setGymClasses(processedClasses);
   };
 
-  const processClientRole = (gymclass, reservesForClass, classDateTime, formattedDate) => {
+  const processClientRole = (
+    gymclass,
+    reservesForClass,
+    classDateTime,
+    formattedDate
+  ) => {
     const isReserved = reservesForClass.some(
       (reserve) => reserve.clientEmail === user.email
     );
@@ -71,17 +95,23 @@ const Reserve = () => {
       idReserve: userReserve ? userReserve.id : null,
       reserved: isReserved,
       reserveCount: reservesForClass.length,
+      canBeCancelled: true
     };
   };
 
-  const processTrainerRole = (gymclass, reservesForClass, classDateTime, formattedDate) => {
+  const processTrainerRole = (
+    gymclass,
+    reservesForClass,
+    classDateTime,
+    formattedDate
+  ) => {
     if (gymclass.trainerActivity.trainer.email === user.email) {
       return {
         ...gymclass,
         datetime: classDateTime,
         datetimeString: formattedDate,
         reservesForClass: reservesForClass,
-        reserveCount: reservesForClass.length
+        reserveCount: reservesForClass.length,
       };
     }
     return null;
@@ -90,11 +120,6 @@ const Reserve = () => {
   useEffect(() => {
     fetchGymClassesAndReserves();
   }, [changes]);
-
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
 
   return (
     <section className="reserve-section">
