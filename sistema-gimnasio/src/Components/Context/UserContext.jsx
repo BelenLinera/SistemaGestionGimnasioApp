@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 
@@ -15,6 +16,8 @@ function parseJwt (token) {
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -24,7 +27,6 @@ const UserProvider = ({ children }) => {
 
   const login = (token) => {
     const userClaims = parseJwt(token)
-    console.log(userClaims)
     const fullName = `${userClaims.name} ${userClaims.lastName}`;
     const userData = { email: userClaims.sub, role:userClaims.role, name: fullName, token: token};
     setUser(userData);
@@ -34,6 +36,7 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (

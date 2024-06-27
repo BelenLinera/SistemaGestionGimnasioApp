@@ -9,7 +9,7 @@ import Activity from "../Activity/Activity";
 import GymClass from "../GymClass/GymClass";
 import Footer from "./Footer/Footer";
 import NavBar from "./NavBar/NavBar";
-import React from "react";
+import React, { useContext } from "react";
 import Login from "../Login/Login";
 import Home from "./Home/Home";
 import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
@@ -17,15 +17,17 @@ import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
 import Reserve from "../Reserve/Reserve";
 import MyReserves from "../Reserve/MyReserves";
 import ContenidoChat from "./ChatBot/ContenidoChat";
+import UserContext from "../Context/UserContext";
 
 const Layout = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useContext(UserContext);
   return (
     <>
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<FormUser/>}/>
         <Route path="/forget-password" element={<RecoverPassword />} />
         <Route
           path="/forget-password/validate-token"

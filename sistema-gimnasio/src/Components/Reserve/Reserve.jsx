@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState} from "react";
 import { addDays, setHours, setMinutes, format } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { getAllGymClasses } from "../GymClass/GymClassServices";
 import { getAllReserves } from "../Reserve/ReserveService";
-import UserContext from "../Context/UserContext";
 import "./Reserve.css";
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchGymClassesAndReserves = async () => {
     try {

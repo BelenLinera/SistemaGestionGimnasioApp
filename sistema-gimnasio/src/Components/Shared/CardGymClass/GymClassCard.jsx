@@ -10,12 +10,11 @@ import {
   makeReserve,
 } from "../../Reserve/ReserveService";
 import { deleteGymClass } from "../../GymClass/GymClassServices";
-import UserContext from "../../Context/UserContext";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
 
   const handleDeleteClass = async () => {
@@ -26,7 +25,6 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       console.error("Failed to delete gym class", error);
     }
   };
-  console.log(entity);
   const handleReserve = async () => {
     if (entity.reserved || entity.reserveCount === entity.capacity) {
       return console.log("Capacidad maxima alcanzada");
