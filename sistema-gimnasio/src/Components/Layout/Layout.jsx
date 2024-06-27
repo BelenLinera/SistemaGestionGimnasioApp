@@ -18,10 +18,12 @@ import ContenidoChat from "./ChatBot/ContenidoChat";
 
 
 const Layout = () => {
+  //const userRole = 'Admin';
   return (
     <>
       <NavBar />
       <Routes>
+        <Route path="/" element={<Home/>}/>
         <Route path="/admin" element={<Admin />} />
         <Route
           path="/admin/create-admin"
@@ -32,7 +34,6 @@ const Layout = () => {
           path="/admin/edit-admin/:userEmail"
           element={<FormUser entity={"admin"} editForm={true} />}
         />
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forget-password" element={<RecoverPassword />} />
         <Route
@@ -87,5 +88,5 @@ const Layout = () => {
     </>
   );
 };
-
+//<Home isAdmin={userRole === 'Admin'}/>
 export default Layout;
