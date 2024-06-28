@@ -76,7 +76,7 @@ const FormActivity = ({ entity, editFormAct }) => {
     if (entity === "activity") {
       try {
         await createActivity(data.activityName, data.activityDescription);
-        navigate("/activity", { replace: true });
+        return navigate("/activity", { replace: true });
       } catch (error) {
         console.log(error);
       }

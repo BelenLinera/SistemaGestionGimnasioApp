@@ -50,7 +50,6 @@ const ChangePasswordForm = () => {
           tokenRecover: tokenValid,
           newPassword: data.password
       });
-      console.log(response.data)
       return navigate("/", { replace: true });
     } catch (error) {
       return console.log(error.response.status, error.response.data);
