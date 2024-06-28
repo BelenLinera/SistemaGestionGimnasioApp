@@ -7,9 +7,6 @@ const getAllGymClasses = () => {
 const getGymClassById = (idGymClass) => {
   return api.get(`/api/GymClass/${idGymClass}`);
 };
-const deleteGymClass = (idGymClass) => {
-  return api.delete(`/api/GymClass/${idGymClass}`);
-};
 
 const createGymClass = (data) => {
   return api.post("/api/GymClass", {
@@ -31,11 +28,19 @@ const updateGymClass = (
     capacity: data.Capacity,
   });
 };
+const deleteGymClass = (idGymClass) => {
+  return api.delete(`/api/GymClass/${idGymClass}`);
+};
+const cancelGymClassOnDate = async (idGymClass, dateToCancel) => {
+  return await api.post(
+    `https://localhost:7224/api/GymClass/cancel?idGymClass=${idGymClass}&dateToCancel=${dateToCancel}`,)
+}
 
 export {
   getAllGymClasses,
   getGymClassById,
-  deleteGymClass,
   createGymClass,
   updateGymClass,
+  deleteGymClass,
+  cancelGymClassOnDate
 };

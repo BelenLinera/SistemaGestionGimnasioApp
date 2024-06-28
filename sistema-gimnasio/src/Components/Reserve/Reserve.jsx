@@ -38,7 +38,15 @@ const Reserve = () => {
         const reservesForClass = reservesData.filter(
           (reserve) => reserve.idGymClass === gymclass.idGymClass
         );
-
+        console.log(gymclass);
+        const isCancelled = gymclass.cancelledDates.some(
+          (cancelledDate) =>
+            format(new Date(cancelledDate.cancelledDate), "dd/MM/yyyy") === formattedDate
+        );
+  
+        if (isCancelled) {
+          return null;
+        }
         if (user.role === "Client") {
           return processClientRole(
             gymclass,
@@ -70,7 +78,7 @@ const Reserve = () => {
           gymclass.datetime <= sevenDaysLater
       );
 
-    setGymClasses(processedClasses);
+      setGymClasses(processedClasses.filter(Boolean));
   };
 
   const processClientRole = (
