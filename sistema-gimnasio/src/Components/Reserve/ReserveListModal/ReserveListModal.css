@@ -26,7 +26,12 @@
 .reserve-list li span {
   margin-right: 10px;
 }
-
+.reserve-item{
+  margin-bottom: 15px;
+  background-color: #6decb9;
+  padding: 10px;
+  border-radius: 10px;
+}
 .modalHeader {
   display: flex;
   align-items: center;
