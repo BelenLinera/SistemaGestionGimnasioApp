@@ -1,7 +1,8 @@
 import api from "../../api";
 
-const getAllGymClasses = () => {
-  return api.get("/api/GymClass");
+const getAllGymClasses = (sendRequest) => {
+  return sendRequest({ method: "get", url: "/api/GymClass" });
+  // return api.get("/api/GymClass");
 };
 
 const getGymClassById = (idGymClass) => {
@@ -20,10 +21,7 @@ const createGymClass = (data) => {
   });
 };
 
-const updateGymClass = (
-  idGymClass,
-  data
-) => {
+const updateGymClass = (idGymClass, data) => {
   return api.put(`/api/GymClass?idGymClass=${idGymClass}`, {
     idTrainerActivity: data.IdTrainerActivity,
     timeClass: data.TimeClass,

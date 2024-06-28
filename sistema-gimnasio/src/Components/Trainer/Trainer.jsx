@@ -3,16 +3,30 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CardTrainer from "./CardTrainer/CardTrainer";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import "./Trainer.css";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
   const [changes, setChanges] = useState(false);
+  const { loading, sendRequest } = UseAxiosLoader();
+
   useEffect(() => {
-    getAllTrainers().then((response) => {
-      setTrainers(response.data);
-    });
-  }, [changes]);
+    const fetchTrainers = async () => {
+      try {
+        const response = await getAllTrainers(sendRequest);
+        console.log(response);
+        setTrainers(response.data);
+      } catch (error) {
+        console.log("Error al fecthear los trainers", error);
+      }
+    };
+
+    fetchTrainers();
+    // getAllTrainers().then((response) => {
+    //   setTrainers(response.data);
+    // });
+  }, [changes, sendRequest]);
   return (
     <section className="trainer-section">
       <h2>ENTRENADORES</h2>
@@ -21,6 +35,7 @@ const Trainer = () => {
           + Nuevo entrenador
         </Button>
       </Link>
+      {loading && <p>Loading...</p>}
       {trainers.map((trainer) => (
         <CardTrainer
           entity={trainer}

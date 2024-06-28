@@ -14,15 +14,20 @@ import makeAnimated from "react-select/animated";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getAllActivities } from "../../Activity/ActivityServices";
 import { getAllTrainers } from "../../Trainer/TrainerServices";
+import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
 import "./GymClassForm.css";
 
 const createGymClassSchema = yup.object({
   IdActivity: yup.object().required("La actividad del entrenador es requerida"),
   IdTrainerActivity: yup.number().required("El entrenador es requerido"),
   Days: yup.number().required("Los días de la clase son requeridos"),
-  TimeClass: yup.string()
-  .matches(/^([0-9]|[01]\d|2[0-3]):([00]\d)$/, "El horario debe estar en formato de hora (HH:mm)")
-  .required("El horario es requerido"),
+  TimeClass: yup
+    .string()
+    .matches(
+      /^([0-9]|[01]\d|2[0-3]):([00]\d)$/,
+      "El horario debe estar en formato de hora (HH:mm)"
+    )
+    .required("El horario es requerido"),
   Capacity: yup
     .number("La capacidad debe ser un numero")
     .required("La capacidad de la clase es requerida")
@@ -50,6 +55,7 @@ const GymClassForm = ({ editFormGym }) => {
   const [trainers, setTrainers] = useState([]);
   const [activitySelected, setActivitySelected] = useState(null);
   const [trainerSelected, setTrainerSelected] = useState(null);
+  const { sendRequest } = UseAxiosLoader();
 
   const {
     register,
@@ -77,33 +83,35 @@ const GymClassForm = ({ editFormGym }) => {
       }
     };
     fetchActivities();
-    console.log("Trae actividades")
+    console.log("Trae actividades");
   }, []);
 
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await getAllTrainers();
+        const response = await getAllTrainers(sendRequest);
         setTrainers(response.data);
       } catch (error) {
         console.error("Error trayendo los entrenadores", error);
       }
     };
     fetchTrainers();
-    console.log("trae trainers activities")
-  }, []);
+    console.log("trae trainers activities");
+  }, [sendRequest]);
 
   const optionsTrainers = useMemo(() => {
     if (!activitySelected) return [];
     const trainersOfActivitySelected = trainers.filter((trainer) =>
       trainer.trainerActivities.some(
-        (activities) => activities.activity.idActivity === activitySelected.value
+        (activities) =>
+          activities.activity.idActivity === activitySelected.value
       )
     );
     return trainersOfActivitySelected.flatMap((trainer) =>
       trainer.trainerActivities
         .filter(
-          (activities) => activities.activity.idActivity === activitySelected.value
+          (activities) =>
+            activities.activity.idActivity === activitySelected.value
         )
         .map((activity) => ({
           value: activity.idTrainerActivity,
@@ -112,7 +120,6 @@ const GymClassForm = ({ editFormGym }) => {
     );
   }, [trainers, activitySelected]);
 
-  
   useEffect(() => {
     if (id) {
       const fetchDataUser = async () => {
@@ -130,7 +137,10 @@ const GymClassForm = ({ editFormGym }) => {
           value: gymClassDefault.trainerActivity.idActivity,
           label: gymClassDefault.trainerActivity.activity.activityName,
         });
-        setValue("IdTrainerActivity", gymClassDefault.trainerActivity.idTrainerActivity);
+        setValue(
+          "IdTrainerActivity",
+          gymClassDefault.trainerActivity.idTrainerActivity
+        );
         setValue("Days", gymClassDefault.days);
         setValue("TimeClass", gymClassDefault.timeClass);
         setValue("Capacity", gymClassDefault.capacity);
