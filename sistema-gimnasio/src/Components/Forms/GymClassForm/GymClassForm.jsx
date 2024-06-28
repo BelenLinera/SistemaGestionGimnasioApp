@@ -72,7 +72,7 @@ const GymClassForm = ({ editFormGym }) => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await getAllActivities();
+        const response = await getAllActivities(sendRequest);
         const mappedActivities = response.data.map((activity) => ({
           value: activity.idActivity,
           label: activity.activityName,
@@ -84,7 +84,7 @@ const GymClassForm = ({ editFormGym }) => {
     };
     fetchActivities();
     console.log("Trae actividades");
-  }, []);
+  }, [sendRequest]);
 
   useEffect(() => {
     const fetchTrainers = async () => {

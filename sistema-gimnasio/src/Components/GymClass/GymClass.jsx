@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllGymClasses } from "./GymClassServices";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import "./GymClass.css";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
@@ -36,7 +37,7 @@ const GymClass = () => {
           + Nueva clase
         </Button>
       </Link>
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner animation="border" />}
       {gymClasses.map((gymClass) => (
         <CardGymClass
           entity={gymClass}

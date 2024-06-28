@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import CardTrainer from "./CardTrainer/CardTrainer";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
@@ -35,7 +36,7 @@ const Trainer = () => {
           + Nuevo entrenador
         </Button>
       </Link>
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner animation="border" />}
       {trainers.map((trainer) => (
         <CardTrainer
           entity={trainer}

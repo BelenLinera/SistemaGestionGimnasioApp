@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Spinner from "react-bootstrap/Spinner";
 import "./Home.css";
 import CardActivity from "../../Shared/CardEntity/CardActivity";
 import { getAllActivities } from "../../Activity/ActivityServices";
@@ -25,7 +26,7 @@ const Home = ({ isAdmin }) => {
     };
 
     fetchActivities();
-    
+
     // getAllActivities()
     //   .then((response) => {
     //     if (response.data && Array.isArray(response.data)) {
@@ -57,7 +58,7 @@ const Home = ({ isAdmin }) => {
       <div className="activities-container">
         <h2>Nuestras Actividades</h2>
         <div className="activities-container-card">
-          {loading && <p>Loading...</p>}
+          {loading && <Spinner animation="border" />}
           {activities && activities.length > 0 ? (
             activities.map((activity) => (
               <CardActivity
@@ -69,7 +70,7 @@ const Home = ({ isAdmin }) => {
                 isAdmin={isAdmin}
               />
             ))
-          ) : (
+          ) : loading === false && (
             <p>No hay actividades disponibles</p>
           )}
         </div>

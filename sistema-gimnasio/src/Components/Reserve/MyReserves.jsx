@@ -1,19 +1,19 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getMyReserves } from "./ReserveService";
-import {
-  format,
-  isAfter,
-  parseISO,
-} from "date-fns";
+import { format, isAfter, parseISO } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
+import Spinner from "react-bootstrap/Spinner";
 
 const MyReserves = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
+  const { loading, sendRequest } = UseAxiosLoader();
+
   const fetchGymClassesAndReserves = async () => {
     try {
-      const reservesResponse = await getMyReserves(user.token);
+      const reservesResponse = await getMyReserves(sendRequest);
       const gymClasses = reservesResponse.data.map((reserve) => {
         const classDate = parseISO(reserve.dateClass);
         const classTime = reserve.gymClass.timeClass.split(":").map(Number);
@@ -46,6 +46,7 @@ const MyReserves = () => {
   return (
     <section className="reserve-section">
       <h2>MIS RESERVAS</h2>
+      {loading && <Spinner animation="border" />}
       {gymClasses.map((gymclass) => (
         <CardGymClass
           key={gymclass.idGymClass}

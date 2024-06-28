@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import Card from "../Shared/Card/Card";
 import "./Client.css";
@@ -36,7 +37,7 @@ const Client = () => {
           + Nuevo cliente
         </Button>
       </Link>
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner animation="border" />}
       {clients.map((client) => (
         <Card
           entity={client}

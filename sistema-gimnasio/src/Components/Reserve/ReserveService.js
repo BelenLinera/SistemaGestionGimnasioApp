@@ -1,18 +1,14 @@
 import api from "../../api";
 
 const getAllReserves = () => {
+  // return sendRequest({ method: "get", url: "/api/Reserve" });
   return api.get("/api/Reserve");
 };
 
-const getMyReserves = (token) => {
-  return api.get("/api/Reserve/my-reserves",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-}
+const getMyReserves = (sendRequest) => {
+  return sendRequest({ method: "get", url: "/api/Reserve/my-reserves" });
+  // return api.get("/api/Reserve/my-reserves");
+};
 
 const makeReserve = async (token, data) => {
   return await api.post(
@@ -29,7 +25,7 @@ const makeReserve = async (token, data) => {
   );
 };
 const confirmAssistance = async (token, id) => {
-  return await api.patch(`api/Reserve/${id}`, null,{
+  return await api.patch(`api/Reserve/${id}`, null, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -43,4 +39,10 @@ const cancelReserve = async (token, id) => {
   });
 };
 
-export { getAllReserves,getMyReserves, makeReserve, confirmAssistance, cancelReserve };
+export {
+  getAllReserves,
+  getMyReserves,
+  makeReserve,
+  confirmAssistance,
+  cancelReserve,
+};

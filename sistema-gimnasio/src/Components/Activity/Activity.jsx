@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllActivities } from "./ActivityServices";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import "./Activity.css";
 import CardActivity from "../Shared/CardEntity/CardActivity";
@@ -35,7 +36,7 @@ const Activity = () => {
           + Nueva actividad
         </Button>
       </Link>
-      {loading && <p>Loading...</p>}
+      {loading && <Spinner animation="border" />}
       {activities.map((activity) => (
         <CardActivity
           entity={activity}

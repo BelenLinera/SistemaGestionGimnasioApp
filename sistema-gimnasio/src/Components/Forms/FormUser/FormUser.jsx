@@ -7,7 +7,11 @@ import * as yup from "yup";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createAdmin, getAdminByEmail, updateAdmin } from "../../Admin/AdminServices";
+import {
+  createAdmin,
+  getAdminByEmail,
+  updateAdmin,
+} from "../../Admin/AdminServices";
 import {
   createClient,
   getClientByEmail,
@@ -20,6 +24,7 @@ import {
 } from "../../Trainer/TrainerServices";
 import "./FormUser.css";
 import { getAllActivities } from "../../Activity/ActivityServices";
+import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -77,6 +82,7 @@ const ENTITY_URL_MAP = {
 const FormUser = ({ entity, editForm }) => {
   const navigate = useNavigate();
   const [optionsActivities, setOptionsActivities] = useState([]);
+  const { sendRequest } = UseAxiosLoader();
   const { userEmail } = useParams();
   const {
     register,
@@ -94,7 +100,7 @@ const FormUser = ({ entity, editForm }) => {
     if (entity === "trainer") {
       const fetchActivities = async () => {
         try {
-          const response = await getAllActivities();
+          const response = await getAllActivities(sendRequest);
           const mappedActivities = response.data.map((activity) => ({
             value: activity.idActivity,
             label: activity.activityName,
@@ -107,13 +113,17 @@ const FormUser = ({ entity, editForm }) => {
       fetchActivities();
     }
     if (userEmail) {
-      const fetchDataUser = async () =>{
-          const dataEditUser =await getDataUser(userEmail)
-          const user = dataEditUser.data;
-          setValue("firstName", user.name);
-          setValue("lastname", user.lastName);
-          entity === "trainer" && setValue("activities", user.trainerActivities.map(activity => activity.idActivity));
-      }
+      const fetchDataUser = async () => {
+        const dataEditUser = await getDataUser(userEmail);
+        const user = dataEditUser.data;
+        setValue("firstName", user.name);
+        setValue("lastname", user.lastName);
+        entity === "trainer" &&
+          setValue(
+            "activities",
+            user.trainerActivities.map((activity) => activity.idActivity)
+          );
+      };
       fetchDataUser();
     }
   }, []);
@@ -133,15 +143,15 @@ const FormUser = ({ entity, editForm }) => {
   const getDataUser = async (email) => {
     switch (entity) {
       case "admin":
-        return await getAdminByEmail(email); 
+        return await getAdminByEmail(email);
       case "client":
-        return await getClientByEmail(email); 
+        return await getClientByEmail(email);
       case "trainer":
-        return await getTrainerByEmail(email); 
+        return await getTrainerByEmail(email);
       default:
         break;
     }
-  }
+  };
   const handleEdit = async (data) => {
     switch (entity) {
       case "admin":

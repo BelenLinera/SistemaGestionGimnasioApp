@@ -4,19 +4,24 @@ import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { getAllGymClasses } from "../GymClass/GymClassServices";
 import { getAllReserves } from "../Reserve/ReserveService";
 import UserContext from "../Context/UserContext";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import "./Reserve.css";
+import Spinner from "react-bootstrap/Spinner";
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
+  const { loading, sendRequest } = UseAxiosLoader();
   const { user } = useContext(UserContext);
 
   const fetchGymClassesAndReserves = async () => {
     try {
-      const [gymClassesResponse, reservesResponse] = await Promise.all([
-        getAllGymClasses(),
-        getAllReserves(),
-      ]);
+      // const [gymClassesResponse, reservesResponse] = await Promise.all([
+      //   getAllReserves(),
+      //   getAllGymClasses(sendRequest),
+      // ]);
+      const reservesResponse = await getAllReserves();
+      const gymClassesResponse = await getAllGymClasses(sendRequest);
       processGymClasses(gymClassesResponse.data, reservesResponse.data);
     } catch (error) {
       console.log("Error trayendo las clases", error);
@@ -62,6 +67,7 @@ const Reserve = () => {
             reserveCount: reservesForClass.length,
           };
         }
+        return null;
       })
       .filter(
         (gymclass) =>
@@ -123,7 +129,9 @@ const Reserve = () => {
   return (
     <section className="reserve-section">
       <h2>RESERVAS SEMANALES</h2>
-      {gymClasses.length > 0 ? (
+      {loading ? (
+        <Spinner animation="border" />
+      ) : gymClasses.length > 0 ? (
         gymClasses.map((gymclass) => (
           <CardGymClass
             key={gymclass.idGymClass}
