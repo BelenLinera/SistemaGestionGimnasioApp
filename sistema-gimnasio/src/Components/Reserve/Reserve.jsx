@@ -123,6 +123,7 @@ const Reserve = () => {
   return (
     <section className="reserve-section">
       <h2>RESERVAS SEMANALES</h2>
+      <div className="reserve-container-card"> 
       {gymClasses.length > 0 ? (
         gymClasses.map((gymclass) => (
           <CardGymClass
@@ -140,6 +141,7 @@ const Reserve = () => {
             : "No hay clases disponibles."}
         </p>
       )}
+      </div> 
     </section>
   );
 };

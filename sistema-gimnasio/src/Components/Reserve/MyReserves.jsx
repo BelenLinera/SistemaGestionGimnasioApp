@@ -6,6 +6,7 @@ import {
   parseISO,
 } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import "./Reserve.css";
 
 const MyReserves = () => {
   const [gymClasses, setGymClasses] = useState([]);
@@ -46,6 +47,7 @@ const MyReserves = () => {
   return (
     <section className="reserve-section">
       <h2>MIS RESERVAS</h2>
+      <div className="reserve-container-card">
       {gymClasses.map((gymclass) => (
         <CardGymClass
           key={gymclass.idGymClass}
@@ -55,6 +57,7 @@ const MyReserves = () => {
           changes={changes}
         />
       ))}
+      </div>
     </section>
   );
 };

@@ -3,7 +3,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    min-height: 60vh;
 }
 
 .reserve-section p{
@@ -12,9 +11,8 @@
 }
 
 @media only screen and (min-width: 1440px) {
-    .activity-container-card {
+    .reserve-container-card {
       display: grid;
-  
       grid-template-columns: 1fr 1fr 1fr ; 
       gap: 20px;
     }
