@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    min-height: 60vh;
   }
 
   .button-activity {
@@ -31,7 +29,6 @@
 @media only screen and (min-width: 1440px) {
   .activity-container-card {
     display: grid;
-
     grid-template-columns: 1fr 1fr 1fr ; 
     gap: 20px;
   }

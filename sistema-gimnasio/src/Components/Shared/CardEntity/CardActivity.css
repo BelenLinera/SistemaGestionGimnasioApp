@@ -13,12 +13,7 @@
     word-wrap: break-word;
     
   }
- .activity-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
+
 
 .card-entity-description-act{
   
