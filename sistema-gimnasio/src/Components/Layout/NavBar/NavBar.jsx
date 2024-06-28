@@ -57,7 +57,7 @@ const NavBar = () => {
             <Link to="/reserves" className="link-nav" onClick={showNavBar}>
               RESERVAS
             </Link>
-            <Link to="" className="link-nav" onClick={showNavBar}>
+            <Link to={`/edit-profile/${user.email}`} className="link-nav" onClick={showNavBar}>
               EDITAR PERFIL
             </Link>
             <Button variant="light" onClick={logout}>LOGOUT</Button>

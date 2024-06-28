@@ -207,14 +207,15 @@ const FormUser = ({ entity, editForm }) => {
         );
     }
   };
-
   return (
     <section className="form-section">
       <h2>
         {editForm
           ? "EDITAR CUENTA"
           : entity
-          ? `CREAR ${entity.toUpperCase()}`
+          ?  "CREAR " +(entity ===  "admin" ? "ADMIN" :entity ===  "client"?"CLIENTE":entity ===  "trainer" &&"ENTRENADOR")
+
+
           : "CREAR CUENTA"}
       </h2>
 

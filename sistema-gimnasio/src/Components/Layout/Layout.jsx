@@ -27,7 +27,7 @@ const Layout = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<FormUser/>}/>
+        <Route path="/register" element={<FormUser />} />
         <Route path="/forget-password" element={<RecoverPassword />} />
         <Route
           path="/forget-password/validate-token"
@@ -84,7 +84,16 @@ const Layout = () => {
             />
           </>
         )}
-        {user?.role && <Route path="/reserves" element={<Reserve />} />}
+        {user?.role && (
+          <>
+            <Route path="/reserves" element={<Reserve />} />
+            <Route
+              path="/edit-profile/:userEmail"
+              element={<FormUser editForm={true} entity={user.role.toLowerCase()} />}
+            />
+          </>
+        )}
+
         {user?.role === "Client" && (
           <Route path="/my-reserves" element={<MyReserves />} />
         )}
