@@ -44,7 +44,7 @@ const Reserve = () => {
             gymclass,
             reservesForClass,
             classDateTime,
-            formattedDate,
+            formattedDate
           );
         } else if (user.role === "Trainer") {
           return processTrainerRole(
@@ -53,7 +53,7 @@ const Reserve = () => {
             classDateTime,
             formattedDate
           );
-        } else if(user.role === "Admin") {
+        } else if (user.role === "Admin") {
           return {
             ...gymclass,
             datetime: classDateTime,
@@ -62,7 +62,6 @@ const Reserve = () => {
             reserveCount: reservesForClass.length,
           };
         }
-
       })
       .filter(
         (gymclass) =>
@@ -95,7 +94,7 @@ const Reserve = () => {
       idReserve: userReserve ? userReserve.id : null,
       reserved: isReserved,
       reserveCount: reservesForClass.length,
-      canBeCancelled: true
+      canBeCancelled: true,
     };
   };
 
@@ -124,15 +123,23 @@ const Reserve = () => {
   return (
     <section className="reserve-section">
       <h2>RESERVAS SEMANALES</h2>
-      {gymClasses.map((gymclass) => (
-        <CardGymClass
-          key={gymclass.idGymClass}
-          entity={gymclass}
-          showDay={true}
-          setChanges={setChanges}
-          changes={changes}
-        />
-      ))}
+      {gymClasses.length > 0 ? (
+        gymClasses.map((gymclass) => (
+          <CardGymClass
+            key={gymclass.idGymClass}
+            entity={gymclass}
+            showDay={true}
+            setChanges={setChanges}
+            changes={changes}
+          />
+        ))
+      ) : (
+        <p>
+          {user?.role === "Trainer"
+            ? "No tienes clases asignadas."
+            : "No hay clases disponibles."}
+        </p>
+      )}
     </section>
   );
 };
