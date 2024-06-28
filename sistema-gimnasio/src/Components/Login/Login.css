@@ -1,4 +1,4 @@
-.login-section{
+.login-section-light{
     height: 80vh;
     display: flex;
     flex-direction: column;
@@ -6,12 +6,24 @@
     justify-content: space-evenly;
 
 }
+.login-section-dark{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #222831;
+
+}
 
 .button-login{
     background-color: #6DECB9;
     
 }
-.input-login{
+.input-login-light{
+    background-color: #d9d9d9;
+}
+.input-login-dark{
     background-color: #d9d9d9;
 }
 .login-form-group{
@@ -19,6 +31,7 @@
     align-items: center;
     flex-direction: column;
 }
+
 .forget-password{
     text-align: center;
     height: 25px;

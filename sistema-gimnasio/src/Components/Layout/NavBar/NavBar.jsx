@@ -8,7 +8,7 @@ import ThemeButton from "../../Context/ThemeButton";
 
 const NavBar = () => {
   const navRef = useRef();
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const showNavBar = () => {
     navRef.current.classList.toggle("responsive_nav");
@@ -50,9 +50,7 @@ const NavBar = () => {
         
       </nav>
       <ThemeButton/>
-      {/* <button className="theme-toggle-btn" onClick={toggleTheme}>
-          {theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
-        </button> */}
+      
     </header>
   );
 };

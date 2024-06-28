@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import './Theme.css'; 
-
+import './Theme.css'; // Asegúrate de importar el archivo CSS
 
 const ThemeContext = createContext();
 
