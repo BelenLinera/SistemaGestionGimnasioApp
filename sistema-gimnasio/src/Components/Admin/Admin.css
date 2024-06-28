@@ -58,3 +58,13 @@
   color: #d9d9d9;
   border: 2px solid transparent;
 }
+
+@media only screen and (min-width: 1440px) {
+  .admin-container-card {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr ; 
+    gap: 20px;
+  }
+  
+}

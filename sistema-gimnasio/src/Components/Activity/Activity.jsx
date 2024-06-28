@@ -17,10 +17,12 @@ const Activity = () => {
     <section className="activity-section">
         <h2>ACTIVIDADES</h2>
         <Link to="/activity/create-activity">
+        
             <Button variant="light" className="button-activity">
                 + Nueva actividad
             </Button>
         </Link>
+        <div className='activity-container-card'>
         {activities.map((activity) => (
             <CardActivity
             entity={activity}
@@ -30,6 +32,7 @@ const Activity = () => {
             changes={changes}
             />
         ))}
+        </div>
     </section>
     
   );

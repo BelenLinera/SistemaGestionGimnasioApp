@@ -23,6 +23,7 @@ const GymClass = () => {
                     + Nueva clase
                 </Button>
             </Link>
+            <div className='gymclass-container-card'>
             {gymClasses.map((gymClass) => (
                 <CardGymClass
                     entity={gymClass}
@@ -32,6 +33,7 @@ const GymClass = () => {
                     changes={changes}
                 />
             ))}
+            </div>
         </section>
     );
 };

@@ -47,3 +47,12 @@
     border: 2px solid transparent;
   }
   
+  @media only screen and (min-width: 1440px) {
+    .trainer-container-card {
+      display: grid;
+  
+      grid-template-columns: 1fr 1fr 1fr ; 
+      gap: 20px;
+    }
+    
+  }
