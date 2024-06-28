@@ -24,6 +24,7 @@ const Client = () => {
           + Nuevo cliente
         </Button>
       </Link>
+      <div className="client-container-card">
       {clients.map((client) => (
         <Card
           entity={client}
@@ -34,6 +35,7 @@ const Client = () => {
           deleteEntity={deleteClient}
         />
       ))}
+      </div>
     </section>
   );
 };

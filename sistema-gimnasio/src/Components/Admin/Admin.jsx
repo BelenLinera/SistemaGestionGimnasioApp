@@ -24,6 +24,7 @@ const Admin = () => {
           + Nuevo administrador
         </Button>
       </Link>
+      <div className="admin-container-card">
       {admins.map((admin) => (
         <Card
           entity={admin}
@@ -34,6 +35,7 @@ const Admin = () => {
           deleteEntity={deleteAdmin}
         />
       ))}
+      </div>
     </section>
   );
 };

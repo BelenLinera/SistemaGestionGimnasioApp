@@ -23,6 +23,7 @@ const Trainer = () => {
           + Nuevo entrenador
         </Button>
       </Link>
+      <div className="trainer-container-card">
       {trainers.map((trainer) => (
         <CardTrainer
           entity={trainer}
@@ -33,6 +34,7 @@ const Trainer = () => {
           deleteEntity={deleteByEmail}
         />
       ))}
+      </div>
     </section>
   );
 };
