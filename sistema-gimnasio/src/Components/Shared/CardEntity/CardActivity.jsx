@@ -9,9 +9,13 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import "./CardActivity.css";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin }) => {
   const [confirm, setConfirmModal] = useState(false);
+  
+  const {theme} = useContext(ThemeContext)
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
@@ -28,7 +32,7 @@ const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin
   
   return (
     <div className="activity-section">
-      <div className="card-entity-act"> 
+      <div className={theme === "dark" ? 'card-entity-act-dark' : 'card-entity-act-light'}> 
         <h5 className="card-entity-name-act">
           {entity.activityName}
         </h5>

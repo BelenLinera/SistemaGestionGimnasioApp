@@ -5,10 +5,12 @@
     justify-content: space-between;
   }
 
-  .button-activity {
+  .button-activity-light {
     background-color: #6decb9;
   }
-
+  .button-activity-dark {
+    background-color: #11999e;
+  }
   .buttons button{
     margin: 10px;
   }

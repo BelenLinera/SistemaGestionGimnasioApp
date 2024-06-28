@@ -1,0 +1,13 @@
+.themeButton-container {
+    position: fixed;
+    /* bottom: 2em;
+    left: 2em; */
+    top: 2em;
+    right: 2em;
+}
+
+.themeButton-container button {
+    border-radius: 50%;
+    height: 3em;
+    width: 3em;
+} 

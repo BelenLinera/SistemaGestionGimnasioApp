@@ -9,18 +9,45 @@ header {
   color: #11999e;
 }
 
+
+.navbar-dark {
+  background-color: #222831;
+}
+
+.navbar-light{
+  background-color: #d9d9d9;
+}
+
 nav .link-nav {
   margin: 0 2rem;
   padding: 10px 20px;
   display: inline-block;
   border-radius: 8px;
-  background-color: #d9d9d9;
-  color: #000000;
   text-decoration: none;
 }
 
+.btn-dark {
+  color: #fff;
+}
+
+.btn-light {
+  color: #000;
+}
+
 nav .link-nav:hover {
-  background-color: #6decb9;
+  background-color: #11999e;
+  
+}
+
+.link-dark:hover {
+  color:black;
+}
+
+.link-dark p{
+  color:#fff;
+}
+.link-light p{
+  color: black;
 }
 
 header .nav-btn {

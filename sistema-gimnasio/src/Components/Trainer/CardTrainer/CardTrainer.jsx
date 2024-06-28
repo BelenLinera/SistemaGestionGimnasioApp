@@ -4,14 +4,16 @@ import {
   faUser,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
 import "./CardTrainer.css";
 import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../../Context/ThemeContext";
 
 const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const [confirm, setConfirmModal] = useState(false);
+  const {theme} = useContext(ThemeContext)
 
   const handleConfirm = () => {
     setConfirmModal(!confirm);
@@ -29,7 +31,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   };
 
   return (
-    <div className="card-entity">
+    <div className={theme === "dark" ? 'card-entity-dark' : 'card-entity-light'}>
       <div className="card-left">
         <div className="icon-user">
           <FontAwesomeIcon icon={faUser} />
@@ -45,7 +47,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
       </div>
       <div className="information-trainer-section">
         <h3>Actividades</h3>
-        <div className="activities-trainer">
+        <div className={theme === "dark" ? 'activities-trainer-dark' : 'activities-trainer-light'}>
           {entity.trainerActivities.length > 0 ? (
             entity.trainerActivities.map((activity) => (
               <p

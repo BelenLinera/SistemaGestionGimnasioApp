@@ -1,4 +1,4 @@
-.card-entity-act {
+.card-entity-act-light {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -11,8 +11,27 @@
     margin: 25px 0 25px;
     overflow: hidden; 
     word-wrap: break-word;
+    color: black;
     
   }
+
+  .card-entity-act-dark {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #11999e;
+    flex-direction: column;
+    width: 370px;
+    min-height: 220px;
+    height: auto;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+    overflow: hidden; 
+    word-wrap: break-word;
+    color: black;
+    
+  }
+
  .activity-section {
     display: flex;
     flex-direction: column;

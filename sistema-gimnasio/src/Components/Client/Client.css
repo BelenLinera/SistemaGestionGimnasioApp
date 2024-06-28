@@ -5,8 +5,11 @@
     justify-content: space-between;
   }
   
-  .button-client {
+  .button-client-light {
     background-color: #6decb9;
+  }
+  .button-client-dark {
+    background-color: #11999e;
   }
   
   
@@ -21,6 +24,9 @@
     border-radius: 20px;
     margin: 25px 0 25px;
   }
+
+ 
+
   .icon-user
   {
     display: flex;

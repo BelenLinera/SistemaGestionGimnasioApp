@@ -10,9 +10,12 @@ import "./Card.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { updateClientActiveState } from "../../Client/ClientServices";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const [confirm, setConfirmModal] = useState(false);
+  const {theme} = useContext(ThemeContext)
   const [activeModalClient, setActiveModalClient] = useState(false);
 
   const handleConfirm = () => {
@@ -53,7 +56,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   };
 
   return (
-    <div className="card-entity">
+    <div className={theme === "dark" ? 'card-entity-dark' : 'card-entity-light'}>
       <div className="card-left">
         <div className="icon-user">
           <FontAwesomeIcon icon={faUser} />

@@ -1,5 +1,5 @@
 
-.card-gymclass {
+.card-gymclass-light {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,6 +11,21 @@
     min-height: 220px;
     border-radius: 20px;
     margin: 25px 0 25px;
+    color: black;
+  }
+  .card-gymclass-dark {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    height: 80hv;
+    background-color: #11999e;
+    width: 370px;
+    min-height: 220px;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+    color: black;
   }
 
   .buttons button{

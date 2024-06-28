@@ -5,8 +5,11 @@ import "./GymClassCard.css";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const CardGymClass = ({ entity, setChanges, changes }) => {
+  const {theme} = useContext(ThemeContext)
   const handleDelete = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
@@ -17,7 +20,7 @@ const CardGymClass = ({ entity, setChanges, changes }) => {
   };
 
   return (
-    <div className="card-gymclass">
+    <div className={theme === "dark" ? 'card-gymclass-dark' : 'card-gymclass-light'}>
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>
