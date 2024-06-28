@@ -90,7 +90,7 @@ header .nav-btn {
     gap: 1.5rem;
     background-color: #ffffff;
     transition: 1s;
-    transform: translateY(-100vh);
+    transform: translateY(-150vh);
   }
 
   header .responsive_nav {

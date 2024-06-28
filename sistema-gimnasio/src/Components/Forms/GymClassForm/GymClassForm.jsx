@@ -77,7 +77,6 @@ const GymClassForm = ({ editFormGym }) => {
       }
     };
     fetchActivities();
-    console.log("Trae actividades")
   }, []);
 
   useEffect(() => {
@@ -90,7 +89,6 @@ const GymClassForm = ({ editFormGym }) => {
       }
     };
     fetchTrainers();
-    console.log("trae trainers activities")
   }, []);
 
   const optionsTrainers = useMemo(() => {
