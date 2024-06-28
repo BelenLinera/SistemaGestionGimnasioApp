@@ -20,7 +20,7 @@ const Client = () => {
       setClients(response.data); 
     }
     catch(error) {
-      toast.error(error.response.data);
+      toast.error("No puedes acceder a esa seccion");
     }
   }
   useEffect(() => {

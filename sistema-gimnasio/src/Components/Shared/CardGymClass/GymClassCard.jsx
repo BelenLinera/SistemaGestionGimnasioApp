@@ -13,6 +13,8 @@ import { deleteGymClass } from "../../GymClass/GymClassServices";
 import UserContext from "../../Context/UserContext";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   const { user } = useContext(UserContext);
@@ -23,7 +25,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       await deleteGymClass(entity.idGymClass);
       setChanges(!changes);
     } catch (error) {
-      console.error("Failed to delete gym class", error);
+      toast.error("Error al borrar una clase");
     }
   };
   console.log(entity);
@@ -40,7 +42,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       });
       setChanges(!changes);
     } catch (error) {
-      console.log("No se pudo hacer la reserva", error);
+      toast.error("Cliente inactivo, no se puede hacer la reserva");
     }
   };
 
@@ -49,7 +51,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       await cancelReserve(user.token, entity.idReserve);
       setChanges(!changes);
     } catch (error) {
-      console.log("No se pudo cancelar la reserva", error);
+      toast.error("No se pudo hacer la reserva");
     }
   };
 
@@ -150,6 +152,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
           onConfirm={handleConfirmAttendance}
         />
       )}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
