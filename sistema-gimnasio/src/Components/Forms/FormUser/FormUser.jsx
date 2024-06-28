@@ -7,7 +7,11 @@ import * as yup from "yup";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createAdmin, getAdminByEmail, updateAdmin } from "../../Admin/AdminServices";
+import {
+  createAdmin,
+  getAdminByEmail,
+  updateAdmin,
+} from "../../Admin/AdminServices";
 import {
   createClient,
   getClientByEmail,
@@ -109,13 +113,17 @@ const FormUser = ({ entity, editForm }) => {
       fetchActivities();
     }
     if (userEmail) {
-      const fetchDataUser = async () =>{
-          const dataEditUser =await getDataUser(userEmail)
-          const user = dataEditUser.data;
-          setValue("firstName", user.name);
-          setValue("lastname", user.lastName);
-          entity === "trainer" && setValue("activities", user.trainerActivities.map(activity => activity.idActivity));
-      }
+      const fetchDataUser = async () => {
+        const dataEditUser = await getDataUser(userEmail);
+        const user = dataEditUser.data;
+        setValue("firstName", user.name);
+        setValue("lastname", user.lastName);
+        entity === "trainer" &&
+          setValue(
+            "activities",
+            user.trainerActivities.map((activity) => activity.idActivity)
+          );
+      };
       fetchDataUser();
     }
   }, []);
@@ -128,7 +136,7 @@ const FormUser = ({ entity, editForm }) => {
         await handleCreate(data);
       }
       setTimeout(() => {
-        navigate(ENTITY_URL_MAP[entity], { replace: true });
+        entity? navigate(ENTITY_URL_MAP[entity], { replace: true }):navigate("/login", { replace: true });
       }, 3000);
       
     } catch (error) {
@@ -138,15 +146,15 @@ const FormUser = ({ entity, editForm }) => {
   const getDataUser = async (email) => {
     switch (entity) {
       case "admin":
-        return await getAdminByEmail(email); 
+        return await getAdminByEmail(email);
       case "client":
-        return await getClientByEmail(email); 
+        return await getClientByEmail(email);
       case "trainer":
-        return await getTrainerByEmail(email); 
+        return await getTrainerByEmail(email);
       default:
         break;
     }
-  }
+  };
   const handleEdit = async (data) => {
     switch (entity) {
       case "admin":
@@ -210,10 +218,18 @@ const FormUser = ({ entity, editForm }) => {
         );
     }
   };
-
   return (
     <section className="form-section">
-      <h2>{editForm ? "EDITAR CUENTA" : `CREAR ${entity.toUpperCase()}`}</h2>
+      <h2>
+        {editForm
+          ? "EDITAR CUENTA"
+          : entity
+          ?  "CREAR " +(entity ===  "admin" ? "ADMIN" :entity ===  "client"?"CLIENTE":entity ===  "trainer" &&"ENTRENADOR")
+
+
+          : "CREAR CUENTA"}
+      </h2>
+
       <Form className="form-group" onSubmit={handleSubmit(handleFormSubmit)}>
         <Form.Group className="mb-3" controlId="formGroupName">
           <Form.Control

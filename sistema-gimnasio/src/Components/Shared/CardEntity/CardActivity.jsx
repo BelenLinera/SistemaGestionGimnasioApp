@@ -12,8 +12,9 @@ import "./CardActivity.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin }) => {
+const CardActivity = ({ entity, type, setChanges, changes}) => {
   const [confirm, setConfirmModal] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
@@ -39,7 +40,7 @@ const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin
           {entity.activityDescription}
         </p>
         
-        {isAdmin && (
+        {user?.role ==="Admin" && (
           <div className="buttons">
             <Link to={`/activity/edit-activity/${entity.activityName}`}>
               <Button variant="light" className="button-update-entity">
