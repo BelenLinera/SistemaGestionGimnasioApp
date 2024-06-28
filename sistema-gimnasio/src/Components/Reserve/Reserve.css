@@ -10,3 +10,13 @@
     font-size: 1.5rem;
     justify-content: center;
 }
+
+@media only screen and (min-width: 1440px) {
+    .activity-container-card {
+      display: grid;
+  
+      grid-template-columns: 1fr 1fr 1fr ; 
+      gap: 20px;
+    }
+    
+  }
