@@ -35,14 +35,14 @@ const NavBar = () => {
         <Link to="/activity" className={`link-nav ${theme === 'dark' ? 'link-dark' : 'link-light'}`} onClick={showNavBar}>
           <p>ACTIVIDADES</p>
         </Link>
-        <Link to="/reserves" className="link-nav" onClick={showNavBar}>
-          RESERVAS
+        <Link to="/reserves" className={`link-nav ${theme === 'dark' ? 'link-dark' : 'link-light'}`} onClick={showNavBar}>
+         <p> RESERVAS</p>
         </Link>
-        <Link to="/my-reserves" className="link-nav" onClick={showNavBar}>
-          MIS RESERVAS
+        <Link to="/my-reserves" className={`link-nav ${theme === 'dark' ? 'link-dark' : 'link-light'}`} onClick={showNavBar}>
+        <p>MIS RESERVAS</p>
         </Link>
-        <Link to="/client" className="link-nav" onClick={showNavBar}>
-          CLIENTES
+        <Link to="/client" className={`link-nav ${theme === 'dark' ? 'link-dark' : 'link-light'}`} onClick={showNavBar}>
+        <p>CLIENTES</p>
         </Link>
         <Link to="/admin" className={`link-nav ${theme === 'dark' ? 'link-dark' : 'link-light'}`} onClick={showNavBar}>
           <p>ADMINS</p>

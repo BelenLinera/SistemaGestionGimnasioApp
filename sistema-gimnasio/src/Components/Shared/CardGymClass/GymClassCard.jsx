@@ -13,8 +13,10 @@ import { deleteGymClass } from "../../GymClass/GymClassServices";
 import UserContext from "../../Context/UserContext";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
+import { ThemeContext } from "../../Context/ThemeContext";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
+  const { theme } = useContext(ThemeContext);
   const { user } = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
 
