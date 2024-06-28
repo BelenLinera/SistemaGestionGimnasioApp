@@ -14,6 +14,8 @@ import Login from "../Login/Login";
 import Home from "./Home/Home";
 import RecoverPassword from "../Forms/RecoverPassword/RecoverPassword";
 import ChangePasswordForm from "../Forms/ValidateTokenForm/ChangePasswordForm";
+import Reserve from "../Reserve/Reserve";
+import MyReserves from "../Reserve/MyReserves";
 import ContenidoChat from "./ChatBot/ContenidoChat";
 
 
@@ -77,11 +79,12 @@ const Layout = () => {
           path="/gym-class/create-gym-class"
           element={<GymClassForm editFormGym={false} />}
         />
-        <Route path="/gym-class" element={<GymClass />} />
         <Route
           path="/gym-class/edit-gym-class/:id"
           element={<GymClassForm editFormGym={true} />}
         />
+        <Route path="/reserves" element={<Reserve />} />
+        <Route path="/my-reserves" element={<MyReserves />} />
       </Routes>
       <ContenidoChat/>
       <Footer />

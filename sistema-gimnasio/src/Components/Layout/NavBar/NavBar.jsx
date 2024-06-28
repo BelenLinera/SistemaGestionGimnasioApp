@@ -33,6 +33,12 @@ const NavBar = () => {
         <Link to="/activity" className="link-nav" onClick={showNavBar}>
           ACTIVIDADES
         </Link>
+        <Link to="/reserves" className="link-nav" onClick={showNavBar}>
+          RESERVAS
+        </Link>
+        <Link to="/my-reserves" className="link-nav" onClick={showNavBar}>
+          MIS RESERVAS
+        </Link>
         <Link to="/client" className="link-nav" onClick={showNavBar}>
           CLIENTES
         </Link>

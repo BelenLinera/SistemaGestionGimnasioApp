@@ -21,22 +21,19 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
   const handleConfirmActiveClient = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-  }
+  };
 
   const handleChange = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-      // Si el cliente se activa manualmente, llamamos a la API para actualizar el estado
-      updateClientActiveState(entity.email, !entity.autorizationToReserve) // Llama a la función de actualización con el nuevo estado
-        .then(() => {
-          console.log("Estado del cliente actualizado con éxito en la API");
-          setChanges(!changes);
-        })
-        .catch((error) => {
-          console.error("Error al actualizar el estado del cliente:", error);
-        });
+    updateClientActiveState(entity.email, !entity.autorizationToReserve)
+      .then(() => {
+        setChanges(!changes);
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el estado del cliente:", error);
+      });
   };
-
 
   const onAction = () => {
     if (activeModalClient) {
@@ -66,7 +63,6 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
               label="Cliente activo"
               checked={entity.autorizationToReserve}
               onChange={handleConfirmActiveClient}
-              
             />
           )}
         </div>
@@ -113,12 +109,15 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
       {confirm && activeModalClient && (
         <ConfirmModal
           handler={handleChange}
-          title={entity.autorizationToReserve ? `Desactivar ${type}` : `Activar`}
+          title={
+            entity.autorizationToReserve ? `Desactivar ${type}` : `Activar`
+          }
           reason={"enviar"}
           onAction={() => onAction()}
         >
           Estás seguro de que quieres{" "}
-          {entity.autorizationToReserve ? " desactivar" : " activar"} la cuenta de{" "}
+          {entity.autorizationToReserve ? " desactivar" : " activar"} la cuenta
+          de{" "}
           <strong>
             {entity.name} {entity.lastName}
           </strong>
