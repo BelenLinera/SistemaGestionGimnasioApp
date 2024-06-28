@@ -1,36 +1,36 @@
 .activity-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .button-activity {
-    background-color: #6decb9;
-  }
+.button-activity {
+  background-color: #6decb9;
+}
 
-  .buttons button{
-    margin: 10px;
-  }
-  
-  .button-update-activity-act {
-    background-color: green;
-    color: #d9d9d9;
-    border: 2px solid transparent;
-    
-  }
-  
-  .button-delete-activity-act {
-    background-color: red;
-    color: #d9d9d9;
-    border: 2px solid transparent;
-  }
+.buttons button{
+  margin: 10px;
+}
 
+.button-update-activity-act {
+  background-color: green;
+  color: #d9d9d9;
+  border: 2px solid transparent;
   
+}
+
+.button-delete-activity-act {
+  background-color: red;
+  color: #d9d9d9;
+  border: 2px solid transparent;
+}
+
+
 @media only screen and (min-width: 1440px) {
-  .activity-container-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr ; 
-    gap: 20px;
-  }
-  
+.activity-container-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr ; 
+  gap: 20px;
+}
+
 }

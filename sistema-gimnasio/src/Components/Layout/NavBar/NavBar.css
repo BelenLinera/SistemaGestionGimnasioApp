@@ -9,18 +9,49 @@ header {
   color: #11999e;
 }
 
+.navbar-dark nav{
+  background-color: black;
+}
+
+
+.navbar-dark {
+  background-color: black;
+}
+
+.navbar-light{
+  background-color: #d9d9d9;
+}
+
 nav .link-nav {
-  margin: 0 2rem;
+ 
   padding: 10px 20px;
   display: inline-block;
   border-radius: 8px;
-  background-color: #d9d9d9;
-  color: #000000;
   text-decoration: none;
 }
 
+.btn-dark {
+  color: #fff;
+}
+
+.btn-light {
+  color: #000;
+}
+
 nav .link-nav:hover {
-  background-color: #6decb9;
+  background-color: #11999e;
+  
+}
+
+.link-dark:hover {
+  color:black;
+}
+
+.link-dark p{
+  color:#fff;
+}
+.link-light p{
+  color: black;
 }
 
 header .nav-btn {
@@ -29,7 +60,7 @@ header .nav-btn {
   background: transparent;
   border: none;
   outline: none;
-  visibility: hidden;
+  display: none;
   opacity: 0;
   font-size: 1.5rem;
 }
@@ -41,12 +72,18 @@ header .nav-btn {
   margin-right: 50px;
   margin-bottom: 10px;
 }
+.buttons-login-register{
+  display: flex;
+}
+.buttons-login-register button{
+  margin: 0 10px;
+}
 
 /* para hacer el responsive */
 
 @media only screen and (max-width: 1220px) {
   header .nav-btn {
-    visibility: visible;
+    display: block;
     opacity: 1;
   }
 
@@ -84,3 +121,5 @@ header .nav-btn {
     width: 250px;
   }
 }
+
+

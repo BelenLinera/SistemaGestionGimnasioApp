@@ -1,4 +1,4 @@
-.card-entity {
+.card-entity-light {
     display: flex;
     flex-direction: row;
     height: 80hv;
@@ -7,8 +7,19 @@
     min-height: 220px;
     border-radius: 20px;
     margin: 25px 0 25px;
+    color: black;
   }
-
+  .card-entity-dark {
+    display: flex;
+    flex-direction: row;
+    height: 80hv;
+    background-color: #11999e;
+    width: 370px;
+    min-height: 220px;
+    border-radius: 20px;
+    margin: 25px 0 25px;
+    color: black;
+  }
   .card-left{
     display: flex;
     align-items: center;

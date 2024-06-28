@@ -5,9 +5,14 @@
     min-height: 80vh;
 }
 
-.button-gymclass {
+.button-gymclass-light {
     margin-bottom: 20px;
     background-color: #6decb9;
+}
+
+.button-gymclass-dark {
+  margin-bottom: 20px;
+  background-color: #11999e;
 }
 
 @media only screen and (min-width: 1440px) {
@@ -18,4 +23,5 @@
       gap: 20px;
     }
     
-  }
+}
+
