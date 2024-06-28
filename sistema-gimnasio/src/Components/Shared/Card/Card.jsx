@@ -24,7 +24,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => 
   const handleConfirmActiveClient = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-  }
+  };
 
   const handleChange = () => {
     setConfirmModal(!confirm);
@@ -69,7 +69,6 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => 
               label="Cliente activo"
               checked={entity.autorizationToReserve}
               onChange={handleConfirmActiveClient}
-              
             />
           )}
         </div>
@@ -116,12 +115,15 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => 
       {confirm && activeModalClient && (
         <ConfirmModal
           handler={handleChange}
-          title={entity.autorizationToReserve ? `Desactivar ${type}` : `Activar`}
+          title={
+            entity.autorizationToReserve ? `Desactivar ${type}` : `Activar`
+          }
           reason={"enviar"}
           onAction={() => onAction()}
         >
           Estás seguro de que quieres{" "}
-          {entity.autorizationToReserve ? " desactivar" : " activar"} la cuenta de{" "}
+          {entity.autorizationToReserve ? " desactivar" : " activar"} la cuenta
+          de{" "}
           <strong>
             {entity.name} {entity.lastName}
           </strong>
