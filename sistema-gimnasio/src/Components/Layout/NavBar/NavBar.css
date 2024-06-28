@@ -9,6 +9,10 @@ header {
   color: #11999e;
 }
 
+.navbar-dark nav{
+  background-color: #222831;
+}
+
 
 .navbar-dark {
   background-color: #222831;
@@ -19,7 +23,7 @@ header {
 }
 
 nav .link-nav {
-  margin: 0 2rem;
+ 
   padding: 10px 20px;
   display: inline-block;
   border-radius: 8px;
@@ -56,7 +60,7 @@ header .nav-btn {
   background: transparent;
   border: none;
   outline: none;
-  visibility: hidden;
+  display: none;
   opacity: 0;
   font-size: 1.5rem;
 }
@@ -68,12 +72,18 @@ header .nav-btn {
   margin-right: 50px;
   margin-bottom: 10px;
 }
+.buttons-login-register{
+  display: flex;
+}
+.buttons-login-register button{
+  margin: 0 10px;
+}
 
 /* para hacer el responsive */
 
 @media only screen and (max-width: 1220px) {
   header .nav-btn {
-    visibility: visible;
+    display: block;
     opacity: 1;
   }
 
@@ -111,3 +121,5 @@ header .nav-btn {
     width: 250px;
   }
 }
+
+

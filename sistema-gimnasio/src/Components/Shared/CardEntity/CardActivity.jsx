@@ -12,10 +12,11 @@ import "./CardActivity.css";
 import { ThemeContext } from "../../Context/ThemeContext";
 import { useContext } from "react";
 
-const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin }) => {
+const CardActivity = ({ entity, type, setChanges, changes}) => {
   const [confirm, setConfirmModal] = useState(false);
   
   const {theme} = useContext(ThemeContext)
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
@@ -40,7 +41,7 @@ const CardActivity = ({ entity, type, setChanges, changes, deleteEntity, isAdmin
           {entity.activityDescription}
         </p>
         
-        {isAdmin && (
+        {user?.role ==="Admin" && (
           <div className="buttons">
             <Link to={`/activity/edit-activity/${entity.activityName}`}>
               <Button variant="light" className="button-update-entity">
