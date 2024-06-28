@@ -1,0 +1,12 @@
+.reserve-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 60vh;
+}
+
+.reserve-section p{
+    font-size: 1.5rem;
+    justify-content: center;
+}
