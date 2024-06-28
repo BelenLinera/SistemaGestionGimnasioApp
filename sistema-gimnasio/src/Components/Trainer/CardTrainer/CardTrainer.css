@@ -33,11 +33,18 @@
     margin-top: 10px;
     text-align: center;
   }
-  .activities-trainer{
+  .activities-trainer-light{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .activities-trainer-dark{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
   }
   .activities-trainer .activity-trainer {
     display: flex;

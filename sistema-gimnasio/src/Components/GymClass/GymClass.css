@@ -5,7 +5,11 @@
     justify-content: space-between;
 }
 
-.button-gymclass {
+.button-gymclass-light {
     margin-bottom: 20px;
     background-color: #6decb9;
+}
+.button-gymclass-dark {
+    margin-bottom: 20px;
+    background-color: #11999e;
 }

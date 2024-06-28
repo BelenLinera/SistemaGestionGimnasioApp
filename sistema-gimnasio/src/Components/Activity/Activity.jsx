@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getAllActivities } from "./ActivityServices";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./Activity.css";
 import CardActivity from "../Shared/CardEntity/CardActivity";
+import { ThemeContext } from '../Context/ThemeContext';
 
 const Activity = () => {
   const [activities, setActivities] = useState([]);
   const [changes, setChanges] = useState([]);
+  const {theme} = useContext(ThemeContext)
   const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     getAllActivities().then((response) => {
@@ -19,9 +21,9 @@ const Activity = () => {
       <h2>ACTIVIDADES</h2>
       {user.role === "Admin" && (
         <Link to="/activity/create-activity">
-          <Button variant="light" className="button-activity">
-            + Nueva actividad
-          </Button>
+            <Button variant="light" className={theme === "dark" ? 'button-activity-dark' : 'button-activity-light'}>
+                + Nueva actividad
+            </Button>
         </Link>
       )}
       {activities.map((activity) => (

@@ -12,8 +12,10 @@ import {
 import { deleteGymClass } from "../../GymClass/GymClassServices";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
+import { ThemeContext } from "../../Context/ThemeContext";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
 
@@ -61,7 +63,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   };
 
   return (
-    <div className="card-gymclass">
+    <div className={theme === "dark" ? 'card-gymclass-dark' : 'card-gymclass-light'}>
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>

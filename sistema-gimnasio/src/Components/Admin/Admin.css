@@ -5,10 +5,13 @@
   justify-content: space-between;
 }
 
-.button-admin {
+.button-admin-light {
   background-color: #6decb9;
 }
 
+.button-admin-dark {
+  background-color: #11999e;
+}
 
 
 .card-admin {

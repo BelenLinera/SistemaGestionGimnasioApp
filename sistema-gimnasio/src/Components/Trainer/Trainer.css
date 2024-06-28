@@ -5,8 +5,11 @@
     justify-content: space-between;
   }
   
-  .button-trainer {
+  .button-trainer-light {
     background-color: #6decb9;
+  }
+  .button-trainer-dark {
+    background-color: #11999e;
   }
   .card-trainer {
     display: flex;
