@@ -14,6 +14,7 @@ const GymClass = () => {
     
     useEffect(() => {
         getAllGymClasses().then((response) => {
+            console.log(response)
             setGymClasses(response.data);
         });
     }, [changes]);

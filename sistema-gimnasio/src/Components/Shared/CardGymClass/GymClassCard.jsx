@@ -9,22 +9,36 @@ import {
   confirmAssistance,
   makeReserve,
 } from "../../Reserve/ReserveService";
-import { deleteGymClass } from "../../GymClass/GymClassServices";
+import {
+  cancelGymClassOnDate,
+  deleteGymClass,
+} from "../../GymClass/GymClassServices";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { ThemeContext } from "../../Context/ThemeContext";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   const { theme } = useContext(ThemeContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
+  const [confirm, setConfirmModal] = useState(false);
+  const [activeCancellClass, setActiveCancellClass] = useState(false);
+
+  const handleConfirmDeleteClass = () => {
+    setConfirmModal(!confirm);
+  };
+  const handleConfirmCancelClass = () => {
+    setConfirmModal(!confirm);
+    setActiveCancellClass(!activeCancellClass);
+  };
 
   const handleDeleteClass = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
       setChanges(!changes);
     } catch (error) {
-      console.error("Failed to delete gym class", error);
+      console.error("Error al eliminar la clase", error);
     }
   };
   const handleReserve = async () => {
@@ -43,7 +57,16 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
       console.log("No se pudo hacer la reserva", error);
     }
   };
-
+  const handleCancelClass = async () => {
+    try {
+      const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
+      const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
+      await cancelGymClassOnDate(entity.idGymClass, formattedDate);
+      setChanges(!changes);
+    } catch (error) {
+      console.error("Error al cancelar la clase", error);
+    }
+  };
   const handleCancelReserve = async () => {
     try {
       await cancelReserve(entity.idReserve);
@@ -121,9 +144,9 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             )}
           </>
         ) : (
-          !showDay &&  (
+          !showDay && (
             <>
-              <Button variant="danger" onClick={handleDeleteClass}>
+              <Button variant="danger" onClick={handleConfirmDeleteClass}>
                 Eliminar
               </Button>
               <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
@@ -134,14 +157,32 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             </>
           )
         )}
-        {showDay && (user.role === "Trainer" || user.role === "Admin") &&  (
+        {showDay && (user.role === "Trainer" || user.role === "Admin") && (
           <>
             <Button variant="info" onClick={() => setShowModal(true)}>
               Ver reservas
             </Button>
           </>
         )}
+        {showDay && user.role === "Admin" && (
+          <>
+            <Button variant="danger" onClick={handleConfirmCancelClass}>
+              Cancelar clase
+            </Button>
+          </>
+        )}
       </div>
+      {confirm &&(
+        <ConfirmModal
+          handler={handleConfirmDeleteClass}
+          title="Eliminar clase"
+          reason="eliminar"
+          onAction={handleDeleteClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
+      )}
 
       {showModal && (
         <ReserveListModal
@@ -149,6 +190,17 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
           handler={() => setShowModal(false)}
           onConfirm={handleConfirmAttendance}
         />
+      )}
+      {confirm && activeCancellClass && (
+        <ConfirmModal
+          handler={handleConfirmCancelClass}
+          title="Cancelar clase"
+          reason={"enviar"}
+          onAction={handleCancelClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
       )}
     </div>
   );
