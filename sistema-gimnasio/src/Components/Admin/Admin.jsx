@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import Card from "../Shared/Card/Card";
 import "./Admin.css";
 import { getAllAdmins } from "./AdminServices";
 import { deleteAdmin } from "./AdminServices";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import { toast, ToastContainer } from "react-toastify";
 import { ThemeContext } from "../Context/ThemeContext";
 
@@ -17,13 +19,21 @@ const Admin = () => {
     display: false,
     error: false,
   });
+  const { loading, sendRequest } = UseAxiosLoader();
+
 
   useEffect(() => {
-    getAllAdmins().then((response) => {
-      setAdmins(response.data);
-    });
-  }, [changes]);
-
+    const fetchAdmins = async () => {
+      try {
+        const response = await getAllAdmins(sendRequest);
+        console.log(response);
+        setAdmins(response.data);
+      } catch (error) {
+        console.log("Error al fecthear los clientes", error);
+      }
+    };
+    fetchAdmins();
+  }, [changes, sendRequest]);
   useEffect(() => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
@@ -31,7 +41,6 @@ const Admin = () => {
       toast.error(toastModal.message);
     }
   }, [toastModal]);
-
   return (
     <section className="admin-section">
       <h2>ADMINISTRADORES</h2>
@@ -40,6 +49,7 @@ const Admin = () => {
           + Nuevo administrador
         </Button>
       </Link>
+      {loading && <Spinner animation="border" />}
       <div className="admin-container-card">
       {admins.map((admin) => (
         <Card

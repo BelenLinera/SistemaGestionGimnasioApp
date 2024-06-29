@@ -10,7 +10,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from "../../Context/ThemeContext";
 import { useContext } from "react";
 
-const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
+const CardActivity = ({
+  entity,
+  type,
+  setChanges,
+  changes,
+  deleteEntity,
+  isAdmin,
+  setToast,
+}) => {
   const [confirm, setConfirmModal] = useState(false);
   
   const {theme} = useContext(ThemeContext)
@@ -21,9 +29,8 @@ const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
   };
   const onAction = async () => {
     handleConfirm();
-    // toast.success("Actividad eliminada con exito")
     try {
-      await deleteActivity(entity.activityName);
+      await deleteActivity(entity.activityName)
       setToast({
         display: true,
         message: "Actividad eliminada con exito",

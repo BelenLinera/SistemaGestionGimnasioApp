@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getAllActivities } from "./ActivityServices";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import { Link } from "react-router-dom";
 import "./Activity.css";
 import CardActivity from "../Shared/CardEntity/CardActivity";
@@ -17,15 +19,19 @@ const Activity = () => {
   });
   const {theme} = useContext(ThemeContext)
   const user = JSON.parse(localStorage.getItem("user"));
-  const getActivities = async () => {
-    try {
-      const response = await getAllActivities();
-      setActivities(response.data);
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
+  const { loading, sendRequest } = UseAxiosLoader();
 
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await getAllActivities(sendRequest);
+        setActivities(response.data);
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    };
+    fetchActivities();
+  }, [changes, sendRequest]);
   useEffect(() => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
@@ -34,20 +40,17 @@ const Activity = () => {
     }
   }, [toastModal]);
 
-  useEffect(() => {
-    getActivities();
-  }, [changes]);
-
   return (
-    <section className="activity-section">
+<section className="activity-section">
       <h2>ACTIVIDADES</h2>
-      {user.role === "Admin" && (
+      {user?.role === "Admin" && (
         <Link to="/activity/create-activity">
             <Button variant="light" className={theme === "dark" ? 'button-activity-dark' : 'button-activity-light'}>
                 + Nueva actividad
             </Button>
         </Link>
       )}
+      {loading && <Spinner animation="border" />}
       <div className="activity-container-card">
       {activities.map((activity) => (
         <CardActivity

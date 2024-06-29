@@ -1,11 +1,12 @@
 import api from "../../api";
 
-const getAllClients = () => {
-  return api.get("/api/Client");
+const getAllClients = (sendRequest) => {
+  return sendRequest({ method: "get", url: "/api/Client" });
+  // api.get("/api/Client")
 };
-const getClientByEmail=(email) =>{
-  return api.get(`/api/Client/${email}`)
-}
+const getClientByEmail = (email) => {
+  return api.get(`/api/Client/${email}`);
+};
 
 const deleteClient = (email) => {
   return api.delete(`/api/Client/${email}`);
@@ -28,10 +29,17 @@ const updateClient = (email, nameClient, lastName) => {
 };
 
 const updateClientActiveState = (email, autorizationToReserve) => {
-   // eslint-disable-next-line no-sequences
-  return api.patch(`/api/Client/${email}/state?autorizationToReserve=${autorizationToReserve}` )
+  // eslint-disable-next-line no-sequences
+  return api.patch(
+    `/api/Client/${email}/state?autorizationToReserve=${autorizationToReserve}`
+  );
 };
 
-export { getAllClients, getClientByEmail,deleteClient, createClient, updateClient, updateClientActiveState };
-
-
+export {
+  getAllClients,
+  getClientByEmail,
+  deleteClient,
+  createClient,
+  updateClient,
+  updateClientActiveState,
+};

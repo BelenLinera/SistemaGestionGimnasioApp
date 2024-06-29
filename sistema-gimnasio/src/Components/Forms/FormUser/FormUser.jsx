@@ -24,6 +24,7 @@ import {
 } from "../../Trainer/TrainerServices";
 import "./FormUser.css";
 import { getAllActivities } from "../../Activity/ActivityServices";
+import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -83,6 +84,7 @@ const ENTITY_URL_MAP = {
 const FormUser = ({ entity, editForm }) => {
   const navigate = useNavigate();
   const [optionsActivities, setOptionsActivities] = useState([]);
+  const { sendRequest } = UseAxiosLoader();
   const { userEmail } = useParams();
   const {
     register,
@@ -100,7 +102,7 @@ const FormUser = ({ entity, editForm }) => {
     if (entity === "trainer") {
       const fetchActivities = async () => {
         try {
-          const response = await getAllActivities();
+          const response = await getAllActivities(sendRequest);
           const mappedActivities = response.data.map((activity) => ({
             value: activity.idActivity,
             label: activity.activityName,

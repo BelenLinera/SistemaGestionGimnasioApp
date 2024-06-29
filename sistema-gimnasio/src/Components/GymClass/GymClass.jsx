@@ -1,33 +1,38 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getAllGymClasses } from "./GymClassServices";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import "./GymClass.css";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from '../Context/ThemeContext';
-
 
 const GymClass = () => {
   const {theme} = useContext(ThemeContext)
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
+  const { loading, sendRequest } = UseAxiosLoader();
   const [toastModal, setToast] = useState({
     message: null,
     display: false,
     error: false,
   });
 
-  const getGymClasses = async () => {
-    try {
-      const response = await getAllGymClasses();
-      setGymClasses(response.data);
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
-
+  useEffect(() => {
+    const fetchGymClass = async () => {
+      try {
+        const response = await getAllGymClasses(sendRequest);
+        setGymClasses(response.data);
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    };
+    
+    fetchGymClass();
+  }, [changes, sendRequest]);
   useEffect(() => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
@@ -35,11 +40,7 @@ const GymClass = () => {
       toast.error(toastModal.message);
     }
   }, [toastModal]);
-
-  useEffect(() => {
-    getGymClasses();
-  }, [changes]);
-
+  
   return (
     <section className="gymclass-section">
         <h2>CLASES DEL GIMNASIO</h2>
@@ -48,6 +49,7 @@ const GymClass = () => {
                 + Nueva clase
             </Button>
         </Link>
+      {loading && <Spinner animation="border" />}
         <div className='gymclass-container-card'>
         {gymClasses.map((gymClass) => (
             <CardGymClass
@@ -62,7 +64,6 @@ const GymClass = () => {
         </div>
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
-);
-};
+)};
 
 export default GymClass;

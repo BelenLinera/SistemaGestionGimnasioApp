@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import CardTrainer from "./CardTrainer/CardTrainer";
 import { deleteByEmail, getAllTrainers } from "./TrainerServices";
+import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import "./Trainer.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,16 +19,21 @@ const Trainer = () => {
     display: false,
     error: false,
   });
+  const { loading, sendRequest } = UseAxiosLoader();
 
-  const getTrainers = async () => {
-    try {
-      const response = await getAllTrainers();
-      setTrainers(response.data);
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
+  useEffect(() => {
+    const fetchTrainers = async () => {
+      try {
+        const response = await getAllTrainers(sendRequest);
+        console.log(response);
+        setTrainers(response.data);
+      } catch (error) {
+        console.log("Error al fecthear los trainers", error);
+      }
+    };
 
+    fetchTrainers();
+  }, [changes, sendRequest]);
   useEffect(() => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
@@ -34,10 +41,6 @@ const Trainer = () => {
       toast.error("No se puede eliminar un entrenador asociado a una clase");
     }
   }, [toastModal]);
-
-  useEffect(() => {
-    getTrainers();
-  }, [changes]);
   return (
     <section className="trainer-section">
       <h2>ENTRENADORES</h2>
@@ -46,6 +49,7 @@ const Trainer = () => {
           + Nuevo entrenador
         </Button>
       </Link>
+      {loading && <Spinner animation="border" />}
       <div className="trainer-container-card">
       {trainers.map((trainer) => (
         <CardTrainer

@@ -1,7 +1,8 @@
 import api from "../../api";
 
-const getAllActivities = () => {
-  return api.get("/api/Activity");
+const getAllActivities = (sendRequest) => {
+  return sendRequest({ method: "get", url: "/api/Activity" });
+  // return api.get("/api/Activity");
 };
 
 const getActivityByName = (activityName) => {
@@ -13,15 +14,19 @@ const deleteActivity = (activityName) => {
 };
 const createActivity = (activityName, activityDescription) => {
   return api.post("/api/Activity", {
-    ActivityName : activityName,
+    ActivityName: activityName,
     ActivityDescription: activityDescription,
   });
 };
 
-const updateActivity = ( activityName, activityNameUpdate, activityDescription) => {
+const updateActivity = (
+  activityName,
+  activityNameUpdate,
+  activityDescription
+) => {
   // eslint-disable-next-line no-sequences
   return api.put(`/api/Activity?activityName=${activityName}`, {
-    ActivityName : activityNameUpdate,
+    ActivityName: activityNameUpdate,
     ActivityDescription: activityDescription,
   });
 };

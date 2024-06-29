@@ -14,6 +14,7 @@ import makeAnimated from "react-select/animated";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getAllActivities } from "../../Activity/ActivityServices";
 import { getAllTrainers } from "../../Trainer/TrainerServices";
+import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
 import "./GymClassForm.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,6 +52,7 @@ const GymClassForm = ({ editFormGym }) => {
   const [trainers, setTrainers] = useState([]);
   const [activitySelected, setActivitySelected] = useState(null);
   const [trainerSelected, setTrainerSelected] = useState(null);
+  const { sendRequest } = UseAxiosLoader();
 
   const {
     register,
@@ -67,7 +69,7 @@ const GymClassForm = ({ editFormGym }) => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await getAllActivities();
+        const response = await getAllActivities(sendRequest);
         const mappedActivities = response.data.map((activity) => ({
           value: activity.idActivity,
           label: activity.activityName,
@@ -78,31 +80,35 @@ const GymClassForm = ({ editFormGym }) => {
       }
     };
     fetchActivities();
-  }, []);
+    console.log("Trae actividades");
+  }, [sendRequest]);
 
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
-        const response = await getAllTrainers();
+        const response = await getAllTrainers(sendRequest);
         setTrainers(response.data);
       } catch (error) {
         toast.error(error.response.data);
       }
     };
     fetchTrainers();
-  }, []);
+    console.log("trae trainers activities");
+  }, [sendRequest]);
 
   const optionsTrainers = useMemo(() => {
     if (!activitySelected) return [];
     const trainersOfActivitySelected = trainers.filter((trainer) =>
       trainer.trainerActivities.some(
-        (activities) => activities.activity.idActivity === activitySelected.value
+        (activities) =>
+          activities.activity.idActivity === activitySelected.value
       )
     );
     return trainersOfActivitySelected.flatMap((trainer) =>
       trainer.trainerActivities
         .filter(
-          (activities) => activities.activity.idActivity === activitySelected.value
+          (activities) =>
+            activities.activity.idActivity === activitySelected.value
         )
         .map((activity) => ({
           value: activity.idTrainerActivity,
@@ -111,7 +117,6 @@ const GymClassForm = ({ editFormGym }) => {
     );
   }, [trainers, activitySelected]);
 
-  
   useEffect(() => {
     if (id) {
       const fetchDataUser = async () => {
@@ -129,7 +134,10 @@ const GymClassForm = ({ editFormGym }) => {
           value: gymClassDefault.trainerActivity.idActivity,
           label: gymClassDefault.trainerActivity.activity.activityName,
         });
-        setValue("IdTrainerActivity", gymClassDefault.trainerActivity.idTrainerActivity);
+        setValue(
+          "IdTrainerActivity",
+          gymClassDefault.trainerActivity.idTrainerActivity
+        );
         setValue("Days", gymClassDefault.days);
         setValue("TimeClass", gymClassDefault.timeClass);
         setValue("Capacity", gymClassDefault.capacity);

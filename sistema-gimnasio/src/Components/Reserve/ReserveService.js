@@ -4,10 +4,9 @@ const getAllReserves = () => {
   return api.get("/api/Reserve");
 };
 
-const getMyReserves = () => {
-  return api.get("/api/Reserve/my-reserves",
-  );
-}
+const getMyReserves = (sendRequest) => {
+  return sendRequest({ method: "get", url: "/api/Reserve/my-reserves" });
+};
 
 const makeReserve = async (data) => {
   return await api.post(
@@ -25,4 +24,10 @@ const cancelReserve = async (id) => {
   return await api.delete(`/api/Reserve/${id}`);
 };
 
-export { getAllReserves,getMyReserves, makeReserve, confirmAssistance, cancelReserve };
+export {
+  getAllReserves,
+  getMyReserves,
+  makeReserve,
+  confirmAssistance,
+  cancelReserve,
+};
