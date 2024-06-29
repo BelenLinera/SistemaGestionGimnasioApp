@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getAllActivities } from "./ActivityServices";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./Activity.css";
 import CardActivity from "../Shared/CardEntity/CardActivity";
 import { toast, ToastContainer } from "react-toastify";
+import { ThemeContext } from '../Context/ThemeContext';
 
 const Activity = () => {
   const [activities, setActivities] = useState([]);
@@ -14,6 +15,7 @@ const Activity = () => {
     display: false,
     error: false,
   });
+  const {theme} = useContext(ThemeContext)
   const user = JSON.parse(localStorage.getItem("user"));
   const getActivities = async () => {
     try {
@@ -41,11 +43,12 @@ const Activity = () => {
       <h2>ACTIVIDADES</h2>
       {user.role === "Admin" && (
         <Link to="/activity/create-activity">
-          <Button variant="light" className="button-activity">
-            + Nueva actividad
-          </Button>
+            <Button variant="light" className={theme === "dark" ? 'button-activity-dark' : 'button-activity-light'}>
+                + Nueva actividad
+            </Button>
         </Link>
       )}
+      <div className="activity-container-card">
       {activities.map((activity) => (
         <CardActivity
           entity={activity}
@@ -56,6 +59,7 @@ const Activity = () => {
           changes={changes}
         />
       ))}
+      </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );

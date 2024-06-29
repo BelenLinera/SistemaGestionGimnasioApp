@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { format, parse } from "date-fns";
 import { Button } from "react-bootstrap";
@@ -9,14 +9,30 @@ import {
   confirmAssistance,
   makeReserve,
 } from "../../Reserve/ReserveService";
-import { deleteGymClass } from "../../GymClass/GymClassServices";
+import {
+  cancelGymClassOnDate,
+  deleteGymClass,
+} from "../../GymClass/GymClassServices";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { ThemeContext } from "../../Context/ThemeContext";
 
-const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
+const CardGymClass = ({ entity, setChanges, changes, showDay,setToast }) => {
+  const { theme } = useContext(ThemeContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
+  const [confirm, setConfirmModal] = useState(false);
+  const [activeCancellClass, setActiveCancellClass] = useState(false);
+
+  const handleConfirmDeleteClass = () => {
+    setConfirmModal(!confirm);
+  };
+  const handleConfirmCancelClass = () => {
+    setConfirmModal(!confirm);
+    setActiveCancellClass(!activeCancellClass);
+  };
 
   const handleDeleteClass = async () => {
     try {
@@ -59,7 +75,16 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
       });
     }
   };
-
+  const handleCancelClass = async () => {
+    try {
+      const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
+      const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
+      await cancelGymClassOnDate(entity.idGymClass, formattedDate);
+      setChanges(!changes);
+    } catch (error) {
+      console.error("Error al cancelar la clase", error);
+    }
+  };
   const handleCancelReserve = async () => {
     try {
       await cancelReserve(entity.idReserve);
@@ -87,7 +112,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
   };
 
   return (
-    <div className="card-gymclass">
+    <div className={theme === "dark" ? 'card-gymclass-dark' : 'card-gymclass-light'}>
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>
@@ -147,7 +172,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
         ) : (
           !showDay && (
             <>
-              <Button variant="danger" onClick={handleDeleteClass}>
+              <Button variant="danger" onClick={handleConfirmDeleteClass}>
                 Eliminar
               </Button>
               <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
@@ -165,7 +190,25 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
             </Button>
           </>
         )}
+        {showDay && user.role === "Admin" && (
+          <>
+            <Button variant="danger" onClick={handleConfirmCancelClass}>
+              Cancelar clase
+            </Button>
+          </>
+        )}
       </div>
+      {confirm &&(
+        <ConfirmModal
+          handler={handleConfirmDeleteClass}
+          title="Eliminar clase"
+          reason="eliminar"
+          onAction={handleDeleteClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
+      )}
 
       {showModal && (
         <ReserveListModal
@@ -173,6 +216,17 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
           handler={() => setShowModal(false)}
           onConfirm={handleConfirmAttendance}
         />
+      )}
+      {confirm && activeCancellClass && (
+        <ConfirmModal
+          handler={handleConfirmCancelClass}
+          title="Cancelar clase"
+          reason={"enviar"}
+          onAction={handleCancelClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
       )}
     </div>
   );

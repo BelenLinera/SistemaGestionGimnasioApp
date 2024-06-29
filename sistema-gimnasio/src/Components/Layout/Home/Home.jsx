@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import CardActivity from "../../Shared/CardEntity/CardActivity";
 import { getAllActivities } from "../../Activity/ActivityServices";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const Home = ({ isAdmin }) => { 
   const [activities, setActivities] = useState([]);
   const [changes, setChanges] = useState(false);
+  const {theme} = useContext(ThemeContext)
 
   useEffect(() => {
     getAllActivities()
@@ -22,7 +25,7 @@ const Home = ({ isAdmin }) => {
   }, [changes]);
 
   return (
-    <div className="home-container">
+    <div className={theme === "dark" ? 'home-dark' : 'home-light'}>
       <div className="home-header">
         <div className="home-content">
           <h1>Bienvenido/a a Training Center</h1>
@@ -38,7 +41,7 @@ const Home = ({ isAdmin }) => {
           
         </div>
       </div>
-      <div className="activities-container">
+      <div className={theme === "dark" ? 'home-act-dark' : 'home-act-light'}>
         <h2>Nuestras Actividades</h2>
         <div className="activities-container-card">
         {activities && activities.length > 0 ? (

@@ -38,7 +38,15 @@ const Reserve = () => {
         const reservesForClass = reservesData.filter(
           (reserve) => reserve.idGymClass === gymclass.idGymClass
         );
-
+        console.log(gymclass);
+        const isCancelled = gymclass.cancelledDates.some(
+          (cancelledDate) =>
+            format(new Date(cancelledDate.cancelledDate), "dd/MM/yyyy") === formattedDate
+        );
+  
+        if (isCancelled) {
+          return null;
+        }
         if (user.role === "Client") {
           return processClientRole(
             gymclass,
@@ -70,7 +78,7 @@ const Reserve = () => {
           gymclass.datetime <= sevenDaysLater
       );
 
-    setGymClasses(processedClasses);
+      setGymClasses(processedClasses.filter(Boolean));
   };
 
   const processClientRole = (
@@ -123,6 +131,7 @@ const Reserve = () => {
   return (
     <section className="reserve-section">
       <h2>RESERVAS SEMANALES</h2>
+      <div className="reserve-container-card"> 
       {gymClasses.length > 0 ? (
         gymClasses.map((gymclass) => (
           <CardGymClass
@@ -140,6 +149,7 @@ const Reserve = () => {
             : "No hay clases disponibles."}
         </p>
       )}
+      </div> 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );

@@ -11,6 +11,8 @@ import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { updateClientActiveState } from "../../Client/ClientServices";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const Card = ({
   entity,
@@ -21,6 +23,7 @@ const Card = ({
   setToast,
 }) => {
   const [confirm, setConfirmModal] = useState(false);
+  const {theme} = useContext(ThemeContext)
   const [activeModalClient, setActiveModalClient] = useState(false);
 
   const handleConfirm = () => {
@@ -67,7 +70,7 @@ const Card = ({
   };
 
   return (
-    <div className="card-entity">
+    <div className={theme === "dark" ? 'card-entity-dark' : 'card-entity-light'}>
       <div className="card-left">
         <div className="icon-user">
           <FontAwesomeIcon icon={faUser} />

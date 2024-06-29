@@ -7,9 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import "./CardActivity.css";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
 
 const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
   const [confirm, setConfirmModal] = useState(false);
+  
+  const {theme} = useContext(ThemeContext)
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleConfirm = () => {
@@ -37,8 +41,10 @@ const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
 
   return (
     <div className="activity-section">
-      <div className="card-entity-act">
-        <h5 className="card-entity-name-act">{entity.activityName}</h5>
+      <div className={theme === "dark" ? 'card-entity-act-dark' : 'card-entity-act-light'}> 
+        <h5 className="card-entity-name-act">
+          {entity.activityName}
+        </h5>
         <p className="card-entity-description-act">
           {entity.activityDescription}
         </p>

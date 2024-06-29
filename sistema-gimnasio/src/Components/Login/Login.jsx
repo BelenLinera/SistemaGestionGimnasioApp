@@ -9,6 +9,7 @@ import api from "../../api";
 import "./Login.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeContext } from '../Context/ThemeContext';
 
 const loginSchema = yup.object({
   email: yup
@@ -20,7 +21,7 @@ const loginSchema = yup.object({
 const Login = () => {
   let navigate = useNavigate();
   const { login } = useContext(UserContext);
-
+  const {theme} = useContext(ThemeContext)
   const {
     register,
     formState: { errors },
@@ -46,9 +47,10 @@ const Login = () => {
     }
   };
   return (
-    <section className="login-section">
+    <section className={theme === "dark" ? 'login-section-dark' : 'login-section-light'}>
       <h2>BIENVENIDO/A</h2>
       <Form className="login-form-group" onSubmit={handleSubmit(LoginUser)}>
+
         <Form.Group className="mb-3" controlId="formGroupEmail">
           <Form.Control
             className="input-login"

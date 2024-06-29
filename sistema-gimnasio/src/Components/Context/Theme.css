@@ -1,0 +1,15 @@
+:root {
+    --background-color: #f4f4f4;
+    --text-color: black;
+  }
+  
+  [data-theme="dark"] {
+    --background-color: #222831;
+    --text-color: white;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }

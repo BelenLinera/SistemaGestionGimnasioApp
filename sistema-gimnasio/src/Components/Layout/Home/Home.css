@@ -1,12 +1,42 @@
+
 .home-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #fff;
+  color: #fff; 
   text-align: center;
-  
 }
 
+/* Estilos para modo oscuro */
+.home-dark {
+  background-color: #222831;
+  color: #fff;
+}
+
+.home-dark .home-content {
+  color: #fff;
+}
+
+.home-dark .home-act-dark {
+  background-color: #222831;
+  color: #fff;
+}
+
+.home-light {
+  background-color: #d9d9d9;
+  color: #fff;
+}
+
+.home-light .home-content {
+  color: #fff;
+}
+
+.home-light .home-act-light {
+  background-color: #d9d9d9;
+  color: #000;
+}
+
+/* Estilos para el encabezado */
 .home-header {
   background-image: linear-gradient(#00000099, #00000099), url('/public/assets/home.jpg');
   background-size: cover;
@@ -30,23 +60,33 @@
   width: 50%;
 }
 
-.activities-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 800px;
-  margin: 20px auto;
-  color: #000;
+/* Estilos para contenedor de actividades */
+.home-act-light,
+.home-act-dark {
+  background-color: #d9d9d9; 
+  color: #000; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
+.activities-container-card{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap:20px;
+}
+
+.home-act-dark {
+  background-color: #222831;
+  color: #fff; 
 }
 
 
-@media only screen and (min-width: 1220px){
-.activities-container-card{
-  
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
-  gap: 20px; /* Espacio entre las tarjetas */
-}}
+@media only screen and (min-width: 1440px) {
+  .activities-container-card {
+    grid-template-columns: 1fr 1fr 1fr ; 
+  }
+  .activities-container {
+    width: 90%; 
+    max-width: 1200px; 
+  }
+}

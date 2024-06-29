@@ -5,8 +5,19 @@ footer {
   background-color: #d9d9d9;
   color: #11999e;
   bottom: 0;
-  height: 180px;
+  height: 120px;
   width: 100%;
+  position: relative;
+  
+}
+.footer-dark{
+  background-color: #222831;
+  color: #fff;
+}
+
+.footer-light{
+  background-color: #d9d9d9;
+  color: black;
 }
 
 /* vista para telefonos */
