@@ -10,10 +10,18 @@ import "./Card.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { updateClientActiveState } from "../../Client/ClientServices";
+import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from "../../Context/ThemeContext";
 import { useContext } from "react";
 
-const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
+const Card = ({
+  entity,
+  type,
+  setChanges,
+  changes,
+  deleteEntity,
+  setToast,
+}) => {
   const [confirm, setConfirmModal] = useState(false);
   const {theme} = useContext(ThemeContext)
   const [activeModalClient, setActiveModalClient] = useState(false);
@@ -31,25 +39,34 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
     setActiveModalClient(!activeModalClient);
     updateClientActiveState(entity.email, !entity.autorizationToReserve)
       .then(() => {
+        setToast({
+          display: true,
+          message: "Cliente ha sido actualizado con exito",
+          error: false,
+        });
         setChanges(!changes);
       })
       .catch((error) => {
-        console.error("Error al actualizar el estado del cliente:", error);
+        setToast({ display: true, message: error.response.data, error: true });
       });
   };
 
-  const onAction = () => {
+  const onAction = async () => {
     if (activeModalClient) {
       return handleChange();
     }
-    handleConfirm();
-    deleteEntity(entity.email)
-      .then(() => {
-        setChanges(!changes);
-      })
-      .catch((error) => {
-        console.error(`Error deleting ${type}:`, error);
+    await handleConfirm();
+    try {
+      await deleteEntity(entity.email);
+      setToast({
+        display: true,
+        message: "Cliente eliminado con exito",
+        error: false,
       });
+      setChanges(!changes);
+    } catch (error) {
+      setToast({ display: true, message: error.response.data, error: true });
+    }
   };
 
   return (

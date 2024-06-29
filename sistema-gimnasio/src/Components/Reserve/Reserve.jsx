@@ -4,6 +4,7 @@ import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { getAllGymClasses } from "../GymClass/GymClassServices";
 import { getAllReserves } from "../Reserve/ReserveService";
 import "./Reserve.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
@@ -18,7 +19,7 @@ const Reserve = () => {
       ]);
       processGymClasses(gymClassesResponse.data, reservesResponse.data);
     } catch (error) {
-      console.log("Error trayendo las clases", error);
+      toast.error("Error trayendo las clases")
     }
   };
 
@@ -149,6 +150,7 @@ const Reserve = () => {
         </p>
       )}
       </div> 
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

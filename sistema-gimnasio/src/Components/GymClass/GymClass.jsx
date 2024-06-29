@@ -1,45 +1,68 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { getAllGymClasses } from './GymClassServices';  
-import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import "./GymClass.css";  
-import CardGymClass from '../Shared/CardGymClass/GymClassCard';  
+import React, { useState, useEffect, useContext } from "react";
+import { getAllGymClasses } from "./GymClassServices";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./GymClass.css";
+import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from '../Context/ThemeContext';
 
-const GymClass = () => {
-    const [gymClasses, setGymClasses] = useState([]);
-    const {theme} = useContext(ThemeContext)
-    
-    const [changes, setChanges] = useState([]);
-    
-    useEffect(() => {
-        getAllGymClasses().then((response) => {
-            console.log(response)
-            setGymClasses(response.data);
-        });
-    }, [changes]);
 
-    return (
-        <section className="gymclass-section">
-            <h2>CLASES DEL GIMNASIO</h2>
-            <Link to="/gym-class/create-gym-class">
-                <Button variant="light" className={theme === "dark" ? 'button-gymclass-dark' : 'button-gymclass-light'}>
-                    + Nueva clase
-                </Button>
-            </Link>
-            <div className='gymclass-container-card'>
-            {gymClasses.map((gymClass) => (
-                <CardGymClass
-                    entity={gymClass}
-                    type={"gymclass"}
-                    key={gymClass.idGymClass}
-                    setChanges={setChanges}
-                    changes={changes}
-                />
-            ))}
-            </div>
-        </section>
-    );
+const GymClass = () => {
+  const {theme} = useContext(ThemeContext)
+  const [gymClasses, setGymClasses] = useState([]);
+  const [changes, setChanges] = useState([]);
+  const [toastModal, setToast] = useState({
+    message: null,
+    display: false,
+    error: false,
+  });
+
+  const getGymClasses = async () => {
+    try {
+      const response = await getAllGymClasses();
+      setGymClasses(response.data);
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (toastModal.display === true && toastModal.error === false) {
+      toast.success(toastModal.message);
+    } else if (toastModal.display === true && toastModal.error === true) {
+      toast.error(toastModal.message);
+    }
+  }, [toastModal]);
+
+  useEffect(() => {
+    getGymClasses();
+  }, [changes]);
+
+  return (
+    <section className="gymclass-section">
+        <h2>CLASES DEL GIMNASIO</h2>
+        <Link to="/gym-class/create-gym-class">
+            <Button variant="light" className={theme === "dark" ? 'button-gymclass-dark' : 'button-gymclass-light'}>
+                + Nueva clase
+            </Button>
+        </Link>
+        <div className='gymclass-container-card'>
+        {gymClasses.map((gymClass) => (
+            <CardGymClass
+                entity={gymClass}
+                type={"gymclass"}
+                key={gymClass.idGymClass}
+                setChanges={setChanges}
+                changes={changes}
+                setToast={setToast}
+            />
+        ))}
+        </div>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+    </section>
+);
 };
 
 export default GymClass;

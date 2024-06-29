@@ -11,7 +11,9 @@ import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../Context/ThemeContext";
 
-const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
+import "react-toastify/dist/ReactToastify.css";
+
+const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast}) => {
   const [confirm, setConfirmModal] = useState(false);
   const {theme} = useContext(ThemeContext)
 
@@ -19,15 +21,19 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
     setConfirmModal(!confirm);
   };
 
-  const onAction = () => {
-    handleConfirm();
-    deleteEntity(entity.email)
-      .then(() => {
-        setChanges(!changes);
-      })
-      .catch((error) => {
-        console.error(`Error deleting ${type}:`, error);
+  const onAction =async () => {
+    try {
+      handleConfirm();
+      await deleteEntity(entity.email)
+      setToast({
+        display: true,
+        message: "Entrenador eliminado con exito",
+        error: false,
       });
+      setChanges(!changes);
+    } catch (error) {
+      setToast({ display: true, message: error.response.data, error: true });
+    }
   };
 
   return (
@@ -83,9 +89,9 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
           reason={"eliminar"}
           onAction={() => onAction()}
         >
-          Estás seguro de que quieres eliminar
+          Estás seguro de que quieres eliminar a 
           <strong>
-            {entity.name} {entity.lastName}
+           {} {entity.name} {entity.lastName}
           </strong>
           ?
         </ConfirmModal>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createActivity,
   updateActivity,
+  getActivityByName
 } from "../../Activity/ActivityServices";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
@@ -11,37 +12,40 @@ import "./FormActivity.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const createActivitySchema = yup.object({
   activityName: yup
     .string()
     .required("El nombre de la actividad es requerido")
     .matches(
-      /^[a-zA-Z0-9 ]+$/,
-      "El nombre no debe tener simbolos ni caracteres especiales"
+      /^[a-zA-Z0-9 áéíóúÁÉÍÓÚüÜñÑ]+$/,
+      "El nombre no debe tener símbolos ni caracteres especiales"
     ),
   activityDescription: yup
     .string()
-    .required("La descripcion de la actividad es requerida")
-    .matches(
-      /^[a-zA-Z0-9 ]+$/,
-      "La descripcion no debe contener simbolos ni caracteres especiales"
-    ),
+    .required("La descripción de la actividad es requerida")
+    .min(5, "La descripción debe tener al menos 5 caracteres")
+    .max(120, "La descripción debe tener como máximo 120 caracteres"),
 });
 
 const editActivitySchema = yup.object({
   activityName: yup
     .string()
     .required("El nombre de la actividad es requerido")
-    .matches(/^[a-zA-Z0-9 ]+$/, "El nombre debe tener solo letras"),
+    .matches(
+      /^[a-zA-Z0-9 áéíóúÁÉÍÓÚüÜñÑ]+$/,
+      "El nombre no debe tener símbolos ni caracteres especiales"
+    ),
   activityDescription: yup
     .string()
-    .required("La descripcion de la actividad es requerida")
-    .matches(
-      /^[a-zA-Z0-9 ]+$/,
-      "La descripcion no debe contener simbolos ni caracteres especiales"
-    ),
+    .required("La descripción de la actividad es requerida")
+    .min(5, "La descripción debe tener al menos 5 caracteres")
+    .max(120, "La descripción debe tener como máximo 120 caracteres"),
 });
+
+
 
 const FormActivity = ({ entity, editFormAct }) => {
   let navigate = useNavigate();
@@ -50,6 +54,7 @@ const FormActivity = ({ entity, editFormAct }) => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
     clearErrors,
   } = useForm({
     mode: "onBlur",
@@ -58,30 +63,52 @@ const FormActivity = ({ entity, editFormAct }) => {
     ),
   });
 
+  useEffect(() => {
+    if (activityName){
+      const fetchActivities = async () => {
+        try {
+          const dataActivity = await getActivityByName(activityName);
+          setValue("activityName", dataActivity.data.activityName);
+          setValue("activityDescription", dataActivity.data.activityDescription);
+        }
+        catch (error) {
+          toast.error("Error al traer los datos de la actividad")
+        }
+      };
+      fetchActivities();
+    }
+  },[]);
   const onSubmit = async (data) => {
     if (editFormAct) {
       if (entity === "activity") {
         try {
-          await updateActivity(
+           await updateActivity(
             activityName,
             data.activityName,
             data.activityDescription
           );
-          return navigate("/activity", { replace: true });
+          toast.success("Actividad actualizada con exito")
+          setTimeout(() => {
+            return navigate("/activity", { replace: true });
+          }, 3000);
         } catch (error) {
-          return console.log(error);
+          toast.error(error.response.data);
         }
       }
     }
-    if (entity === "activity") {
+    if (entity === "activity" && !editFormAct ) {
       try {
         await createActivity(data.activityName, data.activityDescription);
-        return navigate("/activity", { replace: true });
+        toast.success("Actividad creada con exito")
+        setTimeout(() => {
+          return navigate("/activity", { replace: true });
+        }, 3000);  
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data);
+        
       }
     }
-    //}
+   
   };
   return (
     <section className="form-section">
@@ -121,6 +148,7 @@ const FormActivity = ({ entity, editFormAct }) => {
         </Button>
       </Form>
       {editFormAct}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };
