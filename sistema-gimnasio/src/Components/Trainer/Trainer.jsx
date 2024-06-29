@@ -10,17 +10,31 @@ import "react-toastify/dist/ReactToastify.css";
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
   const [changes, setChanges] = useState(false);
+  const [toastModal, setToast] = useState({
+    message: null,
+    display: false,
+    error: false,
+  });
+
   const getTrainers = async () => {
     try {
-      const response = await getAllTrainers()
+      const response = await getAllTrainers();
       setTrainers(response.data);
-    }
-    catch(error) {
+    } catch (error) {
       toast.error(error.response.data);
     }
-  }
- useEffect(() => {
-    getTrainers()
+  };
+
+  useEffect(() => {
+    if (toastModal.display === true && toastModal.error === false) {
+      toast.success(toastModal.message);
+    } else if (toastModal.display === true && toastModal.error === true) {
+      toast.error(toastModal.message);
+    }
+  }, [toastModal]);
+
+  useEffect(() => {
+    getTrainers();
   }, [changes]);
   return (
     <section className="trainer-section">
@@ -35,6 +49,7 @@ const Trainer = () => {
           entity={trainer}
           type={"trainer"}
           key={trainer.email}
+          setToast={setToast}
           setChanges={setChanges}
           changes={changes}
           deleteEntity={deleteByEmail}

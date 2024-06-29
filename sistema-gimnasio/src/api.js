@@ -1,21 +1,21 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://localhost:7254',
+  baseURL: "https://localhost:7234",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 api.interceptors.request.use(
-  config => {
+  (config) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       config.headers.Authorization = `Bearer ${user.token}`;
     }
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );

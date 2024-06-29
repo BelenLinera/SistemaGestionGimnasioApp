@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import {Form, Button} from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import UserContext from "../Context/UserContext";
@@ -32,17 +32,17 @@ const Login = () => {
   });
   const LoginUser = async (data) => {
     try {
-      const response = await api.post("/api/Autheticate", {
+      const response = await api.post("/api/Authenticate", {
         Email: data.email,
         Password: data.password,
       });
       login(response.data);
-      toast.success("Inicio de sesión exitoso"); 
+      toast.success("Inicio de sesión exitoso");
       setTimeout(() => {
         return navigate("/", { replace: true });
       }, 3000);
     } catch (error) {
-      toast.error(error.response.data); 
+      toast.error(error.response.data);
     }
   };
   return (
@@ -83,7 +83,7 @@ const Login = () => {
       </Form>
       <div>
         <div className="forget-password">
-          No tenes cuenta? <Link  to="/login">Registrate</Link>
+          No tenes cuenta? <Link to="/login">Registrate</Link>
         </div>
         <div className="forget-password">
           Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>

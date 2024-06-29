@@ -15,16 +15,21 @@ import "./GymClassCard.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
+const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
 
   const handleDeleteClass = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
+      setToast({
+        display: true,
+        message: "Cliente eliminado con exito",
+        error: false,
+      });
       setChanges(!changes);
     } catch (error) {
-      toast.error("Error al borrar una clase");
+      setToast({ display: true, message: error.response.data, error: true });
     }
   };
   const handleReserve = async () => {
@@ -121,7 +126,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             )}
           </>
         ) : (
-          !showDay &&  (
+          !showDay && (
             <>
               <Button variant="danger" onClick={handleDeleteClass}>
                 Eliminar
@@ -134,7 +139,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             </>
           )
         )}
-        {showDay && (user.role === "Trainer" || user.role === "Admin") &&  (
+        {showDay && (user.role === "Trainer" || user.role === "Admin") && (
           <>
             <Button variant="info" onClick={() => setShowModal(true)}>
               Ver reservas
@@ -150,7 +155,6 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
           onConfirm={handleConfirmAttendance}
         />
       )}
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

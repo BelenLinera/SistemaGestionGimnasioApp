@@ -10,11 +10,16 @@ import "./Card.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
 import { updateClientActiveState } from "../../Client/ClientServices";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => {
+const Card = ({
+  entity,
+  type,
+  setChanges,
+  changes,
+  deleteEntity,
+  setToast,
+}) => {
   const [confirm, setConfirmModal] = useState(false);
   const [activeModalClient, setActiveModalClient] = useState(false);
 
@@ -29,29 +34,35 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast }) => 
   const handleChange = () => {
     setConfirmModal(!confirm);
     setActiveModalClient(!activeModalClient);
-      updateClientActiveState(entity.email, !entity.autorizationToReserve) 
-        .then(() => {
-          setToast({display:true, message:"Cliente ha sido actualizado con exito", error:false});
-          setChanges(!changes);
-        })
-        .catch((error) => {
-          setToast({display:true, message:error.response.data, error:true});
+    updateClientActiveState(entity.email, !entity.autorizationToReserve)
+      .then(() => {
+        setToast({
+          display: true,
+          message: "Cliente ha sido actualizado con exito",
+          error: false,
         });
+        setChanges(!changes);
+      })
+      .catch((error) => {
+        setToast({ display: true, message: error.response.data, error: true });
+      });
   };
 
-
-  const  onAction = async () => {
+  const onAction = async () => {
     if (activeModalClient) {
       return handleChange();
     }
     await handleConfirm();
     try {
-      await deleteEntity(entity.email)
-        setToast({display:true, message:"Cliente eliminado con exito", error:false});
-        setChanges(!changes);
-    }
-    catch (error) { 
-      setToast({display:true, message:error.response.data, error:true});
+      await deleteEntity(entity.email);
+      setToast({
+        display: true,
+        message: "Cliente eliminado con exito",
+        error: false,
+      });
+      setChanges(!changes);
+    } catch (error) {
+      setToast({ display: true, message: error.response.data, error: true });
     }
   };
 
