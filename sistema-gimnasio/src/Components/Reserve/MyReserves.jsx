@@ -6,6 +6,7 @@ import {
   parseISO,
 } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import { ToastContainer, toast } from "react-toastify";
 
 const MyReserves = () => {
   const [gymClasses, setGymClasses] = useState([]);
@@ -35,7 +36,7 @@ const MyReserves = () => {
       });
       setGymClasses(gymClasses);
     } catch (error) {
-      console.log("Error trayendo las clases", error);
+      toast.error("Error trayendo las reservas")
     }
   };
   useEffect(() => {
@@ -54,6 +55,7 @@ const MyReserves = () => {
           changes={changes}
         />
       ))}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

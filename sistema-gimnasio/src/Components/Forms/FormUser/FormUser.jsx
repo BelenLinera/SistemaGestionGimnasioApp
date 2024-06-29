@@ -107,7 +107,7 @@ const FormUser = ({ entity, editForm }) => {
           }));
           setOptionsActivities(mappedActivities);
         } catch (error) {
-          console.error("Error trayendo las actividades", error);
+          toast.error("Error tayendo las clases");
         }
       };
       fetchActivities();
@@ -136,11 +136,12 @@ const FormUser = ({ entity, editForm }) => {
         await handleCreate(data);
       }
       setTimeout(() => {
-        entity? navigate(ENTITY_URL_MAP[entity], { replace: true }):navigate("/login", { replace: true });
+        entity
+          ? navigate(ENTITY_URL_MAP[entity], { replace: true })
+          : navigate("/login", { replace: true });
       }, 3000);
-      
     } catch (error) {
-      console.error(`Error creando el ${entity}`, error);
+      toast.error("Error trayendo las actividades");
     }
   };
   const getDataUser = async (email) => {
@@ -224,9 +225,12 @@ const FormUser = ({ entity, editForm }) => {
         {editForm
           ? "EDITAR CUENTA"
           : entity
-          ?  "CREAR " +(entity ===  "admin" ? "ADMIN" :entity ===  "client"?"CLIENTE":entity ===  "trainer" &&"ENTRENADOR")
-
-
+          ? "CREAR " +
+            (entity === "admin"
+              ? "ADMIN"
+              : entity === "client"
+              ? "CLIENTE"
+              : entity === "trainer" && "ENTRENADOR")
           : "CREAR CUENTA"}
       </h2>
 

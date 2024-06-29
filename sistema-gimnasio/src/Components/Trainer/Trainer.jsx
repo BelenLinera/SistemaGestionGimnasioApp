@@ -29,7 +29,7 @@ const Trainer = () => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
     } else if (toastModal.display === true && toastModal.error === true) {
-      toast.error(toastModal.message);
+      toast.error("No se puede eliminar un entrenador asociado a una clase");
     }
   }, [toastModal]);
 

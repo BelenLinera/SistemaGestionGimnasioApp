@@ -20,16 +20,15 @@ const Activity = () => {
       const response = await getAllActivities();
       setActivities(response.data);
     } catch (error) {
-      toast.error("No puedes acceder a esa seccion");
+      toast.error(error.response.data);
     }
   };
 
   useEffect(() => {
     if (toastModal.display === true && toastModal.error === false) {
       toast.success(toastModal.message);
-      console.log("hola2")
     } else if (toastModal.display === true && toastModal.error === true) {
-      toast.error(toastModal.message);
+      toast.error("No se puede eliminar actividades asociadas a una clase");
     }
   }, [toastModal]);
 

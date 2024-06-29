@@ -9,26 +9,29 @@ import { Button } from "react-bootstrap";
 import "./CardTrainer.css";
 import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
-const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
+const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast}) => {
   const [confirm, setConfirmModal] = useState(false);
 
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
 
-  const onAction = () => {
-    handleConfirm();
-    toast.success("Entrenador eliminado con exito");
-    deleteEntity(entity.email)
-      .then(() => {
-        setChanges(!changes);
-      })
-      .catch((error) => {
-        console.error(`Error deleting ${type}:`, error);
+  const onAction =async () => {
+    try {
+      handleConfirm();
+      await deleteEntity(entity.email)
+      setToast({
+        display: true,
+        message: "Entrenador eliminado con exito",
+        error: false,
       });
+      setChanges(!changes);
+    } catch (error) {
+      setToast({ display: true, message: error.response.data, error: true });
+    }
   };
 
   return (
@@ -91,7 +94,6 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
           ?
         </ConfirmModal>
       )}
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { format, parse } from "date-fns";
 import { Button } from "react-bootstrap";
@@ -12,7 +12,6 @@ import {
 import { deleteGymClass } from "../../GymClass/GymClassServices";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
@@ -24,17 +23,25 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
       await deleteGymClass(entity.idGymClass);
       setToast({
         display: true,
-        message: "Cliente eliminado con exito",
+        message: "Clase eliminada con exito",
         error: false,
       });
       setChanges(!changes);
     } catch (error) {
-      setToast({ display: true, message: error.response.data, error: true });
+      setToast({
+        display: true,
+        message: "No se pudo eliminar la clase",
+        error: true,
+      });
     }
   };
   const handleReserve = async () => {
     if (entity.reserved || entity.reserveCount === entity.capacity) {
-      return console.log("Capacidad maxima alcanzada");
+      return setToast({
+        display: true,
+        message: "Capacidad maxima alcanzada",
+        error: false,
+      });
     }
     try {
       const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
@@ -45,7 +52,11 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
       });
       setChanges(!changes);
     } catch (error) {
-      toast.error("Cliente inactivo, no se puede hacer la reserva");
+      setToast({
+        display: true,
+        message: "No se pudo hacer la reserva",
+        error: false,
+      });
     }
   };
 
@@ -54,7 +65,11 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
       await cancelReserve(entity.idReserve);
       setChanges(!changes);
     } catch (error) {
-      toast.error("No se pudo hacer la reserva");
+      setToast({
+        display: true,
+        message: "No se pudo cancelar la reserva",
+        error: false,
+      });
     }
   };
 
@@ -63,7 +78,11 @@ const CardGymClass = ({ entity, setChanges, changes, showDay, setToast }) => {
       await confirmAssistance(idReserve);
       setChanges(!changes);
     } catch (error) {
-      console.log(error);
+      setToast({
+        display: true,
+        message: "No se pudo desconfirmar la asistencia",
+        error: false,
+      });
     }
   };
 

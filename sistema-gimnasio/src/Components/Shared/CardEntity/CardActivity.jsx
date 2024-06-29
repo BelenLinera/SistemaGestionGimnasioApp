@@ -6,7 +6,6 @@ import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
 import "./CardActivity.css";
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
@@ -21,7 +20,6 @@ const CardActivity = ({ entity, type, setChanges, changes, setToast }) => {
     // toast.success("Actividad eliminada con exito")
     try {
       await deleteActivity(entity.activityName);
-      console.log("hola");
       setToast({
         display: true,
         message: "Actividad eliminada con exito",

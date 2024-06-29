@@ -145,7 +145,6 @@ const GymClassForm = ({ editFormGym }) => {
         await updateGymClass(id, data);
         toast.success("Clase actualizada con exito")
       } else {
-        console.log(data);
         await createGymClass(data);
         toast.success("Clase creada con exito")
       }
