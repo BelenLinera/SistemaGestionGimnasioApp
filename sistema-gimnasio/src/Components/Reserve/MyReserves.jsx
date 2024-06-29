@@ -4,11 +4,12 @@ import { format, isAfter, parseISO } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import Spinner from "react-bootstrap/Spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "./Reserve.css";
 
 const MyReserves = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
   const { loading, sendRequest } = UseAxiosLoader();
 
   const fetchGymClassesAndReserves = async () => {
@@ -36,7 +37,7 @@ const MyReserves = () => {
       });
       setGymClasses(gymClasses);
     } catch (error) {
-      console.log("Error trayendo las clases", error);
+      toast.error("Error trayendo las reservas")
     }
   };
   useEffect(() => {
@@ -47,15 +48,18 @@ const MyReserves = () => {
     <section className="reserve-section">
       <h2>MIS RESERVAS</h2>
       {loading && <Spinner animation="border" />}
+      <div className="reserve-container-card">
       {gymClasses.map((gymclass) => (
         <CardGymClass
-          key={gymclass.idGymClass}
+          key={gymclass.idReserve}
           entity={gymclass}
           showDay={true}
           setChanges={setChanges}
           changes={changes}
         />
       ))}
+      </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

@@ -9,61 +9,110 @@ import {
   confirmAssistance,
   makeReserve,
 } from "../../Reserve/ReserveService";
-import { deleteGymClass } from "../../GymClass/GymClassServices";
-import UserContext from "../../Context/UserContext";
+import {
+  cancelGymClassOnDate,
+  deleteGymClass,
+} from "../../GymClass/GymClassServices";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
+import "react-toastify/dist/ReactToastify.css";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { ThemeContext } from "../../Context/ThemeContext";
 
-const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
-  const { user } = useContext(UserContext);
+const CardGymClass = ({ entity, setChanges, changes, showDay,setToast }) => {
+  const { theme } = useContext(ThemeContext);
+  const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
+  const [confirm, setConfirmModal] = useState(false);
+  const [activeCancellClass, setActiveCancellClass] = useState(false);
+
+  const handleConfirmDeleteClass = () => {
+    setConfirmModal(!confirm);
+  };
+  const handleConfirmCancelClass = () => {
+    setConfirmModal(!confirm);
+    setActiveCancellClass(!activeCancellClass);
+  };
 
   const handleDeleteClass = async () => {
     try {
       await deleteGymClass(entity.idGymClass);
+      setToast({
+        display: true,
+        message: "Clase eliminada con exito",
+        error: false,
+      });
       setChanges(!changes);
     } catch (error) {
-      console.error("Failed to delete gym class", error);
+      setToast({
+        display: true,
+        message: "No se pudo eliminar la clase",
+        error: true,
+      });
     }
   };
-  console.log(entity);
   const handleReserve = async () => {
     if (entity.reserved || entity.reserveCount === entity.capacity) {
-      return console.log("Capacidad maxima alcanzada");
+      return setToast({
+        display: true,
+        message: "Capacidad maxima alcanzada",
+        error: false,
+      });
     }
     try {
       const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
       const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
-      await makeReserve(user.token, {
+      await makeReserve({
         IdGymClass: entity.idGymClass,
         dateClass: formattedDate,
       });
       setChanges(!changes);
     } catch (error) {
-      console.log("No se pudo hacer la reserva", error);
+      setToast({
+        display: true,
+        message: "No se pudo hacer la reserva",
+        error: false,
+      });
     }
   };
-
-  const handleCancelReserve = async () => {
+  const handleCancelClass = async () => {
     try {
-      await cancelReserve(user.token, entity.idReserve);
+      const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
+      const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
+      await cancelGymClassOnDate(entity.idGymClass, formattedDate);
       setChanges(!changes);
     } catch (error) {
-      console.log("No se pudo cancelar la reserva", error);
+      console.error("Error al cancelar la clase", error);
+    }
+  };
+  const handleCancelReserve = async () => {
+    try {
+      await cancelReserve(entity.idReserve);
+      setChanges(!changes);
+    } catch (error) {
+      setToast({
+        display: true,
+        message: "No se pudo cancelar la reserva",
+        error: false,
+      });
     }
   };
 
   const handleConfirmAttendance = async (idReserve) => {
     try {
-      await confirmAssistance(user.token, idReserve);
+      await confirmAssistance(idReserve);
       setChanges(!changes);
     } catch (error) {
-      console.log(error);
+      setToast({
+        display: true,
+        message: "No se pudo desconfirmar la asistencia",
+        error: false,
+      });
     }
   };
 
   return (
-    <div className="card-gymclass">
+    <div className={theme === "dark" ? 'card-gymclass-dark' : 'card-gymclass-light'}>
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>
@@ -121,9 +170,9 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             )}
           </>
         ) : (
-          !showDay &&  (
+          !showDay && (
             <>
-              <Button variant="danger" onClick={handleDeleteClass}>
+              <Button variant="danger" onClick={handleConfirmDeleteClass}>
                 Eliminar
               </Button>
               <Link to={`/gym-class/edit-gym-class/${entity.idGymClass}`}>
@@ -134,14 +183,32 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
             </>
           )
         )}
-        {showDay && (user.role === "Trainer" || user.role === "Admin") &&  (
+        {showDay && (user.role === "Trainer" || user.role === "Admin") && (
           <>
             <Button variant="info" onClick={() => setShowModal(true)}>
               Ver reservas
             </Button>
           </>
         )}
+        {showDay && user.role === "Admin" && (
+          <>
+            <Button variant="danger" onClick={handleConfirmCancelClass}>
+              Cancelar clase
+            </Button>
+          </>
+        )}
       </div>
+      {confirm &&(
+        <ConfirmModal
+          handler={handleConfirmDeleteClass}
+          title="Eliminar clase"
+          reason="eliminar"
+          onAction={handleDeleteClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
+      )}
 
       {showModal && (
         <ReserveListModal
@@ -149,6 +216,17 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
           handler={() => setShowModal(false)}
           onConfirm={handleConfirmAttendance}
         />
+      )}
+      {confirm && activeCancellClass && (
+        <ConfirmModal
+          handler={handleConfirmCancelClass}
+          title="Cancelar clase"
+          reason={"enviar"}
+          onAction={handleCancelClass}
+        >
+          Estás seguro de que quieres eliminar la clase{" "}
+          <strong>{entity.trainerActivity.activity.activityName}</strong>?
+        </ConfirmModal>
       )}
     </div>
   );

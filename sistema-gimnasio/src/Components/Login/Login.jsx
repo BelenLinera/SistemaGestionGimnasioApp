@@ -7,6 +7,9 @@ import * as yup from "yup";
 import UserContext from "../Context/UserContext";
 import api from "../../api";
 import "./Login.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ThemeContext } from '../Context/ThemeContext';
 
 const loginSchema = yup.object({
   email: yup
@@ -18,7 +21,7 @@ const loginSchema = yup.object({
 const Login = () => {
   let navigate = useNavigate();
   const { login } = useContext(UserContext);
-
+  const {theme} = useContext(ThemeContext)
   const {
     register,
     formState: { errors },
@@ -35,15 +38,19 @@ const Login = () => {
         Password: data.password,
       });
       login(response.data);
-      return navigate("/", { replace: true });
+      toast.success("Inicio de sesión exitoso");
+      setTimeout(() => {
+        return navigate("/", { replace: true });
+      }, 3000);
     } catch (error) {
-      console.log("Error:", error);
+      toast.error(error.response.data);
     }
   };
   return (
-    <section className="login-section">
+    <section className={theme === "dark" ? 'login-section-dark' : 'login-section-light'}>
       <h2>BIENVENIDO/A</h2>
       <Form className="login-form-group" onSubmit={handleSubmit(LoginUser)}>
+
         <Form.Group className="mb-3" controlId="formGroupEmail">
           <Form.Control
             className="input-login"
@@ -78,12 +85,13 @@ const Login = () => {
       </Form>
       <div>
         <div className="forget-password">
-          No tenes cuenta? <Link to="/login">Registrate</Link>
+          No tenes cuenta? <Link to="/register">Registrate</Link>
         </div>
         <div className="forget-password">
           Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

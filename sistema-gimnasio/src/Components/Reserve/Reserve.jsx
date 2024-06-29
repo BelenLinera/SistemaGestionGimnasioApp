@@ -1,30 +1,26 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState} from "react";
 import { addDays, setHours, setMinutes, format } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
 import { getAllGymClasses } from "../GymClass/GymClassServices";
 import { getAllReserves } from "../Reserve/ReserveService";
-import UserContext from "../Context/UserContext";
 import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
-import "./Reserve.css";
 import Spinner from "react-bootstrap/Spinner";
+import "./Reserve.css";
+import { ToastContainer, toast } from "react-toastify";
 
 const Reserve = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
   const { loading, sendRequest } = UseAxiosLoader();
-  const { user } = useContext(UserContext);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchGymClassesAndReserves = async () => {
     try {
-      // const [gymClassesResponse, reservesResponse] = await Promise.all([
-      //   getAllReserves(),
-      //   getAllGymClasses(sendRequest),
-      // ]);
       const reservesResponse = await getAllReserves();
       const gymClassesResponse = await getAllGymClasses(sendRequest);
       processGymClasses(gymClassesResponse.data, reservesResponse.data);
     } catch (error) {
-      console.log("Error trayendo las clases", error);
+      toast.error("Error trayendo las clases")
     }
   };
 
@@ -43,7 +39,15 @@ const Reserve = () => {
         const reservesForClass = reservesData.filter(
           (reserve) => reserve.idGymClass === gymclass.idGymClass
         );
-
+        console.log(gymclass);
+        const isCancelled = gymclass.cancelledDates.some(
+          (cancelledDate) =>
+            format(new Date(cancelledDate.cancelledDate), "dd/MM/yyyy") === formattedDate
+        );
+  
+        if (isCancelled) {
+          return null;
+        }
         if (user.role === "Client") {
           return processClientRole(
             gymclass,
@@ -76,7 +80,7 @@ const Reserve = () => {
           gymclass.datetime <= sevenDaysLater
       );
 
-    setGymClasses(processedClasses);
+      setGymClasses(processedClasses.filter(Boolean));
   };
 
   const processClientRole = (
@@ -129,6 +133,7 @@ const Reserve = () => {
   return (
     <section className="reserve-section">
       <h2>RESERVAS SEMANALES</h2>
+      <div className="reserve-container-card"> 
       {loading ? (
         <Spinner animation="border" />
       ) : gymClasses.length > 0 ? (
@@ -148,6 +153,8 @@ const Reserve = () => {
             : "No hay clases disponibles."}
         </p>
       )}
+      </div> 
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

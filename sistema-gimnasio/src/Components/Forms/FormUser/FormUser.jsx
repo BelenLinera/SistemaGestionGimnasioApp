@@ -25,6 +25,8 @@ import {
 import "./FormUser.css";
 import { getAllActivities } from "../../Activity/ActivityServices";
 import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const createUserSchema = yup.object({
   firstName: yup
@@ -107,7 +109,7 @@ const FormUser = ({ entity, editForm }) => {
           }));
           setOptionsActivities(mappedActivities);
         } catch (error) {
-          console.error("Error trayendo las actividades", error);
+          toast.error("Error tayendo las clases");
         }
       };
       fetchActivities();
@@ -135,9 +137,13 @@ const FormUser = ({ entity, editForm }) => {
       } else {
         await handleCreate(data);
       }
-      navigate(ENTITY_URL_MAP[entity], { replace: true });
+      setTimeout(() => {
+        entity
+          ? navigate(ENTITY_URL_MAP[entity], { replace: true })
+          : navigate("/login", { replace: true });
+      }, 3000);
     } catch (error) {
-      console.error(`Error creando el ${entity}`, error);
+      toast.error("Error trayendo las actividades");
     }
   };
   const getDataUser = async (email) => {
@@ -156,9 +162,11 @@ const FormUser = ({ entity, editForm }) => {
     switch (entity) {
       case "admin":
         await updateAdmin(userEmail, data.firstName, data.lastname);
+        toast.success("Administrador actualizado con exito");
         break;
       case "client":
         await updateClient(userEmail, data.firstName, data.lastname);
+        toast.success("Cliente actualizado con exito");
         break;
       case "trainer":
         await updateByEmail(
@@ -167,6 +175,7 @@ const FormUser = ({ entity, editForm }) => {
           data.lastname,
           data.activities
         );
+        toast.success("Entrenador actualizado con exito");
         break;
       default:
         throw new Error("Unknown entity type");
@@ -182,6 +191,7 @@ const FormUser = ({ entity, editForm }) => {
           data.lastname,
           data.password
         );
+        toast.success("Administrador creado con exito");
         break;
       case "client":
         await createClient(
@@ -190,6 +200,7 @@ const FormUser = ({ entity, editForm }) => {
           data.lastname,
           data.password
         );
+        toast.success("Cliente creado con exito");
         break;
       case "trainer":
         await createTrainer(
@@ -199,6 +210,7 @@ const FormUser = ({ entity, editForm }) => {
           data.password,
           data.activities
         );
+        toast.success("Entrenador creado con exito");
         break;
       default:
         await createClient(
@@ -209,10 +221,21 @@ const FormUser = ({ entity, editForm }) => {
         );
     }
   };
-
   return (
     <section className="form-section">
-      <h2>{editForm ? "EDITAR CUENTA" : `CREAR ${entity.toUpperCase()}`}</h2>
+      <h2>
+        {editForm
+          ? "EDITAR CUENTA"
+          : entity
+          ? "CREAR " +
+            (entity === "admin"
+              ? "ADMIN"
+              : entity === "client"
+              ? "CLIENTE"
+              : entity === "trainer" && "ENTRENADOR")
+          : "CREAR CUENTA"}
+      </h2>
+
       <Form className="form-group" onSubmit={handleSubmit(handleFormSubmit)}>
         <Form.Group className="mb-3" controlId="formGroupName">
           <Form.Control
@@ -308,6 +331,7 @@ const FormUser = ({ entity, editForm }) => {
       {!entity && (
         <div className="have-account">¿Ya tienes cuenta? Inicia sesión</div>
       )}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

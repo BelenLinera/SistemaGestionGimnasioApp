@@ -16,18 +16,15 @@ import { getAllActivities } from "../../Activity/ActivityServices";
 import { getAllTrainers } from "../../Trainer/TrainerServices";
 import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
 import "./GymClassForm.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const createGymClassSchema = yup.object({
   IdActivity: yup.object().required("La actividad del entrenador es requerida"),
   IdTrainerActivity: yup.number().required("El entrenador es requerido"),
   Days: yup.number().required("Los días de la clase son requeridos"),
-  TimeClass: yup
-    .string()
-    .matches(
-      /^([0-9]|[01]\d|2[0-3]):([00]\d)$/,
-      "El horario debe estar en formato de hora (HH:mm)"
-    )
-    .required("El horario es requerido"),
+  TimeClass: yup.string()
+  .required("El horario es requerido"),
   Capacity: yup
     .number("La capacidad debe ser un numero")
     .required("La capacidad de la clase es requerida")
@@ -79,7 +76,7 @@ const GymClassForm = ({ editFormGym }) => {
         }));
         setOptionsActivities(mappedActivities);
       } catch (error) {
-        console.error("Error trayendo las actividades", error);
+        toast.error(error.response.data);
       }
     };
     fetchActivities();
@@ -92,7 +89,7 @@ const GymClassForm = ({ editFormGym }) => {
         const response = await getAllTrainers(sendRequest);
         setTrainers(response.data);
       } catch (error) {
-        console.error("Error trayendo los entrenadores", error);
+        toast.error(error.response.data);
       }
     };
     fetchTrainers();
@@ -146,6 +143,7 @@ const GymClassForm = ({ editFormGym }) => {
         setValue("Capacity", gymClassDefault.capacity);
       };
       fetchDataUser();
+      
     }
   }, [id, setValue]);
 
@@ -153,12 +151,17 @@ const GymClassForm = ({ editFormGym }) => {
     try {
       if (editFormGym) {
         await updateGymClass(id, data);
+        toast.success("Clase actualizada con exito")
       } else {
         await createGymClass(data);
+        toast.success("Clase creada con exito")
       }
-      navigate("/gym-class", { replace: true });
+      
+      setTimeout(() => {
+        return navigate("/gym-class", { replace: true });
+      }, 3000);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -286,6 +289,7 @@ const GymClassForm = ({ editFormGym }) => {
           {editFormGym ? "Editar" : "Registrar"}
         </Button>
       </Form>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
   );
 };

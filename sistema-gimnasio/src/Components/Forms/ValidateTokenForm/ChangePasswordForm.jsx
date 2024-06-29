@@ -6,6 +6,7 @@ import * as yup from "yup";
 import api from "../../../api";
 import "./ChangePasswordForm.css";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 const tokenSchema = yup.object({
   token: yup.string().required("Por favor introduzca un token"),
 });
@@ -40,20 +41,25 @@ const ChangePasswordForm = () => {
     if (!tokenValid) {
       try {
         const response = await api.post("/api/User/validateToken", data.token);
-        return setTokenValid(response.data);
+        setTokenValid(response.data);
       } catch (response) {
-        return console.log(response.response.status, response.response.data);
+        toast.error("Token invalido")
       }
     }
-    try {
-      const response = await api.patch("/api/User",{
-          tokenRecover: tokenValid,
-          newPassword: data.password
-      });
-      console.log(response.data)
-      return navigate("/", { replace: true });
-    } catch (error) {
-      return console.log(error.response.status, error.response.data);
+    if(tokenValid){
+      try {
+        const response = await api.patch("/api/User",{
+            tokenRecover: tokenValid,
+            newPassword: data.password
+        });
+        response && toast.success("Contraseña cambiada con exito");
+        setTimeout(() => {
+          return navigate("/", { replace: true });
+          }, 2000);
+      } catch (error) {
+        toast.error("No se pudo cambiar la contraseña");
+      }
+      
     }
   };
   return (
@@ -114,6 +120,7 @@ const ChangePasswordForm = () => {
           </Button>
         </Form>
       </section>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </>
   );
 };

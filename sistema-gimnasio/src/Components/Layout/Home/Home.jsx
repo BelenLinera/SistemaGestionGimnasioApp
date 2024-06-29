@@ -4,11 +4,15 @@ import "./Home.css";
 import CardActivity from "../../Shared/CardEntity/CardActivity";
 import { getAllActivities } from "../../Activity/ActivityServices";
 import { UseAxiosLoader } from "../../../Hooks/UseAxiosLoader";
+import { ThemeContext } from "../../Context/ThemeContext";
+import { useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const Home = ({ isAdmin }) => {
   const [activities, setActivities] = useState([]);
   const [changes, setChanges] = useState(false);
   const { loading, sendRequest } = UseAxiosLoader();
+  const {theme} = useContext(ThemeContext)
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -21,27 +25,14 @@ const Home = ({ isAdmin }) => {
           setActivities([]);
         }
       } catch (error) {
-        console.error("Error fetching activities:", error);
+        toast.error("Error al traer las actividades")
       }
     };
-
     fetchActivities();
-
-    // getAllActivities()
-    //   .then((response) => {
-    //     if (response.data && Array.isArray(response.data)) {
-    //       setActivities(response.data);
-    //     } else {
-    //       setActivities([]);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching activities:", error);
-    //   });
   }, [changes, sendRequest]);
 
   return (
-    <div className="home-container">
+    <div className={theme === "dark" ? 'home-dark' : 'home-light'}>
       <div className="home-header">
         <div className="home-content">
           <h1>Bienvenido/a a Training Center</h1>
@@ -55,10 +46,10 @@ const Home = ({ isAdmin }) => {
           </p>
         </div>
       </div>
-      <div className="activities-container">
+      <div className={theme === "dark" ? 'home-act-dark' : 'home-act-light'}>
         <h2>Nuestras Actividades</h2>
-        <div className="activities-container-card">
           {loading && <Spinner animation="border" />}
+        <div className="activities-container-card">
           {activities && activities.length > 0 ? (
             activities.map((activity) => (
               <CardActivity
@@ -75,6 +66,7 @@ const Home = ({ isAdmin }) => {
           )}
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

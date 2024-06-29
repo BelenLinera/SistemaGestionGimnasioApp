@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import api from "../../../api";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const email = yup.object({
   email: yup
@@ -21,20 +22,23 @@ const RecoverPassword = () => {
     clearErrors,
   } = useForm({
     mode: "onBlur",
-    resolver: yupResolver(email)
+    resolver: yupResolver(email),
   });
-  const onSubmit = async (data) =>
-  {
+  const onSubmit = async (data) => {
     try {
-      const response = await api.post(`api/User/createToken?email=${data.email}`);
+      const response = await api.post(
+        `api/User/createToken?email=${data.email}`
+      );
 
-      if (response.status=== 200) {
-        return navigate("/forget-password/validate-token", { replace: true });
+      if (response.status === 200) {
+        toast.success("Token enviado con exito");
+        setTimeout(() => {
+          return navigate("/forget-password/validate-token", { replace: true });
+        }, 2000);
       }
     } catch (error) {
-      console.log(error)
+      toast.error("Error al enviar el token");
     }
-
   };
   return (
     <>
@@ -57,6 +61,7 @@ const RecoverPassword = () => {
           Enviar
         </Button>
       </Form>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </>
   );
 };

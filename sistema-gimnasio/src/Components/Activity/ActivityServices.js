@@ -5,6 +5,10 @@ const getAllActivities = (sendRequest) => {
   // return api.get("/api/Activity");
 };
 
+const getActivityByName = (activityName) => {
+  return api.get(`/api/Activity/${activityName}`)
+}
+
 const deleteActivity = (activityName) => {
   return api.delete(`/api/Activity/${activityName}`);
 };
@@ -26,4 +30,4 @@ const updateActivity = (
     ActivityDescription: activityDescription,
   });
 };
-export { getAllActivities, deleteActivity, createActivity, updateActivity };
+export { getAllActivities, getActivityByName, deleteActivity, createActivity, updateActivity };

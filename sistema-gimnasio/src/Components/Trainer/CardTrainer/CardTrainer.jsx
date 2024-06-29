@@ -4,32 +4,40 @@ import {
   faUser,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
 import "./CardTrainer.css";
 import ConfirmModal from "../../Shared/ConfirmModal/ConfirmModal";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../../Context/ThemeContext";
 
-const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
+import "react-toastify/dist/ReactToastify.css";
+
+const Card = ({ entity, type, setChanges, changes, deleteEntity, setToast}) => {
   const [confirm, setConfirmModal] = useState(false);
+  const {theme} = useContext(ThemeContext)
 
   const handleConfirm = () => {
     setConfirmModal(!confirm);
   };
 
-  const onAction = () => {
-    handleConfirm();
-    deleteEntity(entity.email)
-      .then(() => {
-        setChanges(!changes);
-      })
-      .catch((error) => {
-        console.error(`Error deleting ${type}:`, error);
+  const onAction =async () => {
+    try {
+      handleConfirm();
+      await deleteEntity(entity.email)
+      setToast({
+        display: true,
+        message: "Entrenador eliminado con exito",
+        error: false,
       });
+      setChanges(!changes);
+    } catch (error) {
+      setToast({ display: true, message: error.response.data, error: true });
+    }
   };
 
   return (
-    <div className="card-entity">
+    <div className={theme === "dark" ? 'card-entity-dark' : 'card-entity-light'}>
       <div className="card-left">
         <div className="icon-user">
           <FontAwesomeIcon icon={faUser} />
@@ -45,7 +53,7 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
       </div>
       <div className="information-trainer-section">
         <h3>Actividades</h3>
-        <div className="activities-trainer">
+        <div className={theme === "dark" ? 'activities-trainer-dark' : 'activities-trainer-light'}>
           {entity.trainerActivities.length > 0 ? (
             entity.trainerActivities.map((activity) => (
               <p
@@ -81,9 +89,9 @@ const Card = ({ entity, type, setChanges, changes, deleteEntity }) => {
           reason={"eliminar"}
           onAction={() => onAction()}
         >
-          Estás seguro de que quieres eliminar
+          Estás seguro de que quieres eliminar a 
           <strong>
-            {entity.name} {entity.lastName}
+           {} {entity.name} {entity.lastName}
           </strong>
           ?
         </ConfirmModal>
