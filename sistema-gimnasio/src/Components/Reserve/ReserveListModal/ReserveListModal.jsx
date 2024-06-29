@@ -4,7 +4,6 @@ import "./ReserveListModal.css";
 import { Button } from "react-bootstrap";
 
 const ReserveListModal = ({ entity, handler, onConfirm }) => {
-    console.log(entity)
   return ReactDOM.createPortal(
     <div className="modal">
       <div className="modalContent">

@@ -6,14 +6,14 @@ import {
   parseISO,
 } from "date-fns";
 import CardGymClass from "../Shared/CardGymClass/GymClassCard";
+import "./Reserve.css";
 
 const MyReserves = () => {
   const [gymClasses, setGymClasses] = useState([]);
   const [changes, setChanges] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
   const fetchGymClassesAndReserves = async () => {
     try {
-      const reservesResponse = await getMyReserves(user.token);
+      const reservesResponse = await getMyReserves();
       const gymClasses = reservesResponse.data.map((reserve) => {
         const classDate = parseISO(reserve.dateClass);
         const classTime = reserve.gymClass.timeClass.split(":").map(Number);
@@ -46,15 +46,17 @@ const MyReserves = () => {
   return (
     <section className="reserve-section">
       <h2>MIS RESERVAS</h2>
+      <div className="reserve-container-card">
       {gymClasses.map((gymclass) => (
         <CardGymClass
-          key={gymclass.idGymClass}
+          key={gymclass.idReserve}
           entity={gymclass}
           showDay={true}
           setChanges={setChanges}
           changes={changes}
         />
       ))}
+      </div>
     </section>
   );
 };

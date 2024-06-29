@@ -13,13 +13,14 @@ import {
   cancelGymClassOnDate,
   deleteGymClass,
 } from "../../GymClass/GymClassServices";
-import UserContext from "../../Context/UserContext";
 import ReserveListModal from "../../Reserve/ReserveListModal/ReserveListModal";
 import "./GymClassCard.css";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { ThemeContext } from "../../Context/ThemeContext";
 
 const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
-  const { user } = useContext(UserContext);
+  const { theme } = useContext(ThemeContext);
+  const user = JSON.parse(localStorage.getItem("user"));
   const [showModal, setShowModal] = useState(false);
   const [confirm, setConfirmModal] = useState(false);
   const [activeCancellClass, setActiveCancellClass] = useState(false);
@@ -47,7 +48,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
     try {
       const parsedDate = parse(entity.datetimeString, "dd/MM/yyyy", new Date());
       const formattedDate = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
-      await makeReserve(user.token, {
+      await makeReserve({
         IdGymClass: entity.idGymClass,
         dateClass: formattedDate,
       });
@@ -68,7 +69,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   };
   const handleCancelReserve = async () => {
     try {
-      await cancelReserve(user.token, entity.idReserve);
+      await cancelReserve(entity.idReserve);
       setChanges(!changes);
     } catch (error) {
       console.log("No se pudo cancelar la reserva", error);
@@ -77,7 +78,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
 
   const handleConfirmAttendance = async (idReserve) => {
     try {
-      await confirmAssistance(user.token, idReserve);
+      await confirmAssistance(idReserve);
       setChanges(!changes);
     } catch (error) {
       console.log(error);
@@ -85,7 +86,7 @@ const CardGymClass = ({ entity, setChanges, changes, showDay }) => {
   };
 
   return (
-    <div className="card-gymclass">
+    <div className={theme === "dark" ? 'card-gymclass-dark' : 'card-gymclass-light'}>
       <h5 className="card-title">
         {entity.trainerActivity.activity.activityName}
       </h5>
