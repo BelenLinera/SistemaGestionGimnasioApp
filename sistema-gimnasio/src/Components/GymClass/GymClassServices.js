@@ -17,10 +17,7 @@ const createGymClass = (data) => {
   });
 };
 
-const updateGymClass = (
-  idGymClass,
-  data
-) => {
+const updateGymClass = (idGymClass, data) => {
   return api.put(`/api/GymClass?idGymClass=${idGymClass}`, {
     idTrainerActivity: data.IdTrainerActivity,
     timeClass: data.TimeClass,
@@ -33,8 +30,9 @@ const deleteGymClass = (idGymClass) => {
 };
 const cancelGymClassOnDate = async (idGymClass, dateToCancel) => {
   return await api.post(
-    `https://localhost:7224/api/GymClass/cancel?idGymClass=${idGymClass}&dateToCancel=${dateToCancel}`,)
-}
+    `/api/GymClass/cancel?idGymClass=${idGymClass}&dateToCancel=${dateToCancel}`
+  );
+};
 
 export {
   getAllGymClasses,
@@ -42,5 +40,5 @@ export {
   createGymClass,
   updateGymClass,
   deleteGymClass,
-  cancelGymClassOnDate
+  cancelGymClassOnDate,
 };
