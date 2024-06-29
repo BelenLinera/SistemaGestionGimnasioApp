@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import {Form, Button} from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import UserContext from "../Context/UserContext";
@@ -78,7 +78,7 @@ const Login = () => {
       </Form>
       <div>
         <div className="forget-password">
-          No tenes cuenta? <Link  to="/login">Registrate</Link>
+          No tenes cuenta? <Link to="/login">Registrate</Link>
         </div>
         <div className="forget-password">
           Olvidaste tu contraseña? <Link to="/forget-password">Recuperar</Link>
