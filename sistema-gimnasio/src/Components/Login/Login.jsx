@@ -30,7 +30,7 @@ const Login = () => {
   });
   const LoginUser = async (data) => {
     try {
-      const response = await api.post("/api/Autheticate", {
+      const response = await api.post("/api/Authenticate", {
         Email: data.email,
         Password: data.password,
       });

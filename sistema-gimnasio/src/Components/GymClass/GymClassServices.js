@@ -33,7 +33,7 @@ const deleteGymClass = (idGymClass) => {
 };
 const cancelGymClassOnDate = async (idGymClass, dateToCancel) => {
   return await api.post(
-    `https://localhost:7224/api/GymClass/cancel?idGymClass=${idGymClass}&dateToCancel=${dateToCancel}`,)
+    `api/GymClass/cancel?idGymClass=${idGymClass}&dateToCancel=${dateToCancel}`,)
 }
 
 export {
