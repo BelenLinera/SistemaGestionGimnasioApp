@@ -1,24 +1,22 @@
-// ActivityFilter.js
 import React from "react";
-import { Form } from "react-bootstrap";
+import Select from "react-select";
 
 const ActivityFilter = ({ activities, selectedActivity, onActivityChange }) => {
+  const options = [
+    { value: "", label: "Todas las Actividades" }, // Opción para mostrar todas las actividades
+    ...activities,
+  ];
+
   return (
-    <Form.Group controlId="activityFilter">
-      <Form.Label>Filtrar por Actividad</Form.Label>
-      <Form.Control
-        as="select"
-        value={selectedActivity}
-        onChange={(e) => onActivityChange(e.target.value)}
-      >
-        <option value="">Todas las Actividades</option>
-        {activities.map((activity) => (
-          <option key={activity.value} value={activity.value}>
-            {activity.label}
-          </option>
-        ))}
-      </Form.Control>
-    </Form.Group>
+    <div className="mb-3">
+      <label className="form-label">Filtrar por Actividad</label>
+      <Select
+        options={options}
+        value={options.find((activity) => activity.value === selectedActivity)}
+        onChange={(selectedOption) => onActivityChange(selectedOption.value)}
+        placeholder="Selecciona una actividad"
+      />
+    </div>
   );
 };
 
