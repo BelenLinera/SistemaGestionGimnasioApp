@@ -7,23 +7,22 @@ header {
   padding: 0 2rem;
   background-color: #d9d9d9;
   color: #11999e;
+  z-index: 10;
 }
 
-.navbar-dark nav{
+.navbar-dark nav {
   background-color: black;
 }
-
 
 .navbar-dark {
   background-color: black;
 }
 
-.navbar-light{
+.navbar-light {
   background-color: #d9d9d9;
 }
 
 nav .link-nav {
- 
   padding: 10px 20px;
   display: inline-block;
   border-radius: 8px;
@@ -40,17 +39,16 @@ nav .link-nav {
 
 nav .link-nav:hover {
   background-color: #11999e;
-  
 }
 
 .link-dark:hover {
-  color:black;
+  color: black;
 }
 
-.link-dark p{
-  color:#fff;
+.link-dark p {
+  color: #fff;
 }
-.link-light p{
+.link-light p {
   color: black;
 }
 
@@ -72,10 +70,10 @@ header .nav-btn {
   margin-right: 50px;
   margin-bottom: 10px;
 }
-.buttons-login-register{
+.buttons-login-register {
   display: flex;
 }
-.buttons-login-register button{
+.buttons-login-register button {
   margin: 0 10px;
 }
 
@@ -101,6 +99,8 @@ header .nav-btn {
     background-color: #ffffff;
     transition: 1s;
     transform: translateY(-150vh);
+    z-index: 10;
+    overflow-y: auto;
   }
 
   header .responsive_nav {
@@ -121,5 +121,3 @@ header .nav-btn {
     width: 250px;
   }
 }
-
-
