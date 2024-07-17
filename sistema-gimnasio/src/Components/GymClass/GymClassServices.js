@@ -2,7 +2,7 @@ import api from "../../api";
 
 const getAllGymClasses = (sendRequest) => {
   return sendRequest({ method: "get", url: "/api/GymClass" });
-  // return api.get("/api/GymClass");
+  
 };
 
 const getGymClassById = (idGymClass) => {
