@@ -9,9 +9,11 @@ import { deleteAdmin } from "./AdminServices";
 import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import { toast, ToastContainer } from "react-toastify";
 import { ThemeContext } from "../Context/ThemeContext";
+import UserSearch from "../Shared/UserSearch/UserSearch";
 
 const Admin = () => {
   const [admins, setAdmins] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const {theme} = useContext(ThemeContext)
   const [changes, setChanges] = useState(false);
   const [toastModal, setToast] = useState({
@@ -41,6 +43,12 @@ const Admin = () => {
       toast.error(toastModal.message);
     }
   }, [toastModal]);
+
+
+  const filteredAdmins = admins.filter((admin) =>
+    admin.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <section className="admin-section">
       <h2>ADMINISTRADORES</h2>
@@ -49,9 +57,10 @@ const Admin = () => {
           + Nuevo administrador
         </Button>
       </Link>
+      <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {loading && <Spinner animation="border" />}
       <div className="admin-container-card">
-      {admins.map((admin) => (
+      {filteredAdmins.map((admin) => (
         <Card
           entity={admin}
           type={"admin"}
