@@ -143,7 +143,8 @@ const FormUser = ({ entity, editForm }) => {
           : navigate("/login", { replace: true });
       }, 3000);
     } catch (error) {
-      toast.error("Error trayendo las actividades");
+      console.log(error)
+      toast.error(error.request.response);
     }
   };
   const getDataUser = async (email) => {
