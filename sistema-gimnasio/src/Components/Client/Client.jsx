@@ -13,7 +13,7 @@ import { ThemeContext } from "../Context/ThemeContext";
 
 const Client = () => {
   const [clients, setClients] = useState([]);
-  const {theme} = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
   const [changes, setChanges] = useState(false);
   const [toastModal, setToast] = useState({
     message: null,
@@ -46,23 +46,35 @@ const Client = () => {
     <section className="client-section">
       <h2>CLIENTES</h2>
       <Link to="/client/create-client">
-        <Button variant="light" className={theme === "dark" ? 'button-client-dark' : 'button-client-light'}>
+        <Button
+          variant="light"
+          className={
+            theme === "dark" ? "button-client-dark" : "button-client-light"
+          }
+        >
           + Nuevo cliente
         </Button>
       </Link>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {clients.length === 0 && !loading && (
+        <p>No hay clientes disponibles</p>
+      )}
       <div className="client-container-card">
-      {clients.map((client) => (
-        <Card
-          entity={client}
-          type={"client"}
-          key={client.email}
-          setToast={setToast}
-          setChanges={setChanges}
-          changes={changes}
-          deleteEntity={deleteClient}
-        />
-      ))}
+        {clients.map((client) => (
+          <Card
+            entity={client}
+            type={"client"}
+            key={client.email}
+            setToast={setToast}
+            setChanges={setChanges}
+            changes={changes}
+            deleteEntity={deleteClient}
+          />
+        ))}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>

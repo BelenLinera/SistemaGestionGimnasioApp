@@ -26,10 +26,9 @@ const Admin = () => {
     const fetchAdmins = async () => {
       try {
         const response = await getAllAdmins(sendRequest);
-        console.log(response);
         setAdmins(response.data);
       } catch (error) {
-        console.log("Error al fecthear los clientes", error);
+        toast.error(error.message)
       }
     };
     fetchAdmins();
@@ -49,7 +48,11 @@ const Admin = () => {
           + Nuevo administrador
         </Button>
       </Link>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
       <div className="admin-container-card">
       {admins.map((admin) => (
         <Card

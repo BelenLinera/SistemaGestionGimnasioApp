@@ -82,7 +82,11 @@ const CardGymClass = ({ entity, setChanges, changes, showDay,setToast }) => {
       await cancelGymClassOnDate(entity.idGymClass, formattedDate);
       setChanges(!changes);
     } catch (error) {
-      console.error("Error al cancelar la clase", error);
+      setToast({
+        display: true,
+        message: "Hubo un error al cancelar la clase",
+        error: false,
+      });
     }
   };
   const handleCancelReserve = async () => {

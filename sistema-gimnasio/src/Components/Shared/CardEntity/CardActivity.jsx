@@ -47,7 +47,7 @@ const CardActivity = ({
   };
 
   return (
-    <div className="activity-section">
+    <div className="activity-card">
       <div className={theme === "dark" ? 'card-entity-act-dark' : 'card-entity-act-light'}> 
         <h5 className="card-entity-name-act">
           {entity.activityName}

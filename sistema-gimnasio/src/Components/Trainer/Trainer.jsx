@@ -12,7 +12,7 @@ import { ThemeContext } from "../Context/ThemeContext";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
-  const {theme} = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
   const [changes, setChanges] = useState(false);
   const [toastModal, setToast] = useState({
     message: null,
@@ -25,10 +25,9 @@ const Trainer = () => {
     const fetchTrainers = async () => {
       try {
         const response = await getAllTrainers(sendRequest);
-        console.log(response);
         setTrainers(response.data);
       } catch (error) {
-        console.log("Error al fecthear los trainers", error);
+        toast.error(error.message);
       }
     };
 
@@ -45,23 +44,35 @@ const Trainer = () => {
     <section className="trainer-section">
       <h2>ENTRENADORES</h2>
       <Link to="/trainer/create-trainer">
-        <Button variant="light" className={theme === "dark" ? 'button-trainer-dark' : 'button-trainer-light'}>
+        <Button
+          variant="light"
+          className={
+            theme === "dark" ? "button-trainer-dark" : "button-trainer-light"
+          }
+        >
           + Nuevo entrenador
         </Button>
       </Link>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {trainers.length === 0 && !loading && (
+        <p>No hay entrenadores disponibles</p>
+      )}
       <div className="trainer-container-card">
-      {trainers.map((trainer) => (
-        <CardTrainer
-          entity={trainer}
-          type={"trainer"}
-          key={trainer.email}
-          setToast={setToast}
-          setChanges={setChanges}
-          changes={changes}
-          deleteEntity={deleteByEmail}
-        />
-      ))}
+        {trainers.map((trainer) => (
+          <CardTrainer
+            entity={trainer}
+            type={"trainer"}
+            key={trainer.email}
+            setToast={setToast}
+            setChanges={setChanges}
+            changes={changes}
+            deleteEntity={deleteByEmail}
+          />
+        ))}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>
