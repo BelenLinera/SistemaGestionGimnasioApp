@@ -10,10 +10,12 @@ import { UseAxiosLoader } from "../../Hooks/UseAxiosLoader";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from "../Context/ThemeContext";
+import UserSearch from "../Shared/UserSearch/UserSearch";
 
 const Client = () => {
   const [clients, setClients] = useState([]);
-  const { theme } = useContext(ThemeContext);
+  const [searchTerm, setSearchTerm] = useState('');
+  const {theme} = useContext(ThemeContext)
   const [changes, setChanges] = useState(false);
   const [toastModal, setToast] = useState({
     message: null,
@@ -42,6 +44,11 @@ const Client = () => {
     }
   }, [toastModal]);
 
+  const filteredClients = clients.filter((client) =>
+    client.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   return (
     <section className="client-section">
       <h2>CLIENTES</h2>
@@ -60,11 +67,12 @@ const Client = () => {
           <Spinner animation="border" />
         </div>
       )}
+      <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {clients.length === 0 && !loading && (
         <p>No hay clientes disponibles</p>
       )}
       <div className="client-container-card">
-        {clients.map((client) => (
+        {filteredClients.map((client) => (
           <Card
             entity={client}
             type={"client"}
