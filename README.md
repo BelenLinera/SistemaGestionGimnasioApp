@@ -33,3 +33,6 @@ Además, utilizamos tres entidades claves para la finalidad del proyecto: activi
 * React-dom
 * Date-fns
 * Yup
+
+## link app
+https://sistemagymapp-jd-elin.vercel.app/
