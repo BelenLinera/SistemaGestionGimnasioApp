@@ -71,8 +71,10 @@
 
 .activities-container-card{
   display: grid;
-  grid-template-columns: 1fr;
-  gap:20px;
+  grid-template-columns: 1fr ;
+  padding-left: 120px;
+  justify-content: center; 
+  gap:20px; 
 }
 
 .home-act-dark {
