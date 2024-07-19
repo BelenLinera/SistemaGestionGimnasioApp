@@ -9,9 +9,11 @@ import "./Trainer.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeContext } from "../Context/ThemeContext";
+import UserSearch from "../Shared/UserSearch/UserSearch";
 
 const Trainer = () => {
   const [trainers, setTrainers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const {theme} = useContext(ThemeContext)
   const [changes, setChanges] = useState(false);
   const [toastModal, setToast] = useState({
@@ -28,7 +30,7 @@ const Trainer = () => {
         console.log(response);
         setTrainers(response.data);
       } catch (error) {
-        console.log("Error al fecthear los trainers", error);
+        console.log("Error al traer los entrenadores", error);
       }
     };
 
@@ -41,6 +43,13 @@ const Trainer = () => {
       toast.error("No se puede eliminar un entrenador asociado a una clase");
     }
   }, [toastModal]);
+
+
+  const filteredTrainers = trainers.filter((trainer) =>
+    trainer.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   return (
     <section className="trainer-section">
       <h2>ENTRENADORES</h2>
@@ -49,9 +58,10 @@ const Trainer = () => {
           + Nuevo entrenador
         </Button>
       </Link>
+      <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {loading && <Spinner animation="border" />}
       <div className="trainer-container-card">
-      {trainers.map((trainer) => (
+      {filteredTrainers.map((trainer) => (
         <CardTrainer
           entity={trainer}
           type={"trainer"}
