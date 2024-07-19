@@ -174,10 +174,17 @@ const Reserve = () => {
           onActivityChange={filterClassesByActivity}
         />
       </div>
+      {gymClasses.length === 0 && !loading && (
+        <p>
+          {user?.role === "Trainer"
+            ? "No tienes clases asignadas."
+            : "No hay clases disponibles para reservas."}
+        </p>
+      )}
       <div className="reserve-container-card">
         {loading ? (
           <Spinner animation="border" />
-        ) : filteredClasses.length > 0 ? (
+        ) : (
           filteredClasses.map((gymclass) => (
             <CardGymClass
               key={gymclass.idGymClass}
@@ -187,12 +194,6 @@ const Reserve = () => {
               changes={changes}
             />
           ))
-        ) : (
-          <p>
-            {user?.role === "Trainer"
-              ? "No tienes clases asignadas."
-              : "No hay clases disponibles."}
-          </p>
         )}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />

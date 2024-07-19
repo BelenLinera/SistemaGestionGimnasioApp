@@ -37,7 +37,7 @@ const MyReserves = () => {
       });
       setGymClasses(gymClasses);
     } catch (error) {
-      toast.error("Error trayendo las reservas")
+      toast.error("Error trayendo las reservas");
     }
   };
   useEffect(() => {
@@ -47,17 +47,24 @@ const MyReserves = () => {
   return (
     <section className="reserve-section">
       <h2>MIS RESERVAS</h2>
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {gymClasses.length === 0 && !loading && (
+        <p>No tienes reservas todavía</p>
+      )}
       <div className="reserve-container-card">
-      {gymClasses.map((gymclass) => (
-        <CardGymClass
-          key={gymclass.idReserve}
-          entity={gymclass}
-          showDay={true}
-          setChanges={setChanges}
-          changes={changes}
-        />
-      ))}
+        {gymClasses.map((gymclass) => (
+          <CardGymClass
+            key={gymclass.idReserve}
+            entity={gymclass}
+            showDay={true}
+            setChanges={setChanges}
+            changes={changes}
+          />
+        ))}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>

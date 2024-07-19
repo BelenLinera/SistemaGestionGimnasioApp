@@ -143,7 +143,6 @@ const FormUser = ({ entity, editForm }) => {
           : navigate("/login", { replace: true });
       }, 3000);
     } catch (error) {
-      console.log(error)
       toast.error(error.request.response);
     }
   };

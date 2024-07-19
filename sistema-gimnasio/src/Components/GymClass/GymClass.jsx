@@ -82,7 +82,9 @@ const GymClass = () => {
       <Link to="/gym-class/create-gym-class">
         <Button
           variant="light"
-          className={theme === "dark" ? "button-gymclass-dark" : "button-gymclass-light"}
+          className={
+            theme === "dark" ? "button-gymclass-dark" : "button-gymclass-light"
+          }
         >
           + Nueva clase
         </Button>
@@ -92,7 +94,14 @@ const GymClass = () => {
         selectedActivity={selectedActivity}
         onActivityChange={setSelectedActivity}
       />
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {filteredClasses.length === 0 && !loading && (
+        <p>No hay actividades disponibles</p>
+      )}
       <div className="gymclass-container-card">
         {filteredClasses.map((gymClass) => (
           <CardGymClass
