@@ -70,8 +70,8 @@ const CardGymClass = ({ entity, setChanges, changes, showDay,setToast }) => {
     } catch (error) {
       setToast({
         display: true,
-        message: "No se pudo hacer la reserva",
-        error: false,
+        message: error.response.data,
+        error: true,
       });
     }
   };

@@ -15,8 +15,21 @@ const Reserve = () => {
   const [changes, setChanges] = useState([]);
   const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState("");
+  const [toastModal, setToast] = useState({
+    message: null,
+    display: false,
+    error: false,
+  });
   const { loading, sendRequest } = UseAxiosLoader();
   const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (toastModal.display === true && toastModal.error === false) {
+      toast.success(toastModal.message);
+    } else if (toastModal.display === true && toastModal.error === true) {
+      toast.error(toastModal.message);
+    }
+  }, [toastModal]);
 
   const fetchGymClassesAndReserves = async () => {
     try {
@@ -191,6 +204,7 @@ const Reserve = () => {
               entity={gymclass}
               showDay={true}
               setChanges={setChanges}
+              setToast={setToast}
               changes={changes}
             />
           ))
