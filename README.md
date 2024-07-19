@@ -34,5 +34,5 @@ Además, utilizamos tres entidades claves para la finalidad del proyecto: activi
 * Date-fns
 * Yup
 
-## link app
-https://sistemagymapp-jd-elin.vercel.app/
+## Link app Deploy
+https://training-center-utn.vercel.app/
