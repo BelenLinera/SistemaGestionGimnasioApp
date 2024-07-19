@@ -27,10 +27,9 @@ const Trainer = () => {
     const fetchTrainers = async () => {
       try {
         const response = await getAllTrainers(sendRequest);
-        console.log(response);
         setTrainers(response.data);
       } catch (error) {
-        console.log("Error al traer los entrenadores", error);
+        toast.error(error.message);
       }
     };
 
@@ -54,24 +53,36 @@ const Trainer = () => {
     <section className="trainer-section">
       <h2>ENTRENADORES</h2>
       <Link to="/trainer/create-trainer">
-        <Button variant="light" className={theme === "dark" ? 'button-trainer-dark' : 'button-trainer-light'}>
+        <Button
+          variant="light"
+          className={
+            theme === "dark" ? "button-trainer-dark" : "button-trainer-light"
+          }
+        >
           + Nuevo entrenador
         </Button>
       </Link>
       <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {trainers.length === 0 && !loading && (
+        <p>No hay entrenadores disponibles</p>
+      )}
       <div className="trainer-container-card">
-      {filteredTrainers.map((trainer) => (
-        <CardTrainer
-          entity={trainer}
-          type={"trainer"}
-          key={trainer.email}
-          setToast={setToast}
-          setChanges={setChanges}
-          changes={changes}
-          deleteEntity={deleteByEmail}
-        />
-      ))}
+        {filteredTrainers.map((trainer) => (
+          <CardTrainer
+            entity={trainer}
+            type={"trainer"}
+            key={trainer.email}
+            setToast={setToast}
+            setChanges={setChanges}
+            changes={changes}
+            deleteEntity={deleteByEmail}
+          />
+        ))}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>

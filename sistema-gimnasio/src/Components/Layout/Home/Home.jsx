@@ -12,27 +12,26 @@ const Home = ({ isAdmin }) => {
   const [activities, setActivities] = useState([]);
   const [changes, setChanges] = useState(false);
   const { loading, sendRequest } = UseAxiosLoader();
-  const {theme} = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const fetchActivities = async () => {
       try {
         const response = await getAllActivities(sendRequest);
-        console.log(response);
         if (response.data && Array.isArray(response.data)) {
           setActivities(response.data);
         } else {
           setActivities([]);
         }
       } catch (error) {
-        toast.error("Error al traer las actividades")
+        toast.error("Error al traer las actividades");
       }
     };
     fetchActivities();
   }, [changes, sendRequest]);
 
   return (
-    <div className={theme === "dark" ? 'home-dark' : 'home-light'}>
+    <div className={theme === "dark" ? "home-dark" : "home-light"}>
       <div className="home-header">
         <div className="home-content">
           <h1>Bienvenido/a a Training Center</h1>
@@ -46,24 +45,26 @@ const Home = ({ isAdmin }) => {
           </p>
         </div>
       </div>
-      <div className={theme === "dark" ? 'home-act-dark' : 'home-act-light'}>
+      <div className={theme === "dark" ? "home-act-dark" : "home-act-light"}>
         <h2>Nuestras Actividades</h2>
-          {loading && <Spinner animation="border" />}
+        {loading && (
+          <div className="spinner-container">
+            <Spinner animation="border" />
+          </div>
+        )}
         <div className="activities-container-card">
-          {activities && activities.length > 0 ? (
-            activities.map((activity) => (
-              <CardActivity
-                key={activity.activityName}
-                entity={activity}
-                type="actividad"
-                setChanges={setChanges}
-                changes={changes}
-                isAdmin={isAdmin}
-              />
-            ))
-          ) : loading === false && (
-            <p>No hay actividades disponibles</p>
-          )}
+          {activities && activities.length > 0
+            ? activities.map((activity) => (
+                <CardActivity
+                  key={activity.activityName}
+                  entity={activity}
+                  type="actividad"
+                  setChanges={setChanges}
+                  changes={changes}
+                  isAdmin={isAdmin}
+                />
+              ))
+            : loading === false && <p>No hay actividades disponibles</p>}
         </div>
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />

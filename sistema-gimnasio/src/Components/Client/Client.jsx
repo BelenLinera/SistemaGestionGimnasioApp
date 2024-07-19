@@ -53,24 +53,36 @@ const Client = () => {
     <section className="client-section">
       <h2>CLIENTES</h2>
       <Link to="/client/create-client">
-        <Button variant="light" className={theme === "dark" ? 'button-client-dark' : 'button-client-light'}>
+        <Button
+          variant="light"
+          className={
+            theme === "dark" ? "button-client-dark" : "button-client-light"
+          }
+        >
           + Nuevo cliente
         </Button>
       </Link>
+      {loading && (
+        <div className="spinner-container">
+          <Spinner animation="border" />
+        </div>
+      )}
       <UserSearch searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      {loading && <Spinner animation="border" />}
+      {clients.length === 0 && !loading && (
+        <p>No hay clientes disponibles</p>
+      )}
       <div className="client-container-card">
-      {filteredClients.map((client) => (
-        <Card
-          entity={client}
-          type={"client"}
-          key={client.email}
-          setToast={setToast}
-          setChanges={setChanges}
-          changes={changes}
-          deleteEntity={deleteClient}
-        />
-      ))}
+        {filteredClients.map((client) => (
+          <Card
+            entity={client}
+            type={"client"}
+            key={client.email}
+            setToast={setToast}
+            setChanges={setChanges}
+            changes={changes}
+            deleteEntity={deleteClient}
+          />
+        ))}
       </div>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </section>

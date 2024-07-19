@@ -2,13 +2,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 80vh;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100px;
+  margin-top: 20px;
 }
 
-.button-activity {
+.button-activity-light {
   background-color: #6decb9;
 }
 
-.buttons button{
+.button-activity-dark {
+  background-color: #11999e;
+}
+
+.buttons button {
   margin: 10px;
 }
 
@@ -16,7 +29,6 @@
   background-color: green;
   color: #d9d9d9;
   border: 2px solid transparent;
-  
 }
 
 .button-delete-activity-act {
@@ -25,12 +37,10 @@
   border: 2px solid transparent;
 }
 
-
 @media only screen and (min-width: 1440px) {
-.activity-container-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr ; 
-  gap: 20px;
-}
-
+  .activity-container-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
 }
