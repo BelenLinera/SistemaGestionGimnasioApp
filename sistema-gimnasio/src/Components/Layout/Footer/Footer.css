@@ -8,14 +8,14 @@ footer {
   height: 200px;
   width: 100%;
   position: relative;
-  
+  z-index: 1;
 }
-.footer-dark{
+.footer-dark {
   background-color: #222831;
   color: #fff;
 }
 
-.footer-light{
+.footer-light {
   background-color: #d9d9d9;
   color: black;
 }
